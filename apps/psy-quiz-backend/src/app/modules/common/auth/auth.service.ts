@@ -8,7 +8,6 @@ import {
 import {User} from "../user/schemas/user.entity";
 import {UserService} from "../user/user.service";
 import {JwtService} from "@nestjs/jwt";
-import * as bcrypt from 'bcrypt';
 import {TokenService} from "../token/token.service";
 import {ConfigService} from "@nestjs/config";
 import {UserStatusEnum} from "../user/user-status.enum";

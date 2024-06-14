@@ -36,7 +36,7 @@ export class PermissionController {
   @ApiOperation({summary: 'Получение разрешения'})
   @ApiResponse({status: 200, type: Permission})
   @Get('permission/:id')
-  async getPermissionById(@Param('id') id: string;): Promise<PermissionResponseDto> {
+  async getPermissionById(@Param('id') id: string): Promise<PermissionResponseDto> {
     const permission = await this.permissionService.getByID(id);
     return plainToClass(PermissionResponseDto, permission, { enableCircularCheck: true });
   }
@@ -77,7 +77,7 @@ export class PermissionController {
   @Roles("ADMIN")
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('permission/:id')
-  async deletePermission(@Param('id') id: string;): Promise<any> {
+  async deletePermission(@Param('id') id: string): Promise<any> {
     return await this.permissionService.delete([id]);
   }
 }

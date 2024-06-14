@@ -42,7 +42,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   @Get('user/:id')
-  async getUserById(@Param('id') id: string;): Promise<UserResponseDto> {
+  async getUserById(@Param('id') id: string): Promise<UserResponseDto> {
     const user = await this.service.getByID(id, ['roles', 'roles.permissions']);
     return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
     // return plainToClass(UserResponseDto, user, { enableCircularCheck: true, excludeExtraneousValues: true });
@@ -66,7 +66,7 @@ export class UserController {
   @Patch('user/:id')
   async updateUser(
     @Body() requestDto: UserRequestDto,
-    @Param() id: string;,
+    @Param() id: string,
     @UploadedFile() avatar
   ): Promise<UserResponseDto> {
     const user = await this.service.updateUser(id, requestDto, avatar);
@@ -89,7 +89,7 @@ export class UserController {
   @ApiResponse({status: 200})
   @UseGuards(JwtAuthGuard)
   @Delete('user/:id')
-  async deleteUser(@Param('id') id: string;): Promise<any> {
+  async deleteUser(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
   }
 

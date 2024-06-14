@@ -43,7 +43,7 @@ export class RoleController {
   @ApiResponse({status: 200, type: Role})
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('role/:id')
-  async getRoleById(@Param('id') id: string;): Promise<RoleResponseDto> {
+  async getRoleById(@Param('id') id: string): Promise<RoleResponseDto> {
     const role = await this.service.getByID(id, ['permissions']);
     return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
   }
@@ -64,7 +64,7 @@ export class RoleController {
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('role/:id')
   async updateRole(
-    @Param('id') id: string;,
+    @Param('id') id: string,
     @Body() roleRequestDto: RoleRequestDto,
   ): Promise<RoleResponseDto> {
     const role = await this.service.updateRole(id, roleRequestDto);
@@ -86,7 +86,7 @@ export class RoleController {
   @Roles("ADMIN")
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('role/:id')
-  async deleteRole(@Param('id') id: string;): Promise<any> {
+  async deleteRole(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
   }
 }

@@ -50,7 +50,7 @@ export class RoleService extends BaseService<Role, IGetParamsData> {
    * @param id
    * @param roleRequestDto
    */
-  async updateRole(@Param() id: string;, roleRequestDto: RoleRequestDto): Promise<Role> {
+  async updateRole(@Param() id: string, roleRequestDto: RoleRequestDto): Promise<Role> {
     const role = await this.repository.findOne({where: {id}});
     if (!role) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);

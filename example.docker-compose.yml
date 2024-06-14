@@ -1,0 +1,39 @@
+version: "3.2"
+
+networks:
+  mysql:
+    driver: bridge
+    attachable: true
+
+services:
+  psy-quiz-db:
+    image: mysql:latest
+    container_name: psy-quiz-db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=psy-quiz
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=123
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    volumes:
+      - "./volumes/mysql/db:/var/lib/mysql"
+    networks:
+      - mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: pma
+    restart: always
+    ports:
+      - 8081:80
+    links:
+      - psy-quiz-db
+    environment:
+      PMA_HOST: fdb
+      PMA_PORT: 3308
+      PMA_ARBITRARY: 1
+    networks:
+      - mysql

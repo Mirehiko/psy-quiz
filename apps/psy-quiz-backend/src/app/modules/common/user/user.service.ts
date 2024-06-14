@@ -81,7 +81,7 @@ export class UserService extends BaseService<User, IUserGetParamsData> {
    * @param id
    * @param password
    */
-  async updateUserPass(@Param() id: string;, password: string): Promise<void> {
+  async updateUserPass(@Param() id: string, password: string): Promise<void> {
     const user = await this.repository.findOne({ where: {id} });
     if (!user) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
