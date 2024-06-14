@@ -1,10 +1,11 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import {Entity, Column, ManyToMany, JoinTable, OneToMany, OneToOne, JoinColumn} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
 import { BaseEntity } from '../../base-entity';
 import { Role } from "../../role/schemas/role.entity";
 import { UserStatusEnum } from "../user-status.enum";
 import { ConnectedUserEntity } from '../../gateway/schemas/connected-user.entity';
+import {ProfileEntity} from "../../profile";
 
 
 @Entity()
@@ -46,4 +47,8 @@ export class User extends BaseEntity {
   @ApiProperty({ example: '', description: 'Соединения пользователя'})
   @OneToMany(() => ConnectedUserEntity, connection => connection.user, {nullable: true})
   connections: ConnectedUserEntity[];
+
+  @OneToOne(() => ProfileEntity)
+  @JoinColumn()
+  profile: ProfileEntity
 }
