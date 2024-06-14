@@ -1,6 +1,10 @@
-import { EntityRepository, Repository } from 'typeorm';
+import {EntityRepository, Repository} from 'typeorm';
 import { User } from './schemas/user.entity';
 
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {}
+
+// @Injectable()
+// export class UserRepository {
+// }
