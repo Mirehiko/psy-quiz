@@ -13,7 +13,7 @@ import { PermissionEntity } from './schemas/permission.entity';
   controllers: [PermissionController],
   imports: [
     TypeOrmModule.forFeature([PermissionEntity, PermissionRepository, UserEntity, UserRepository]),
-    AuthModule
+    forwardRef(() => AuthModule)
     // TypeOrmModule.forFeature(([Permission, Role]))
   ],
   exports: [PermissionService]

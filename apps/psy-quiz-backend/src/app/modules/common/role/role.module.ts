@@ -15,7 +15,7 @@ import { RoleEntity } from './schemas/role.entity';
   controllers: [RoleController],
   imports: [
     TypeOrmModule.forFeature([RoleRepository, RoleEntity, PermissionRepository, PermissionEntity, UserRepository]),
-    AuthModule,
+    forwardRef(() => AuthModule),
     PermissionModule
   ],
   exports: [RoleService]
