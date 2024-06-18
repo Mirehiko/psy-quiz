@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Param } from '@nestjs/common';
 import {FindOneOptions, Repository} from 'typeorm';
 import { IGetParamsData } from '../../shared';
-import { RequestObjectWithId } from '../../shared/common/dto/objectWithId';
+import {RequestObjectWithId} from "../../shared/common/dto/objectWithId";
 
 
 export abstract class BaseService<T extends RequestObjectWithId, U extends IGetParamsData> {

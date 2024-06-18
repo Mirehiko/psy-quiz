@@ -1,6 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
-import {QuestionEntity} from "../../question";
+import {QuestionEntity} from "../../question/schemas/question.entity";
 
 
 @Entity()

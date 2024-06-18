@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
-import { Role } from './schemas/role.entity';
+import { RoleEntity } from './schemas/role.entity';
 import { PermissionService } from '../permission/permission.service';
 import { RoleRepository } from './role-repository';
 import { IGetParamsData, RoleRequestDto } from '../../../shared';
@@ -7,7 +7,7 @@ import { BaseService } from '../base-service';
 
 
 @Injectable()
-export class RoleService extends BaseService<Role, IGetParamsData> {
+export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
   protected entityNotFoundMessage: string = 'Нет такой роли';
 
   constructor(
@@ -32,7 +32,7 @@ export class RoleService extends BaseService<Role, IGetParamsData> {
     const permissions = await this.permissionService.getAll();
 
     try {
-      const newRole = new Role();
+      const newRole = new RoleEntity();
       newRole.name = role.name;
       newRole.displayName = role.displayName;
       newRole.description = role.description;
@@ -50,7 +50,7 @@ export class RoleService extends BaseService<Role, IGetParamsData> {
    * @param id
    * @param roleRequestDto
    */
-  async updateRole(@Param() id: string, roleRequestDto: RoleRequestDto): Promise<Role> {
+  async updateRole(@Param() id: string, roleRequestDto: RoleRequestDto): Promise<RoleEntity> {
     const role = await this.repository.findOne({where: {id}});
     if (!role) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);

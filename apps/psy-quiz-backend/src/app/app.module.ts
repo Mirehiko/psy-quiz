@@ -12,6 +12,15 @@ import { GatewayModule } from './modules/common/gateway/gateway.module';
 import { PermissionModule } from './modules/common/permission/permission.module';
 import { AuthModule } from './modules/common/auth/auth.module';
 import { AppGateway } from './modules/common/gateway/gateway.gateway';
+import {TestModule} from "./modules/quiz/test/test.module";
+import {QuestionModule} from "./modules/quiz/question/question.module";
+import {CriterionModule} from "./modules/quiz/criterion/criterion.module";
+import {QuestionAnswerModule} from "./modules/quiz/question_answer/question-answer.module";
+import {QuestionTypeModule} from "./modules/quiz/question_type/question-type.module";
+import {RunAnswerModule} from "./modules/quiz/run_answer/run-answer.module";
+import {ScaleAnswerModule} from "./modules/quiz/scale_answer/scale-answer.module";
+import {ScaleModule} from "./modules/quiz/scale/scale.module";
+import {TestRunModule} from "./modules/quiz/test_run/test-run.module";
 
 
 @Module({
@@ -46,9 +55,18 @@ import { AppGateway } from './modules/common/gateway/gateway.gateway';
     RoleModule,
     PermissionModule,
     TokenModule,
-    GatewayModule,
+    // GatewayModule,
+    CriterionModule,
+    QuestionModule,
+    QuestionAnswerModule,
+    QuestionTypeModule,
+    RunAnswerModule,
+    ScaleModule,
+    ScaleAnswerModule,
+    TestModule,
+    TestRunModule
   ],
-  providers: [AppGateway],
+  // providers: [AppGateway],
 })
 export class AppModule implements NestModule {
   constructor(private connection: Connection) {
@@ -60,10 +78,3 @@ export class AppModule implements NestModule {
       .forRoutes({path: '*', method: RequestMethod.ALL})
   }
 }
-
-// @Module({
-//   imports: [],
-//   controllers: [AppController],
-//   providers: [AppService],
-// })
-// export class AppModule {}

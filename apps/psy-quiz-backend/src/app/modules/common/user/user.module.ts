@@ -3,15 +3,17 @@ import { UserRepository } from './user-repository';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {Role} from "../role/schemas/role.entity";
+import {RoleEntity} from "../role/schemas/role.entity";
 import { RoleModule } from '../role/role.module';
 import {AuthModule} from "../auth/auth.module";
 import { ConnectedUserRepository } from '../gateway/connected-user-repository';
+import {UserEntity} from "./schemas/user.entity";
+import {ConnectedUserEntity} from "../gateway/schemas/connected-user.entity";
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature(([UserRepository, ConnectedUserRepository, Role, ])),
+        TypeOrmModule.forFeature(([UserEntity, UserRepository, ConnectedUserEntity, ConnectedUserRepository, RoleEntity])),
         RoleModule,
         forwardRef(() => AuthModule)
     ],

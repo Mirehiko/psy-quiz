@@ -2,13 +2,13 @@ import { Exclude } from 'class-transformer';
 import {Entity, Column, ManyToMany, JoinTable, OneToMany, OneToOne, JoinColumn} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
 import { BaseEntity } from '../../base-entity';
-import { Role } from "../../role/schemas/role.entity";
+import { RoleEntity } from "../../role/schemas/role.entity";
 import { UserStatusEnum } from "../user-status.enum";
 import { ConnectedUserEntity } from '../../gateway/schemas/connected-user.entity';
 
 
 @Entity()
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @ApiProperty({example: 'FirstName LastName', description: 'Имя пользователя'})
   @Column({ length: 150 })
   name: string = '';
@@ -27,9 +27,9 @@ export class User extends BaseEntity {
   avatar: string;
 
   @ApiProperty({ example: '', description: 'Роли'})
-  @ManyToMany(() => Role, role => role.id)
+  @ManyToMany(() => RoleEntity, role => role.id)
   @JoinTable()
-  roles: Role[];
+  roles: RoleEntity[];
 
   @ApiProperty({ example: '2022.01.21', description: 'Дата блокировки'})
   @Column({type: "timestamp", nullable: true})

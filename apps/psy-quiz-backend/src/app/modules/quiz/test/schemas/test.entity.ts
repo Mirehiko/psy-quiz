@@ -1,8 +1,10 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
 import {BaseEntity} from "../../../common/base-entity";
+import {QuestionEntity} from "../../question/schemas/question.entity";
 import {ScaleEntity} from "../../scale/schemas/scale.entity";
-import {QuestionEntity} from "../../question";
+import {RunAnswerEntity} from "../../run_answer/schemas/run-answer.entity";
+import {TestRunEntity} from "../../test_run/schemas/test-run.entity";
 
 
 @Entity()
@@ -21,11 +23,13 @@ export class TestEntity extends BaseEntity {
 
   @ApiProperty({ example: '', description: 'Вопросы'})
   @OneToMany(() => QuestionEntity, question => question.test)
-  // @JoinTable()
   questions: QuestionEntity[];
 
   @ApiProperty({ example: '', description: 'Шкалы оценивания'})
   @OneToMany(() => ScaleEntity, scale => scale.test)
-  // @JoinTable()
   scales: ScaleEntity[];
+
+  @ApiProperty({ example: '', description: 'Ответы'})
+  @OneToMany(() => TestRunEntity, run => run.test)
+  runs: TestRunEntity[];
 }

@@ -1,6 +1,6 @@
 import {Entity, Column, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
-import {ScaleEntity} from "../../scale";
+import {ScaleEntity} from "../../scale/schemas/scale.entity";
 
 
 @Entity()
@@ -10,11 +10,11 @@ export class CriterionEntity {
   id: string;
 
   @ApiProperty({example: '0', description: 'Минимальное значение параметра'})
-  @Column('number', {nullable: false})
+  @Column('int', {nullable: false})
   minScore: number;
 
   @ApiProperty({example: '0', description: 'Максимальное значение параметра'})
-  @Column('number', {nullable: false})
+  @Column('int', {nullable: false})
   maxScore: number;
 
   @ApiProperty({ example: '', description: 'Название оценки'})

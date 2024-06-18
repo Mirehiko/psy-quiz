@@ -1,9 +1,10 @@
 import {Entity, Column, ManyToOne, OneToMany} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
 import {BaseEntity} from "../../../common/base-entity";
-import {TestEntity} from "../../test";
-import {QuestionTypeEntity} from "../../question_type";
-import {QuestionAnswerEntity} from "../../question_answer";
+import {TestEntity} from "../../test/schemas/test.entity";
+import {QuestionTypeEntity} from "../../question_type/schemas/question-type.entity";
+import {QuestionAnswerEntity} from "../../question_answer/schemas/question-answer.entity";
+
 
 
 @Entity()

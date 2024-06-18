@@ -16,7 +16,7 @@ import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import {RoleService} from "./role.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import { Role } from './schemas/role.entity';
+import { RoleEntity } from './schemas/role.entity';
 import {TransformInterceptor} from "../../../interceptors/transform.interceptor";
 import { plainToClass } from 'class-transformer';
 import { IGetParamsData, RoleRequestDto, RoleResponseDto } from '../../../shared';
@@ -40,7 +40,7 @@ export class RoleController {
   }
 
   @ApiOperation({summary: 'Получение роли'})
-  @ApiResponse({status: 200, type: Role})
+  @ApiResponse({status: 200, type: RoleEntity})
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('role/:id')
   async getRoleById(@Param('id') id: string): Promise<RoleResponseDto> {
@@ -49,7 +49,7 @@ export class RoleController {
   }
 
   @ApiOperation({summary: 'Получение роли'})
-  @ApiResponse({status: 200, type: Role})
+  @ApiResponse({status: 200, type: RoleEntity})
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('role/:id')
   async getRoleBy(@Query() requestParams: IGetParamsData): Promise<RoleResponseDto> {
@@ -58,7 +58,7 @@ export class RoleController {
   }
 
   @ApiOperation({summary: 'Обновление роли'})
-  @ApiResponse({status: 200, type: Role})
+  @ApiResponse({status: 200, type: RoleEntity})
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles("ADMIN")
   // @UseGuards(JwtAuthGuard, RolesGuard)
@@ -72,7 +72,7 @@ export class RoleController {
   }
 
   @ApiOperation({summary: 'Создание роли'})
-  @ApiResponse({status: 201, type: Role})
+  @ApiResponse({status: 201, type: RoleEntity})
   @Roles("ADMIN")
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('role')
@@ -82,7 +82,7 @@ export class RoleController {
   }
 
   @ApiOperation({summary: 'Удаление роли'})
-  @ApiResponse({status: 200, type: Role})
+  @ApiResponse({status: 200, type: RoleEntity})
   @Roles("ADMIN")
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('role/:id')

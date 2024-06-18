@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConnectedUserRepository } from './connected-user-repository';
 import { ConnectedUserEntity } from './schemas/connected-user.entity';
-import { User } from '../user/schemas/user.entity';
+import { UserEntity } from '../user/schemas/user.entity';
 
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ConnectedUserService {
     private readonly repository: ConnectedUserRepository,
   ) { }
 
-  async create(socketId: string, user: User): Promise<ConnectedUserEntity> {
+  async create(socketId: string, user: UserEntity): Promise<ConnectedUserEntity> {
     return this.repository.save({ socketId, user });
   }
 
@@ -20,7 +20,7 @@ export class ConnectedUserService {
       .getMany();
   }
 
-  async findByUser(user: User): Promise<ConnectedUserEntity[]> {
+  async findByUser(user: UserEntity): Promise<ConnectedUserEntity[]> {
     return this.repository.find({where: {user}});
   }
 

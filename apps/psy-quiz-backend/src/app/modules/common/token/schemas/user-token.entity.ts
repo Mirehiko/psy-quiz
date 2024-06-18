@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn} from 'typeorm';
-import {User} from "../../user/schemas/user.entity";
+import {UserEntity} from "../../user/schemas/user.entity";
 import {ApiProperty} from "@nestjs/swagger";
 import {UserStatusEnum} from '../../user/user-status.enum';
 
@@ -15,7 +15,7 @@ export class UserToken {
   token: string;
 
   @ApiProperty({example: 1, description: 'Id пользователя'})
-  @OneToOne(() => User, user => user.id)
+  @OneToOne(() => UserEntity, user => user.id)
   @JoinColumn({})
   userId: string;
 

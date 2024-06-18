@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import {AuthService} from "./auth.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {User} from "../user/schemas/user.entity";
+import {UserEntity} from "../user/schemas/user.entity";
 import { plainToClass } from 'class-transformer';
 import {
   AuthResponseDto,
@@ -25,14 +25,14 @@ export class AuthController {
   }
 
   @ApiOperation({summary: 'Регистрация пользователя'})
-  @ApiResponse({status: 201, type: User})
+  @ApiResponse({status: 201, type: UserEntity})
   @Post('registration')
   async register(@Body() userRequestDto: UserRequestDto): Promise<any> {
     return this.authService.signUp(userRequestDto);
   }
 
   @ApiOperation({summary: 'Вход в систему'})
-  @ApiResponse({status: 200, type: User})
+  @ApiResponse({status: 200, type: UserEntity})
   @Post('login')
   async login(@Body() authUserDto: AuthUserDto): Promise<AuthResponseDto> {
     const authUser = await this.authService.signIn(authUserDto);
@@ -40,7 +40,7 @@ export class AuthController {
   }
 
   @ApiOperation({summary: 'Выход из системы'})
-  @ApiResponse({status: 200, type: User})
+  @ApiResponse({status: 200, type: UserEntity})
   @Post('logout')
   async logout(@Body() query: { token: string }): Promise<any> {
     return this.authService.logout(query.token);

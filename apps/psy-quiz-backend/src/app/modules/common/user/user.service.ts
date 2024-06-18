@@ -1,5 +1,5 @@
 import {HttpException, HttpStatus, Injectable, Param} from '@nestjs/common';
-import {User} from "./schemas/user.entity";
+import {UserEntity} from "./schemas/user.entity";
 import {RoleService} from "../role/role.service";
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from './user-repository';
@@ -8,7 +8,7 @@ import { BaseService } from '../base-service';
 
 
 @Injectable()
-export class UserService extends BaseService<User, IUserGetParamsData> {
+export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
   private readonly saltRounds = 10;
   protected entityNotFoundMessage: string = 'Нет такого пользователя';
   protected entityOrRelationNotFoundMessage: string = 'Пользователь или роль не найдены';
@@ -51,7 +51,7 @@ export class UserService extends BaseService<User, IUserGetParamsData> {
    * @param requestDto
    * @param avatar
    */
-  async updateUser(@Param() id: string, requestDto: UserRequestDto, avatar?: any): Promise<User> {
+  async updateUser(@Param() id: string, requestDto: UserRequestDto, avatar?: any): Promise<UserEntity> {
     let user = await this.repository.findOne({where: {id}});
     if (!user) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
