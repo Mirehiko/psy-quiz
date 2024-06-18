@@ -1,12 +1,5 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../../user/schemas/user.entity';
-
 
 @Entity()
 export class ConnectedUserEntity {
@@ -16,7 +9,7 @@ export class ConnectedUserEntity {
   @Column()
   socketId: string;
 
-  @ManyToOne(() => UserEntity, user => user.connections)
+  @ManyToOne(() => UserEntity, (user) => user.connections)
   @JoinColumn()
   user: UserEntity;
 }

@@ -1,1 +1,1 @@
-export * from './i-user-token'
+export * from './i-user-token';

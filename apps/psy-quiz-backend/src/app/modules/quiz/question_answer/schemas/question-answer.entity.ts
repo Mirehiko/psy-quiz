@@ -1,19 +1,18 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from 'typeorm';
-import { ApiProperty } from "@nestjs/swagger";
-import {QuestionEntity} from "../../question/schemas/question.entity";
-
+import { ApiProperty } from '@nestjs/swagger';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { QuestionEntity } from '../../question/schemas/question.entity';
 
 @Entity()
 export class QuestionAnswerEntity {
-  @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
+  @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
   @PrimaryGeneratedColumn()
   id: string;
 
-  @ApiProperty({example: 'Psy Test', description: 'Наименование ответа'})
+  @ApiProperty({ example: 'Psy Test', description: 'Наименование ответа' })
   @Column({ length: 150 })
   name: string = '';
 
-  @ApiProperty({example: 'This test...', description: 'Описание ответа'})
+  @ApiProperty({ example: 'This test...', description: 'Описание ответа' })
   @Column({ length: 500 })
   description: string;
 

@@ -3,11 +3,6 @@
     <h1>Регистрация</h1>
     <input class="form-control" formControlName="email" type="email" />
     <input class="form-control" formControlName="password" type="password" />
-    <input
-      [disabled]="form.invalid || form.disabled"
-      class="form-btn form-btn-dark"
-      type="submit"
-      value="Создать"
-    />
+    <input [disabled]="form.invalid || form.disabled" class="form-btn form-btn-dark" type="submit" value="Создать" />
   </form>
 </div>

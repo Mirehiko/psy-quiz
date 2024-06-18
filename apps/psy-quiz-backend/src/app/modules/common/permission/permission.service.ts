@@ -1,17 +1,14 @@
-import {HttpException, HttpStatus, Injectable, Param} from '@nestjs/common';
-import { PermissionEntity } from './schemas/permission.entity';
-import { PermissionRepository } from './permission-repository';
+import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 import { IGetParamsData, PermissionRequestDto } from '../../../shared';
 import { BaseService } from '../base-service';
-
+import { PermissionRepository } from './permission-repository';
+import { PermissionEntity } from './schemas/permission.entity';
 
 @Injectable()
 export class PermissionService extends BaseService<PermissionEntity, IGetParamsData> {
   protected entityNotFoundMessage: string = 'Нет такого пермишена';
 
-  constructor(
-    protected repository: PermissionRepository
-  ) {
+  constructor(protected repository: PermissionRepository) {
     super();
   }
 
@@ -20,13 +17,13 @@ export class PermissionService extends BaseService<PermissionEntity, IGetParamsD
    * @param permission
    */
   async createPermission(permission: PermissionRequestDto): Promise<PermissionEntity> {
-    const candidate = await this.repository.findOne({where: { name: permission.name }});
+    const candidate = await this.repository.findOne({ where: { name: permission.name } });
     if (candidate) {
       throw new HttpException('Такой пермишен уже существует. Введите другое имя пермишена', HttpStatus.CONFLICT);
     }
 
     try {
-      const newPermission = await this.repository.create({...permission});
+      const newPermission = await this.repository.create({ ...permission });
       await this.repository.save(newPermission);
       return newPermission; // 201
     } catch (e) {
@@ -40,7 +37,7 @@ export class PermissionService extends BaseService<PermissionEntity, IGetParamsD
    * @param permissionRequestDto
    */
   async updatePermission(@Param() id: string, permissionRequestDto: PermissionRequestDto): Promise<PermissionEntity> {
-    const permission = await this.repository.findOne({where: {id}});
+    const permission = await this.repository.findOne({ where: { id } });
     if (!permission) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
     }
@@ -51,8 +48,7 @@ export class PermissionService extends BaseService<PermissionEntity, IGetParamsD
 
     try {
       return await this.repository.save(permission);
-    }
-    catch (e) {
+    } catch (e) {
       throw new Error(e);
     }
   }

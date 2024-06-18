@@ -4,7 +4,10 @@
   "license": "MIT",
   "scripts": {
     "psy-quiz-backend": "nx serve psy-quiz-backend --configuration development",
-    "psy-quiz-frontend": "nx serve psy-quiz-frontend --configuration development"
+    "psy-quiz-frontend": "nx serve psy-quiz-frontend --configuration development",
+    "lint": "nx run-many --all --target=lint",
+    "fix": "npx pretty-quick --staged",
+    "fix-everything": "prettier --write apps"
   },
   "private": true,
   "dependencies": {
@@ -69,6 +72,7 @@
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/jest": "^29.4.0",
     "@types/node": "~18.16.9",
     "@types/passport-jwt": "^4.0.1",

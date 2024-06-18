@@ -6,29 +6,32 @@ import {
   Get,
   Param,
   Patch,
-  Post, Query, UploadedFile, UseGuards, UseInterceptors, UsePipes,
+  Post,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  UsePipes
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { RolesGuard } from "../auth/roles.guard";
-import { Roles } from '../auth/roles-auth.decorator';
-import { FileInterceptor } from "@nestjs/platform-express";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { plainToClass } from 'class-transformer';
 import { BanUserDto, IUserGetParamsData, UserRequestDto, UserResponseDto, UserRolesDto } from '../../../shared';
-
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/roles-auth.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { UserService } from './user.service';
 
 @ApiTags('Пользователи')
 @Controller('main')
 // @UseInterceptors(new TransformInterceptor())
 export class UserController {
-  constructor(private readonly service: UserService) {
-  }
+  constructor(private readonly service: UserService) {}
 
-  @ApiOperation({summary: 'Получение списка пользователей'})
+  @ApiOperation({ summary: 'Получение списка пользователей' })
   // @ApiResponse({status: 200, type: [UserResponseDto]})
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   // @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('users')
@@ -37,8 +40,8 @@ export class UserController {
     return plainToClass(UserResponseDto, users, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Получение пользователя'})
-  @ApiResponse({status: 200, type: UserResponseDto})
+  @ApiOperation({ summary: 'Получение пользователя' })
+  @ApiResponse({ status: 200, type: UserResponseDto })
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   @Get('user/:id')
@@ -48,8 +51,8 @@ export class UserController {
     // return plainToClass(UserResponseDto, user, { enableCircularCheck: true, excludeExtraneousValues: true });
   }
 
-  @ApiOperation({summary: 'Получение пользователя полю'})
-  @ApiResponse({status: 200, type: UserResponseDto})
+  @ApiOperation({ summary: 'Получение пользователя полю' })
+  @ApiResponse({ status: 200, type: UserResponseDto })
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   @Get('user/')
@@ -58,8 +61,8 @@ export class UserController {
     return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Обновление пользователя'})
-  @ApiResponse({status: 200, type: UserResponseDto})
+  @ApiOperation({ summary: 'Обновление пользователя' })
+  @ApiResponse({ status: 200, type: UserResponseDto })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @UseInterceptors(FileInterceptor('avatar'))
@@ -73,8 +76,8 @@ export class UserController {
     return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Создание пользователя'})
-  @ApiResponse({status: 201, type: UserResponseDto})
+  @ApiOperation({ summary: 'Создание пользователя' })
+  @ApiResponse({ status: 201, type: UserResponseDto })
   // @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
@@ -85,40 +88,40 @@ export class UserController {
     return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Удаление пользователя'})
-  @ApiResponse({status: 200})
+  @ApiOperation({ summary: 'Удаление пользователя' })
+  @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)
   @Delete('user/:id')
   async deleteUser(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
   }
 
-  @ApiOperation({summary: 'Назначение прав пользователю'})
-  @ApiResponse({status: 201})
+  @ApiOperation({ summary: 'Назначение прав пользователю' })
+  @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post('user/assignRoles')
   async assignRolesToUser(@Body() userRolesDto: UserRolesDto): Promise<any> {
     return await this.service.assignRolesToUser(userRolesDto);
   }
 
-  @ApiOperation({summary: 'Удаление прав пользователя'})
-  @ApiResponse({status: 201})
+  @ApiOperation({ summary: 'Удаление прав пользователя' })
+  @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post('user/removeUserRoles')
   async removeUserRoles(@Body() userRolesDto: UserRolesDto): Promise<any> {
     return await this.service.removeUserRoles(userRolesDto);
   }
 
-  @ApiOperation({summary: 'Блокировка пользователя'})
-  @ApiResponse({status: 201})
+  @ApiOperation({ summary: 'Блокировка пользователя' })
+  @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post('user/suspend')
   async suspend(@Body() banUserDto: BanUserDto): Promise<any> {
     return await this.service.suspend(banUserDto);
   }
 
-  @ApiOperation({summary: 'Разблокировка пользователя'})
-  @ApiResponse({status: 201})
+  @ApiOperation({ summary: 'Разблокировка пользователя' })
+  @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post('user/unsuspend')
   async unsuspend(@Body() banUserDto: BanUserDto): Promise<any> {

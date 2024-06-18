@@ -1,5 +1,4 @@
-import { IsString, IsDateString, IsNumber } from 'class-validator';
-
+import { IsDateString, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserTokenDto {
   @IsString()
