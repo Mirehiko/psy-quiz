@@ -6,11 +6,13 @@ import { ConnectedUserService } from './connected-user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { UserRepository } from '../user/user-repository';
 import { UserModule } from '../user/user.module';
+import {ConnectedUserEntity} from "./schemas/connected-user.entity";
+import {UserEntity} from "../user/schemas/user.entity";
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature(([ConnectedUserRepository, UserRepository])),
+    TypeOrmModule.forFeature(([ConnectedUserRepository, ConnectedUserEntity, UserRepository, UserEntity])),
     AuthModule, UserModule, JwtModule,
   ],
   providers: [ConnectedUserService],

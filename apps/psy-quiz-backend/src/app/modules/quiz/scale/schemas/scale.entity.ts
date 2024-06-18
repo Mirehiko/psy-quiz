@@ -1,8 +1,8 @@
 import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
-import {TestEntity} from "../../test";
-import {CriterionEntity} from "../../criterion";
-import {ScaleAnswerEntity} from "../../scale_answer";
+import {TestEntity} from "../../test/schemas/test.entity";
+import {ScaleAnswerEntity} from "../../scale_answer/schemas/scale-answer.entity";
+import {CriterionEntity} from "../../criterion/schemas/criterion.entity";
 
 
 @Entity()
@@ -21,7 +21,6 @@ export class ScaleEntity {
 
   @ApiProperty({ example: '', description: 'Ответы попадающие в шкалу оценивания'})
   @OneToMany(() => ScaleAnswerEntity, answer => answer.scale)
-  // @JoinTable()
   answers: ScaleAnswerEntity[];
 
   @ApiProperty({ example: '', description: 'Оценки ответов'})

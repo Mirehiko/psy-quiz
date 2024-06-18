@@ -5,7 +5,7 @@ import {
     Injectable, MethodNotAllowedException,
     UnauthorizedException
 } from '@nestjs/common';
-import {User} from "../user/schemas/user.entity";
+import {UserEntity} from "../user/schemas/user.entity";
 import {UserService} from "../user/user.service";
 import {JwtService} from "@nestjs/jwt";
 import {TokenService} from "../token/token.service";
@@ -81,7 +81,7 @@ export class AuthService {
    * @param user
    * @param withStatusCheck
    */
-  async signUser(user: User, withStatusCheck: boolean = true): Promise<string> {
+  async signUser(user: UserEntity, withStatusCheck: boolean = true): Promise<string> {
     if (withStatusCheck && (user.status === UserStatusEnum.BLOCKED)) {
       throw new MethodNotAllowedException();
     }
@@ -114,7 +114,7 @@ export class AuthService {
    * Confirmation and activation user
    * @param token
    */
-  async confirm(token: string): Promise<User> {
+  async confirm(token: string): Promise<UserEntity> {
     const data = await this.verifyToken(token);
     const user = await this.userService.getByID(data.id);
 
@@ -131,7 +131,7 @@ export class AuthService {
    * Sends confirmation to user
    * @param user
    */
-  async sendConfirmation(user: User): Promise<void> {
+  async sendConfirmation(user: UserEntity): Promise<void> {
     const token = await this.signUser(user, false);
     const confirmLink = `${this.clientAppUrl}/auth/confirm?token=${token}`;
     console.log(confirmLink);
@@ -152,7 +152,7 @@ export class AuthService {
    * @param options
    * @private
    */
-  private async generateToken(user: User, options?: SignOptions): Promise<string> {
+  private async generateToken(user: UserEntity, options?: SignOptions): Promise<string> {
     const payload = {email: user.email, id: user.id}; //еще роли, но что-то нет...
     return this.jwtService.sign(payload, options);
   }
@@ -162,7 +162,7 @@ export class AuthService {
    * @param authUserDto
    * @private
    */
-  private async validateUser(authUserDto: AuthUserDto): Promise<User> {
+  private async validateUser(authUserDto: AuthUserDto): Promise<UserEntity> {
     const candidate = await this.userService.getBy({
       checkOnly: true,
       params: {email: authUserDto.email}
@@ -227,7 +227,7 @@ export class AuthService {
     // });
   }
 
-  async getUserByToken(token: string): Promise<User> {
+  async getUserByToken(token: string): Promise<UserEntity> {
     const user = await this.jwtService.verify(token);
     return await this.userService.getByID(user.id);
   }

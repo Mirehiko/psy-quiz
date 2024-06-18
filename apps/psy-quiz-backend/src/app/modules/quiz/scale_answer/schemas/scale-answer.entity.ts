@@ -1,6 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from 'typeorm';
 import { ApiProperty } from "@nestjs/swagger";
-import {ScaleEntity} from "../../scale";
+import {ScaleEntity} from "../../scale/schemas/scale.entity";
 
 
 @Entity()

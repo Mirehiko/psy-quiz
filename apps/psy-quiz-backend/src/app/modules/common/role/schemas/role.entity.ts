@@ -1,10 +1,10 @@
 import {Entity, Column, ManyToMany, JoinTable, PrimaryGeneratedColumn} from 'typeorm';
 import {ApiProperty} from "@nestjs/swagger";
-import {Permission} from "../../permission/schemas/permission.entity";
+import {PermissionEntity} from "../../permission/schemas/permission.entity";
 
 
 @Entity()
-export class Role {
+export class RoleEntity {
   @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
   @PrimaryGeneratedColumn()
   id: string;
@@ -23,7 +23,7 @@ export class Role {
 
   @ApiProperty({example: 'Список разрешений', description: 'Список разрешений, которыми обладает роль'})
   // @ManyToMany(() => Permission, bill => bill.id, {onDelete: "NO ACTION"})
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => PermissionEntity)
   @JoinTable()
-  permissions: Permission[];
+  permissions: PermissionEntity[];
 }

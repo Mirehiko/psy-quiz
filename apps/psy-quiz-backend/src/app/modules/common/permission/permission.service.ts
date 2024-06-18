@@ -1,12 +1,12 @@
 import {HttpException, HttpStatus, Injectable, Param} from '@nestjs/common';
-import { Permission } from './schemas/permission.entity';
+import { PermissionEntity } from './schemas/permission.entity';
 import { PermissionRepository } from './permission-repository';
 import { IGetParamsData, PermissionRequestDto } from '../../../shared';
 import { BaseService } from '../base-service';
 
 
 @Injectable()
-export class PermissionService extends BaseService<Permission, IGetParamsData> {
+export class PermissionService extends BaseService<PermissionEntity, IGetParamsData> {
   protected entityNotFoundMessage: string = 'Нет такого пермишена';
 
   constructor(
@@ -19,7 +19,7 @@ export class PermissionService extends BaseService<Permission, IGetParamsData> {
    * Creates the new permission
    * @param permission
    */
-  async createPermission(permission: PermissionRequestDto): Promise<Permission> {
+  async createPermission(permission: PermissionRequestDto): Promise<PermissionEntity> {
     const candidate = await this.repository.findOne({where: { name: permission.name }});
     if (candidate) {
       throw new HttpException('Такой пермишен уже существует. Введите другое имя пермишена', HttpStatus.CONFLICT);
@@ -39,7 +39,7 @@ export class PermissionService extends BaseService<Permission, IGetParamsData> {
    * @param id
    * @param permissionRequestDto
    */
-  async updatePermission(@Param() id: string, permissionRequestDto: PermissionRequestDto): Promise<Permission> {
+  async updatePermission(@Param() id: string, permissionRequestDto: PermissionRequestDto): Promise<PermissionEntity> {
     const permission = await this.repository.findOne({where: {id}});
     if (!permission) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);

@@ -3,7 +3,7 @@ import {ApiProperty} from "@nestjs/swagger";
 
 
 @Entity()
-export class Permission {
+export class PermissionEntity {
   @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
   @PrimaryGeneratedColumn()
   id: string;
