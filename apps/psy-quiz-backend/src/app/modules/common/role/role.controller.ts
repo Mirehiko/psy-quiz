@@ -1,5 +1,6 @@
 import {
-  Body, ClassSerializerInterceptor,
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -11,36 +12,34 @@ import {
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
+import { IGetParamsData, RoleRequestDto, RoleResponseDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import {RoleService} from "./role.service";
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import { RoleService } from './role.service';
 import { RoleEntity } from './schemas/role.entity';
-import {TransformInterceptor} from "../../../interceptors/transform.interceptor";
-import { plainToClass } from 'class-transformer';
-import { IGetParamsData, RoleRequestDto, RoleResponseDto } from '../../../shared';
-
 
 // TODO: Add auth guard after migrations release
 @ApiTags('Роли')
 @Controller('main')
 @UseInterceptors(new TransformInterceptor())
 export class RoleController {
-  constructor(private readonly service: RoleService) {
-  }
+  constructor(private readonly service: RoleService) {}
 
-  @ApiOperation({summary: 'Получение списка ролей'})
+  @ApiOperation({ summary: 'Получение списка ролей' })
   // @ApiResponse({status: 200, type: [Role]})
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('roles')
   async getRoles(): Promise<RoleResponseDto[]> {
     const roles = await this.service.getAll(['permissions']);
-    return plainToClass(RoleResponseDto, roles, {enableCircularCheck: true});
+    return plainToClass(RoleResponseDto, roles, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Получение роли'})
-  @ApiResponse({status: 200, type: RoleEntity})
+  @ApiOperation({ summary: 'Получение роли' })
+  @ApiResponse({ status: 200, type: RoleEntity })
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('role/:id')
   async getRoleById(@Param('id') id: string): Promise<RoleResponseDto> {
@@ -48,8 +47,8 @@ export class RoleController {
     return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Получение роли'})
-  @ApiResponse({status: 200, type: RoleEntity})
+  @ApiOperation({ summary: 'Получение роли' })
+  @ApiResponse({ status: 200, type: RoleEntity })
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('role/:id')
   async getRoleBy(@Query() requestParams: IGetParamsData): Promise<RoleResponseDto> {
@@ -57,23 +56,20 @@ export class RoleController {
     return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Обновление роли'})
-  @ApiResponse({status: 200, type: RoleEntity})
+  @ApiOperation({ summary: 'Обновление роли' })
+  @ApiResponse({ status: 200, type: RoleEntity })
   // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('role/:id')
-  async updateRole(
-    @Param('id') id: string,
-    @Body() roleRequestDto: RoleRequestDto,
-  ): Promise<RoleResponseDto> {
+  async updateRole(@Param('id') id: string, @Body() roleRequestDto: RoleRequestDto): Promise<RoleResponseDto> {
     const role = await this.service.updateRole(id, roleRequestDto);
     return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Создание роли'})
-  @ApiResponse({status: 201, type: RoleEntity})
-  @Roles("ADMIN")
+  @ApiOperation({ summary: 'Создание роли' })
+  @ApiResponse({ status: 201, type: RoleEntity })
+  @Roles('ADMIN')
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('role')
   async createRole(@Body() roleRequestDto: RoleRequestDto): Promise<any> {
@@ -81,9 +77,9 @@ export class RoleController {
     return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
-  @ApiOperation({summary: 'Удаление роли'})
-  @ApiResponse({status: 200, type: RoleEntity})
-  @Roles("ADMIN")
+  @ApiOperation({ summary: 'Удаление роли' })
+  @ApiResponse({ status: 200, type: RoleEntity })
+  @Roles('ADMIN')
   // @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('role/:id')
   async deleteRole(@Param('id') id: string): Promise<any> {

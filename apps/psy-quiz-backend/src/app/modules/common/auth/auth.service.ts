@@ -1,21 +1,21 @@
 import {
-    BadRequestException,
-    HttpException,
-    HttpStatus,
-    Injectable, MethodNotAllowedException,
-    UnauthorizedException
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  MethodNotAllowedException,
+  UnauthorizedException
 } from '@nestjs/common';
-import {UserEntity} from "../user/schemas/user.entity";
-import {UserService} from "../user/user.service";
-import {JwtService} from "@nestjs/jwt";
-import {TokenService} from "../token/token.service";
-import {ConfigService} from "@nestjs/config";
-import {UserStatusEnum} from "../user/user-status.enum";
-import {SignOptions} from "jsonwebtoken";
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { SignOptions } from 'jsonwebtoken';
 import moment from 'moment';
 import { AuthResponseDto, AuthUserDto, ChangePasswordDto, ForgotPasswordDto, UserRequestDto } from '../../../shared';
 import { CreateUserTokenDto } from '../token/dto';
-
+import { TokenService } from '../token/token.service';
+import { UserEntity } from '../user/schemas/user.entity';
+import { UserStatusEnum } from '../user/user-status.enum';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -25,9 +25,9 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
-      // this.clientAppUrl = this.configService.get<string>('FE_APP_URL');
+    // this.clientAppUrl = this.configService.get<string>('FE_APP_URL');
   }
 
   /**
@@ -37,17 +37,17 @@ export class AuthService {
   async signUp(userRequestDto: UserRequestDto): Promise<any> {
     const candidate = await this.userService.getBy({
       checkOnly: true,
-      params: {email: userRequestDto.email}
+      params: { email: userRequestDto.email }
     });
     if (candidate) {
-      throw new HttpException("Такой email уже существует. Введите другой email", HttpStatus.CONFLICT);
+      throw new HttpException('Такой email уже существует. Введите другой email', HttpStatus.CONFLICT);
     }
     userRequestDto.password += '';
     // TODO: hash password
     // const hashPassword = await bcrypt.hash(userRequestDto.password, 5);
     // const operation = await this.userService.createUser({...userRequestDto, password: hashPassword});
     // return await this.generateToken(operation);
-    const user = await this.userService.createUser({...userRequestDto});
+    const user = await this.userService.createUser({ ...userRequestDto });
     await this.sendConfirmation(user);
     return true;
   }
@@ -58,13 +58,13 @@ export class AuthService {
    */
   async signIn(authUserDto: AuthUserDto): Promise<AuthResponseDto> {
     const user = await this.validateUser(authUserDto);
-    const token = await this.generateToken(user, {expiresIn: moment().add(7, 'days').valueOf()});
+    const token = await this.generateToken(user, { expiresIn: moment().add(7, 'days').valueOf() });
     if (user.status === UserStatusEnum.PENDING) {
       // operation.status = UserStatusEnum.ACTIVE;
       // await this.userService.usersRepository.save(operation);
       await this.sendConfirmation(user);
     }
-    return {token, user};
+    return { token, user };
   }
 
   /**
@@ -82,16 +82,16 @@ export class AuthService {
    * @param withStatusCheck
    */
   async signUser(user: UserEntity, withStatusCheck: boolean = true): Promise<string> {
-    if (withStatusCheck && (user.status === UserStatusEnum.BLOCKED)) {
+    if (withStatusCheck && user.status === UserStatusEnum.BLOCKED) {
       throw new MethodNotAllowedException();
     }
     const expireAt = moment();
-    const token = await this.generateToken(user, {expiresIn: expireAt.valueOf()});
+    const token = await this.generateToken(user, { expiresIn: expireAt.valueOf() });
 
     await this.saveToken({
       token,
       expireAt: expireAt.toISOString(),
-      userId: user.id,
+      userId: user.id
     });
 
     return token;
@@ -153,7 +153,7 @@ export class AuthService {
    * @private
    */
   private async generateToken(user: UserEntity, options?: SignOptions): Promise<string> {
-    const payload = {email: user.email, id: user.id}; //еще роли, но что-то нет...
+    const payload = { email: user.email, id: user.id }; //еще роли, но что-то нет...
     return this.jwtService.sign(payload, options);
   }
 
@@ -165,7 +165,7 @@ export class AuthService {
   private async validateUser(authUserDto: AuthUserDto): Promise<UserEntity> {
     const candidate = await this.userService.getBy({
       checkOnly: true,
-      params: {email: authUserDto.email}
+      params: { email: authUserDto.email }
     });
     // TODO: hash password
     // const isPasswordEquals = await bcrypt.compare(authUserDto.password + '', candidate.password);
@@ -173,7 +173,7 @@ export class AuthService {
     if (candidate && isPasswordEquals) {
       return candidate;
     }
-    throw new UnauthorizedException({message: 'Incorrect email or password'});
+    throw new UnauthorizedException({ message: 'Incorrect email or password' });
   }
 
   /**
@@ -205,7 +205,7 @@ export class AuthService {
    */
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
     const user = await this.userService.getBy({
-      params: {email: forgotPasswordDto.email}
+      params: { email: forgotPasswordDto.email }
     });
     if (!user) {
       throw new BadRequestException('Invalid email');

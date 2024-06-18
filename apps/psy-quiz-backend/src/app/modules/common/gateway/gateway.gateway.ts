@@ -1,17 +1,16 @@
+import { Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import {
-  SubscribeMessage,
-  WebSocketGateway,
-  OnGatewayInit,
-  WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer
 } from '@nestjs/websockets';
-import { Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { Socket, Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { UserService } from '../user/user.service';
 import { ConnectedUserService } from './connected-user.service';
-import { JwtService } from '@nestjs/jwt';
-
 
 @WebSocketGateway({ cors: { origin: ['http://localhost:5002', 'http://localhost:3000', 'http://localhost:4200'] } })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
@@ -23,14 +22,12 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   constructor(
     private userService: UserService,
     private connectedUserService: ConnectedUserService,
-    private jwtService: JwtService,
-  ) {
-  }
+    private jwtService: JwtService
+  ) {}
 
   afterInit(server: Server) {
     this.logger.log('Socket-server up');
   }
-
 
   async handleDisconnect(client: Socket) {
     await this.connectedUserService.deleteBySocketId(client.id);
@@ -49,9 +46,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       client.data.user = user;
       await this.connectedUserService.create(client.id, user);
       // return this.server.to(client.id).emit('notifications', notifications);
-    }
-    catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       return this.disconnect(client);
     }
   }

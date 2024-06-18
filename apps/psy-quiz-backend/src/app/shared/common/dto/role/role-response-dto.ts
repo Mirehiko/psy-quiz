@@ -1,6 +1,5 @@
-import { PermissionResponseDto } from '../permission';
 import { Expose } from 'class-transformer';
-
+import { PermissionResponseDto } from '../permission';
 
 export class RoleResponseDto {
   @Expose()

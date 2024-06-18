@@ -2,25 +2,21 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthRestService } from './rest/auth-rest.service';
 
-
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   private token: string | null = null;
   public user: any;
 
-  constructor(
-    private authRestService: AuthRestService,
-    private router: Router
-  ) {}
+  constructor(private authRestService: AuthRestService, private router: Router) {}
 
   // register(user: User): Observable<User> {
   //   return this.http.post<User>('/api/auth/register', user);
   // }
 
   async login(authUserDto: any): Promise<void> {
-    const response =  await this.authRestService.login(authUserDto);
+    const response = await this.authRestService.login(authUserDto);
     this.user = response.user;
     this.setToken(response.token);
     // localStorage.setItem('permit', `${JSON.stringify(user)}`);
@@ -33,7 +29,7 @@ export class AuthService {
   async logout(): Promise<void> {
     this.user = null;
     this.removeToken();
-    await this.router.navigate([ "/login" ]);
+    await this.router.navigate(['/login']);
   }
 
   setToken(token: string): void {
@@ -55,8 +51,7 @@ export class AuthService {
     if (!this.user) {
       try {
         this.user = await this.authRestService.getUserByToken(this.getToken());
-      }
-      catch (e) {
+      } catch (e) {
         await this.logout();
       }
     }

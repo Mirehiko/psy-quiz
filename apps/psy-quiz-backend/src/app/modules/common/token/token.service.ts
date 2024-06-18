@@ -1,15 +1,14 @@
 import { Injectable, NotFoundException, Param, UnauthorizedException } from '@nestjs/common';
-import { CreateUserTokenDto } from "./dto";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { UserToken } from "./schemas/user-token.entity";
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserTokenDto } from './dto';
+import { UserToken } from './schemas/user-token.entity';
 
 @Injectable()
 export class TokenService {
   constructor(
     @InjectRepository(UserToken)
-    private repository: Repository<UserToken>,
+    private repository: Repository<UserToken>
   ) {}
 
   /**
@@ -17,9 +16,9 @@ export class TokenService {
    * @param createUserTokenDto
    */
   async create(@Param() createUserTokenDto: CreateUserTokenDto): Promise<CreateUserTokenDto> {
-    const userToken = await this.repository.create({...createUserTokenDto});
+    const userToken = await this.repository.create({ ...createUserTokenDto });
     await this.repository.save(userToken);
-    return {token: userToken.token, userId: userToken.userId, expireAt: userToken.expireAt+''};
+    return { token: userToken.token, userId: userToken.userId, expireAt: userToken.expireAt + '' };
   }
 
   /**
@@ -28,7 +27,7 @@ export class TokenService {
    * @param token
    */
   async delete(userId: string, token: string): Promise<boolean> {
-    const row = await this.repository.find({where: {userId, token }});
+    const row = await this.repository.find({ where: { userId, token } });
     if (row) {
       await this.repository.remove(row);
       return true;
@@ -41,7 +40,7 @@ export class TokenService {
    * @param userId
    */
   async deleteAll(userId: string): Promise<boolean> {
-    const rows = await this.repository.find({where: {userId}});
+    const rows = await this.repository.find({ where: { userId } });
     if (rows.length) {
       await this.repository.remove(rows);
       return true;
@@ -55,14 +54,14 @@ export class TokenService {
    * @param token
    */
   async exists(userId: string, token: string): Promise<boolean> {
-    const row = await this.repository.findOne({where: { userId, token }});
+    const row = await this.repository.findOne({ where: { userId, token } });
     return !!row;
   }
 
   async getUserIdByToken(token: string): Promise<string> {
-    const user = await this.repository.findOne({where: {token}, relations: ['userId']});
+    const user = await this.repository.findOne({ where: { token }, relations: ['userId'] });
     if (!user) {
-      throw new UnauthorizedException({message: "User unauthorized"});
+      throw new UnauthorizedException({ message: 'User unauthorized' });
     }
     return user.userId;
   }

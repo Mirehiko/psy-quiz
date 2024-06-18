@@ -1,6 +1,5 @@
 import { IGetParams, IGetParamsData } from '.';
 
-
 export interface IUserGetParamsData extends IGetParamsData {
   params: IUserGetParams;
 }

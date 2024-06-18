@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { ApiTags } from "@nestjs/swagger";
-import {RunAnswerService} from "./run-answer.service";
-
+import { ApiTags } from '@nestjs/swagger';
+import { RunAnswerService } from './run-answer.service';
 
 @ApiTags('Ответ на тест')
 @Controller('main')

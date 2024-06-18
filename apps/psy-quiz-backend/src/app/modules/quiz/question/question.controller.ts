@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { ApiTags } from "@nestjs/swagger";
-import {QuestionService} from "./question.service";
-
+import { ApiTags } from '@nestjs/swagger';
+import { QuestionService } from './question.service';
 
 @ApiTags('Вопросы')
 @Controller('main')

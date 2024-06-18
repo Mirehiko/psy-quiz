@@ -1,7 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { RoleResponseDto } from '../role/role-response-dto';
 
-
 @Exclude()
 export class UserResponseDto {
   @Expose()

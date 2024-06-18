@@ -1,12 +1,11 @@
-import {UserEntity} from "./schemas/user.entity";
 import { UserResponseDto } from '../../../shared';
-
+import { UserEntity } from './schemas/user.entity';
 
 export class UserHelper {
   public static mapEntitiesToDto(data: UserEntity[]): UserResponseDto[] {
     if (Array.isArray(data)) {
       const result: UserResponseDto[] = [];
-      data.forEach(d => {
+      data.forEach((d) => {
         result.push(Object.assign(new UserResponseDto(), d));
       });
       return result;

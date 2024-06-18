@@ -1,5 +1,4 @@
-import { RoleRequestDto } from "../role/role-request-dto";
-
+import { RoleRequestDto } from '../role/role-request-dto';
 
 export class UserRolesDto {
   readonly userId: string;

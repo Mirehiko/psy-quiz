@@ -1,1 +1,1 @@
-export * from './test-stats.component.scss'
+export * from './test-stats.component.scss';

@@ -1,13 +1,12 @@
 import { HttpException, HttpStatus, Param } from '@nestjs/common';
 import { FindOneOptions, FindOperator, In, IsNull, Not, Repository } from 'typeorm';
 import { IGetParamsData } from '../../shared';
-import {BaseEntity} from "./base-entity";
-import {BaseService} from "./base-service";
+import { BaseEntity } from './base-entity';
+import { BaseService } from './base-service';
 
-
-export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> extends BaseService<T, U>{
+export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> extends BaseService<T, U> {
   protected repository: Repository<T>;
-	protected entityNotFoundMessage: string;
+  protected entityNotFoundMessage: string;
 
   /**
    * Restore deleted entities from trash
@@ -16,16 +15,15 @@ export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> e
   public async restore(ids: string[]): Promise<any> {
     const entities = await this.repository
       .createQueryBuilder('entity')
-      .where('entity.id IN (:...ids)', {ids})
+      .where('entity.id IN (:...ids)', { ids })
       .withDeleted()
       .getMany();
 
     if (entities.length) {
       try {
         await this.repository.restore(ids);
-        return {status: HttpStatus.OK, statusText: 'Recovered successfully'};
-      }
-      catch (e) {
+        return { status: HttpStatus.OK, statusText: 'Recovered successfully' };
+      } catch (e) {
         throw new Error(e);
       }
     }
@@ -38,7 +36,7 @@ export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> e
   async getEntitiesTrash(): Promise<T[]> {
     return await this.repository
       .createQueryBuilder('entity')
-      .where('entity.deletedAt = :deletedAt', {deletedAt: Not(IsNull())})
+      .where('entity.deletedAt = :deletedAt', { deletedAt: Not(IsNull()) })
       .withDeleted()
       .getMany();
   }
@@ -50,7 +48,7 @@ export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> e
   async moveEntitiesToTrash(ids: string[]): Promise<any> {
     const entities = await this.repository
       .createQueryBuilder('entity')
-      .where('entity.id IN (:...ids)', {ids})
+      .where('entity.id IN (:...ids)', { ids })
       .withDeleted()
       .getMany();
 
@@ -60,9 +58,8 @@ export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> e
 
     try {
       await this.repository.softDelete(ids);
-      return {status: HttpStatus.OK, statusText: 'Moved to trash successfully'};
-    }
-    catch (e) {
+      return { status: HttpStatus.OK, statusText: 'Moved to trash successfully' };
+    } catch (e) {
       throw new Error(e);
     }
   }

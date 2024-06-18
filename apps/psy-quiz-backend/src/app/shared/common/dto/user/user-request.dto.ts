@@ -2,18 +2,17 @@ import { IsArray, IsEmail, IsNumber, IsOptional, IsString, Length } from 'class-
 import { RequestObjectWithId } from '../objectWithId';
 import { RoleRequestDto } from '../role/role-request-dto';
 
-
 export class UserRequestDto implements RequestObjectWithId {
   @IsOptional()
   @IsNumber()
   id?: string;
 
   @IsOptional()
-  @IsString({message: 'Должно быть строкой'})
+  @IsString({ message: 'Должно быть строкой' })
   name: string;
 
-  @IsString({message: 'Email должен быть строкой'})
-  @IsEmail({}, {message: 'Некорректный email'})
+  @IsString({ message: 'Email должен быть строкой' })
+  @IsEmail({}, { message: 'Некорректный email' })
   email?: string;
 
   @IsOptional()

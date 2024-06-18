@@ -5,5 +5,4 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './analytics-page.component.html',
   styleUrls: ['./analytics-page.component.scss']
 })
-export class StatsComponent implements OnInit {
-}
+export class StatsComponent implements OnInit {}

@@ -4,28 +4,20 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
-
   form: FormGroup;
   aSub: Subscription;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      email: new FormControl(null, [
-        Validators.required,
-        Validators.email
-      ]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, Validators.required)
     });
   }
@@ -38,13 +30,12 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   async submit(): Promise<void> {
     this.form.disable();
-    if ( !this.form.invalid ) {
+    if (!this.form.invalid) {
       const user = this.form.value;
       await this.authService.login(user);
       this.router.navigate(['/main']);
       this.form.enable();
-    }
-    else {
+    } else {
       this.form.enable();
     }
   }

@@ -1,33 +1,32 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import * as path from 'node:path';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'node:path';
 import { Connection } from 'typeorm';
 import { configModule } from './config/configure.root';
 import { LoggingMiddleware } from './middleware';
-import { UserModule } from './modules/common/user/user.module';
-import { TokenModule } from './modules/common/token/token.module';
-import { RoleModule } from './modules/common/role/role.module';
-import { GatewayModule } from './modules/common/gateway/gateway.module';
-import { PermissionModule } from './modules/common/permission/permission.module';
 import { AuthModule } from './modules/common/auth/auth.module';
 import { AppGateway } from './modules/common/gateway/gateway.gateway';
-import {TestModule} from "./modules/quiz/test/test.module";
-import {QuestionModule} from "./modules/quiz/question/question.module";
-import {CriterionModule} from "./modules/quiz/criterion/criterion.module";
-import {QuestionAnswerModule} from "./modules/quiz/question_answer/question-answer.module";
-import {QuestionTypeModule} from "./modules/quiz/question_type/question-type.module";
-import {RunAnswerModule} from "./modules/quiz/run_answer/run-answer.module";
-import {ScaleAnswerModule} from "./modules/quiz/scale_answer/scale-answer.module";
-import {ScaleModule} from "./modules/quiz/scale/scale.module";
-import {TestRunModule} from "./modules/quiz/test_run/test-run.module";
-
+import { GatewayModule } from './modules/common/gateway/gateway.module';
+import { PermissionModule } from './modules/common/permission/permission.module';
+import { RoleModule } from './modules/common/role/role.module';
+import { TokenModule } from './modules/common/token/token.module';
+import { UserModule } from './modules/common/user/user.module';
+import { CriterionModule } from './modules/quiz/criterion/criterion.module';
+import { QuestionModule } from './modules/quiz/question/question.module';
+import { QuestionAnswerModule } from './modules/quiz/question_answer/question-answer.module';
+import { QuestionTypeModule } from './modules/quiz/question_type/question-type.module';
+import { RunAnswerModule } from './modules/quiz/run_answer/run-answer.module';
+import { ScaleModule } from './modules/quiz/scale/scale.module';
+import { ScaleAnswerModule } from './modules/quiz/scale_answer/scale-answer.module';
+import { TestModule } from './modules/quiz/test/test.module';
+import { TestRunModule } from './modules/quiz/test_run/test-run.module';
 
 @Module({
   imports: [
     configModule,
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, '../../static'),
+      rootPath: path.resolve(__dirname, '../../static')
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
@@ -41,7 +40,7 @@ import {TestRunModule} from "./modules/quiz/test_run/test-run.module";
         synchronize: true,
         // migrationsRun: true,
         autoLoadEntities: true,
-        charset: 'UTF8',
+        charset: 'UTF8'
         // migrations: [
         //   "src/migration/**/*.ts"
         // ],
@@ -65,16 +64,13 @@ import {TestRunModule} from "./modules/quiz/test_run/test-run.module";
     ScaleAnswerModule,
     TestModule,
     TestRunModule
-  ],
+  ]
   // providers: [AppGateway],
 })
 export class AppModule implements NestModule {
-  constructor(private connection: Connection) {
-  }
+  constructor(private connection: Connection) {}
 
   configure(consumer: MiddlewareConsumer): any {
-    consumer
-      .apply(LoggingMiddleware)
-      .forRoutes({path: '*', method: RequestMethod.ALL})
+    consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

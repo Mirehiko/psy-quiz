@@ -1,10 +1,9 @@
 import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
-import { RoleEntity } from './schemas/role.entity';
-import { PermissionService } from '../permission/permission.service';
-import { RoleRepository } from './role-repository';
 import { IGetParamsData, RoleRequestDto } from '../../../shared';
 import { BaseService } from '../base-service';
-
+import { PermissionService } from '../permission/permission.service';
+import { RoleRepository } from './role-repository';
+import { RoleEntity } from './schemas/role.entity';
 
 @Injectable()
 export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
@@ -23,7 +22,7 @@ export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
    * @param role
    */
   async createRole(role: RoleRequestDto): Promise<any> {
-    const candidate = await this.repository.findOne({where: { name: role.name }});
+    const candidate = await this.repository.findOne({ where: { name: role.name } });
     if (candidate) {
       throw new HttpException('Такая роль уже существует. Введите другое имя роли', HttpStatus.CONFLICT);
     }
@@ -39,7 +38,6 @@ export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
       newRole.permissions = permissions;
       await this.repository.save(newRole);
       return newRole; // 201
-
     } catch (e) {
       throw new Error(e);
     }
@@ -51,7 +49,7 @@ export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
    * @param roleRequestDto
    */
   async updateRole(@Param() id: string, roleRequestDto: RoleRequestDto): Promise<RoleEntity> {
-    const role = await this.repository.findOne({where: {id}});
+    const role = await this.repository.findOne({ where: { id } });
     if (!role) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
     }
@@ -66,8 +64,7 @@ export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
 
     try {
       return await this.repository.save(role);
-    }
-    catch (e) {
+    } catch (e) {
       throw new Error(e);
     }
   }
