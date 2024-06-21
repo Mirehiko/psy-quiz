@@ -9,7 +9,7 @@ services:
   psy-quiz-db:
     image: mysql:latest
     container_name: psy-quiz-db
-    command: --default-authentication-plugin=mysql_native_password
+#    command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     environment:
       - MYSQL_DATABASE=psy-quiz
@@ -18,8 +18,8 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - "3307:3306"
-    volumes:
-      - "./volumes/mysql/db:/var/lib/mysql"
+#    volumes:
+#      - "./volumes/mysql/db:/var/lib/mysql"
     networks:
       - mysql
 
