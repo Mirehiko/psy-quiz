@@ -13,13 +13,13 @@ export class QuestionAnswerController {
 
   @Get('question-answer/list')
   async getAll(): Promise<QuestionAnswerResponseDto[]> {
-    const entities = await this.service.getAll(['runs']);
+    const entities = await this.service.getAll();
     return plainToClass(QuestionAnswerResponseDto, entities, { enableCircularCheck: true });
   }
 
   @Get('question-answer/:id')
   async getById(@Param('id') id: string): Promise<QuestionAnswerResponseDto> {
-    const entity = await this.service.getByID(id, ['runs']);
+    const entity = await this.service.getByID(id, );
     return plainToClass(QuestionAnswerResponseDto, entity, { enableCircularCheck: true });
   }
 

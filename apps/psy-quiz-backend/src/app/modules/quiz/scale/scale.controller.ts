@@ -13,13 +13,13 @@ export class ScaleController {
 
   @Get('scale/list')
   async getAll(): Promise<ScaleResponseDto[]> {
-    const entities = await this.service.getAll(['runs']);
+    const entities = await this.service.getAll();
     return plainToClass(ScaleResponseDto, entities, { enableCircularCheck: true });
   }
 
   @Get('scale/:id')
   async getById(@Param('id') id: string): Promise<ScaleResponseDto> {
-    const entity = await this.service.getByID(id, ['runs']);
+    const entity = await this.service.getByID(id, );
     return plainToClass(ScaleResponseDto, entity, { enableCircularCheck: true });
   }
 

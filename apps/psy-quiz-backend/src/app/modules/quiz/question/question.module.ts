@@ -9,16 +9,20 @@ import { QuestionRepository } from './question-repository';
 import { QuestionController } from './question.controller';
 import { QuestionService } from './question.service';
 import { QuestionEntity } from './schemas/question.entity';
+import { QuestionAnswerRepository } from '../question_answer/question-answer-repository';
+import { QuestionTypeRepository } from '../question_type/question-type-repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      QuestionEntity,
+      // QuestionEntity,
+      // TestEntity,
+      // QuestionAnswerEntity,
+      // QuestionTypeEntity,
       QuestionRepository,
-      TestEntity,
       TestRepository,
-      QuestionAnswerEntity,
-      QuestionTypeEntity
+      QuestionAnswerRepository,
+      QuestionTypeRepository
     ]),
     forwardRef(() => TestModule)
   ],

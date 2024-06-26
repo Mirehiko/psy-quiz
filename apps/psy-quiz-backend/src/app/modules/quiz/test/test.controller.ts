@@ -13,13 +13,13 @@ export class TestController {
 
   @Get('test/list')
   async getAll(): Promise<TestResponseDto[]> {
-    const tests = await this.service.getAll(['runs']);
+    const tests = await this.service.getAll();
     return plainToClass(TestResponseDto, tests, { enableCircularCheck: true });
   }
 
   @Get('test/:id')
   async getById(@Param('id') id: string): Promise<TestResponseDto> {
-    const test = await this.service.getByID(id, ['runs']);
+    const test = await this.service.getByID(id, );
     return plainToClass(TestResponseDto, test, { enableCircularCheck: true });
   }
 

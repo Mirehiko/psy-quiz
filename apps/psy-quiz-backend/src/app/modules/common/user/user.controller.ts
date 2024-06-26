@@ -33,7 +33,7 @@ export class UserController {
   // @ApiResponse({status: 200, type: [UserResponseDto]})
   @Roles('ADMIN')
   // @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('users')
   async getUsers(): Promise<UserResponseDto[]> {
     const users = await this.service.getAll(['roles', 'roles.permissions']);

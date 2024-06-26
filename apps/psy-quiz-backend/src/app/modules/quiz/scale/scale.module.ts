@@ -7,9 +7,21 @@ import { ScaleRepository } from './scale-repository';
 import { ScaleController } from './scale.controller';
 import { ScaleService } from './scale.service';
 import { ScaleEntity } from './schemas/scale.entity';
+import { TestRepository } from '../test/test-repository';
+import { CriterionRepository } from '../criterion/criterion-repository';
+import { ScaleAnswerRepository } from '../scale_answer/scale-answer-repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ScaleEntity, ScaleRepository, TestEntity, CriterionEntity, ScaleAnswerEntity])],
+  imports: [TypeOrmModule.forFeature([
+    // ScaleEntity,
+    // TestEntity,
+    // CriterionEntity,
+    // ScaleAnswerEntity,
+    ScaleRepository,
+    TestRepository,
+    CriterionRepository,
+    ScaleAnswerRepository
+  ])],
   providers: [ScaleService],
   controllers: [ScaleController],
   exports: [ScaleService]

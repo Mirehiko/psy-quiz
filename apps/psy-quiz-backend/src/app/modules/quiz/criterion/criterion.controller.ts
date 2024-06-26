@@ -13,13 +13,13 @@ export class CriterionController {
 
   @Get('criterion/list')
   async getAll(): Promise<CriterionResponseDto[]> {
-    const criteria = await this.service.getAll(['runs']);
+    const criteria = await this.service.getAll();
     return plainToClass(CriterionResponseDto, criteria, { enableCircularCheck: true });
   }
 
   @Get('criterion/:id')
   async getById(@Param('id') id: string): Promise<CriterionResponseDto> {
-    const criterion = await this.service.getByID(id, ['runs']);
+    const criterion = await this.service.getByID(id, );
     return plainToClass(CriterionResponseDto, criterion, { enableCircularCheck: true });
   }
 

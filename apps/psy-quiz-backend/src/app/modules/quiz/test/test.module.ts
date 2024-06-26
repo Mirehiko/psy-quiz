@@ -9,16 +9,21 @@ import { TestEntity } from './schemas/test.entity';
 import { TestRepository } from './test-repository';
 import { TestController } from './test.controller';
 import { TestService } from './test.service';
+import { ScaleRepository } from '../scale/scale-repository';
+import { TestRunRepository } from '../test_run/test-run-repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      TestEntity,
-      QuestionEntity,
+      // TestEntity,
+      // QuestionEntity,
+      // ScaleEntity,
+      // TestRunEntity,
+
       TestRepository,
-      ScaleEntity,
-      TestRunEntity,
-      QuestionRepository
+      QuestionRepository,
+      ScaleRepository,
+      TestRunRepository
     ]),
     forwardRef(() => QuestionModule)
   ],
