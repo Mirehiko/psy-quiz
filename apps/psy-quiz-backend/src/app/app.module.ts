@@ -1,12 +1,8 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as path from 'node:path';
 import { Connection, DataSource } from 'typeorm';
-import { configModule } from './config/configure.root';
 import { LoggingMiddleware } from './middleware';
 import { AuthModule } from './modules/common/auth/auth.module';
-import { AppGateway } from './modules/common/gateway/gateway.gateway';
 import { GatewayModule } from './modules/common/gateway/gateway.module';
 import { PermissionModule } from './modules/common/permission/permission.module';
 import { RoleModule } from './modules/common/role/role.module';
@@ -22,68 +18,33 @@ import { ScaleAnswerModule } from './modules/quiz/scale_answer/scale-answer.modu
 import { TestModule } from './modules/quiz/test/test.module';
 import { TestRunModule } from './modules/quiz/test_run/test-run.module';
 
-export const dataBaseProviders = [
-  {
-    provide: 'DATA_SOURCE',
-    useFactory: async () => {
-      const dataSource = new DataSource(
-        {
-          type: 'mysql',
-          host: process.env.DB_HOST,
-          port: parseInt(process.env.DB_PORT) || 3306,
-          username: process.env.DB_USER,
-          password: process.env.DB_PASSWORD,
-          database: process.env.DB_NAME,
-          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-          synchronize: true,
-          // migrationsRun: true,
-          // autoLoadEntities: true,
-          charset: 'UTF8'
-          // migrations: [
-          //   "src/migration/**/*.ts"
-          // ],
-        }
-      );
-      return dataSource.initialize();
-    }
-  }
-];
-
-
-@Module({
-  providers: [...dataBaseProviders],
-  exports: [...dataBaseProviders],
-})
-export class DatabaseModule {}
-
 @Module({
   imports: [
-    configModule,
+    // configModule,
     // ServeStaticModule.forRoot({
-    //   rootPath: path.resolve(__dirname, '../../static')
+    //   rootPath: path.resolve(__dirname, '../../static'),
     // }),
-    // TypeOrmModule.forRootAsync({
-    //   useFactory: async () => ({
-    //     type: 'mysql',
-    //     host: process.env.DB_HOST,
-    //     port: parseInt(process.env.DB_PORT) || 3306,
-    //     username: process.env.DB_USER,
-    //     password: process.env.DB_PASSWORD,
-    //     database: process.env.DB_NAME,
-    //     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    //     synchronize: true,
-    //     // migrationsRun: true,
-    //     autoLoadEntities: true,
-    //     charset: 'UTF8'
-    //     // migrations: [
-    //     //   "src/migration/**/*.ts"
-    //     // ],
-    //   })
-    //   // subscribers: [
-    //   //   "src/subscriber/**/*.ts"
-    //   // ],
-    // }),
-    DatabaseModule,
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'mysql',
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT) || 3306,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+        // migrationsRun: true,
+        autoLoadEntities: true,
+        charset: 'UTF8'
+        // migrations: [
+        //   "src/migration/**/*.ts"
+        // ],
+      })
+      // subscribers: [
+      //   "src/subscriber/**/*.ts"
+      // ],
+    }),
     UserModule,
     AuthModule,
     RoleModule,
@@ -103,7 +64,7 @@ export class DatabaseModule {}
   // providers: [AppGateway],
 })
 export class AppModule implements NestModule {
-  constructor(private connection: Connection) {}
+  constructor(private dataSource: DataSource) {}
 
   configure(consumer: MiddlewareConsumer): any {
     consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });

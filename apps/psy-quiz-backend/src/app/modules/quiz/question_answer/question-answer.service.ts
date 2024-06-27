@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
-import { QuestionAnswerRepository } from './question-answer-repository';
 import { QuestionAnswerEntity } from './schemas/question-answer.entity';
 
 @Injectable()
@@ -9,7 +10,10 @@ export class QuestionAnswerService extends BaseService<QuestionAnswerEntity, IUs
   protected entityNotFoundMessage: string = 'Нет такого ответа';
   protected entityOrRelationNotFoundMessage: string = 'Ответ не найден';
 
-  constructor(protected repository: QuestionAnswerRepository) {
+  constructor(
+    @InjectRepository(QuestionAnswerEntity)
+    protected repository: Repository<QuestionAnswerEntity>
+  ) {
     super();
   }
 }

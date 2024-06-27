@@ -1,11 +1,11 @@
-import { Connection } from 'typeorm';
+import { Connection, DataSource } from 'typeorm';
 import { Constants } from '../../../shared';
-import { CriterionRepository } from './criterion-repository';
+import { CriterionEntity } from './schemas/criterion.entity';
 
 export const criterionProviders = [
   {
     provide: Constants.CRITERION_REPOSITORY,
-    useFactory: (connection: Connection) => connection.getRepository(CriterionRepository),
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(CriterionEntity),
     inject: [Constants.DATABASE_CONNECTION]
   }
 ];

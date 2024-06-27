@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CriterionService } from './criterion.service';
 import { plainToClass } from 'class-transformer';
+import { CriterionService } from './criterion.service';
 
 export class CriterionRequestDto {}
 export class CriterionResponseDto {}
@@ -19,15 +19,12 @@ export class CriterionController {
 
   @Get('criterion/:id')
   async getById(@Param('id') id: string): Promise<CriterionResponseDto> {
-    const criterion = await this.service.getByID(id, );
+    const criterion = await this.service.getByID(id);
     return plainToClass(CriterionResponseDto, criterion, { enableCircularCheck: true });
   }
 
   @Patch('criterion/:id')
-  async update(
-    @Body() requestDto: CriterionRequestDto,
-    @Param() id: string,
-  ): Promise<CriterionResponseDto> {
+  async update(@Body() requestDto: CriterionRequestDto, @Param() id: string): Promise<CriterionResponseDto> {
     const criterion = await this.service.getByID(id);
     return plainToClass(CriterionResponseDto, criterion, { enableCircularCheck: true });
   }

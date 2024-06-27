@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { RunAnswerService } from './run-answer.service';
 import { plainToClass } from 'class-transformer';
+import { RunAnswerService } from './run-answer.service';
 
 export class RunAnswerRequestDto {}
 export class RunAnswerResponseDto {}
@@ -19,15 +19,12 @@ export class RunAnswerController {
 
   @Get('run-answer/:id')
   async getById(@Param('id') id: string): Promise<RunAnswerResponseDto> {
-    const entity = await this.service.getByID(id, );
+    const entity = await this.service.getByID(id);
     return plainToClass(RunAnswerResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Patch('run-answer/:id')
-  async update(
-    @Body() requestDto: RunAnswerRequestDto,
-    @Param() id: string,
-  ): Promise<RunAnswerResponseDto> {
+  async update(@Body() requestDto: RunAnswerRequestDto, @Param() id: string): Promise<RunAnswerResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToClass(RunAnswerResponseDto, entity, { enableCircularCheck: true });
   }

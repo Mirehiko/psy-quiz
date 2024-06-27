@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
 import { QuestionEntity } from '../../question/schemas/question.entity';
-import { RunAnswerEntity } from '../../run_answer/schemas/run-answer.entity';
 import { ScaleEntity } from '../../scale/schemas/scale.entity';
 import { TestRunEntity } from '../../test_run/schemas/test-run.entity';
 

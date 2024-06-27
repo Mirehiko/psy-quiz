@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Expose, plainToClass } from 'class-transformer';
 import { TestService } from './test.service';
-import { plainToClass } from 'class-transformer';
 
 export class TestRequestDto {}
 export class TestResponseDto {}
@@ -13,23 +13,20 @@ export class TestController {
 
   @Get('test/list')
   async getAll(): Promise<TestResponseDto[]> {
-    const tests = await this.service.getAll();
-    return plainToClass(TestResponseDto, tests, { enableCircularCheck: true });
+    const entities = await this.service.getAll();
+    return plainToClass(TestResponseDto, entities, { enableCircularCheck: true });
   }
 
   @Get('test/:id')
   async getById(@Param('id') id: string): Promise<TestResponseDto> {
-    const test = await this.service.getByID(id, );
-    return plainToClass(TestResponseDto, test, { enableCircularCheck: true });
+    const entity = await this.service.getByID(id);
+    return plainToClass(TestResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Patch('test/:id')
-  async update(
-    @Body() requestDto: TestRequestDto,
-    @Param() id: string,
-  ): Promise<TestResponseDto> {
-    const test = await this.service.getByID(id);
-    return plainToClass(TestResponseDto, test, { enableCircularCheck: true });
+  async update(@Body() requestDto: TestRequestDto, @Param() id: string): Promise<TestResponseDto> {
+    const entity = await this.service.getByID(id);
+    return plainToClass(TestResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Delete('test/:id')

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ScaleAnswerService } from './scale-answer.service';
 import { plainToClass } from 'class-transformer';
+import { ScaleAnswerService } from './scale-answer.service';
 
 export class ScaleAnswerRequestDto {}
 export class ScaleAnswerResponseDto {}
@@ -19,15 +19,12 @@ export class ScaleAnswerController {
 
   @Get('scale-answer/:id')
   async getById(@Param('id') id: string): Promise<ScaleAnswerResponseDto> {
-    const entity = await this.service.getByID(id, );
+    const entity = await this.service.getByID(id);
     return plainToClass(ScaleAnswerResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Patch('scale-answer/:id')
-  async update(
-    @Body() requestDto: ScaleAnswerRequestDto,
-    @Param() id: string,
-  ): Promise<ScaleAnswerResponseDto> {
+  async update(@Body() requestDto: ScaleAnswerRequestDto, @Param() id: string): Promise<ScaleAnswerResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToClass(ScaleAnswerResponseDto, entity, { enableCircularCheck: true });
   }

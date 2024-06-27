@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Param, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Param, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserTokenDto } from './dto';

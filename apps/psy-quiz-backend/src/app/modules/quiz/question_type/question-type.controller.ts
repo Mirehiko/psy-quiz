@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { QuestionTypeService } from './question-type.service';
 import { plainToClass } from 'class-transformer';
+import { QuestionTypeService } from './question-type.service';
 
 export class QuestionTypeRequestDto {}
 export class QuestionTypeResponseDto {}
@@ -19,15 +19,12 @@ export class QuestionTypeController {
 
   @Get('question-type/:id')
   async getById(@Param('id') id: string): Promise<QuestionTypeResponseDto> {
-    const entity = await this.service.getByID(id, );
+    const entity = await this.service.getByID(id);
     return plainToClass(QuestionTypeResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Patch('question-type/:id')
-  async update(
-    @Body() requestDto: QuestionTypeRequestDto,
-    @Param() id: string,
-  ): Promise<QuestionTypeResponseDto> {
+  async update(@Body() requestDto: QuestionTypeRequestDto, @Param() id: string): Promise<QuestionTypeResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToClass(QuestionTypeResponseDto, entity, { enableCircularCheck: true });
   }
