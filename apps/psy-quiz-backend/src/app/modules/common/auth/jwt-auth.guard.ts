@@ -1,14 +1,17 @@
 import {CanActivate, ExecutionContext, Injectable, UnauthorizedException} from "@nestjs/common";
 import {JwtService} from "@nestjs/jwt";
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 import {TokenService} from "../token/token.service";
-import { UserRepository } from "../user/user-repository";
+import {UserEntity} from "../user/schemas/user.entity";
 
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(private tokenService: TokenService,
     private jwtService: JwtService,
-    private userRepository: UserRepository) {
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>) {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

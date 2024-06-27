@@ -1,8 +1,9 @@
-import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
+import {HttpException, HttpStatus, Inject, Injectable, Param} from '@nestjs/common';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 import { RoleEntity } from './schemas/role.entity';
 import { PermissionService } from '../permission/permission.service';
-import { RoleRepository } from './role-repository';
-import { IGetParamsData, RoleRequestDto } from '../../../shared';
+import {IGetParamsData, RoleRequestDto} from '../../../shared';
 import { BaseService } from '../base-service';
 
 
@@ -11,8 +12,8 @@ export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
   protected entityNotFoundMessage: string = 'Нет такой роли';
 
   constructor(
-    // TODO: Replace with Permission Repository
-    protected repository: RoleRepository,
+    @InjectRepository(RoleEntity)
+    protected repository: Repository<RoleEntity>,
     private permissionService: PermissionService
   ) {
     super();

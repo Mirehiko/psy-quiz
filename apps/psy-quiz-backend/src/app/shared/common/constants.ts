@@ -1,5 +1,6 @@
 export enum Constants {
-  DATABASE_CONNECTION = 'dbConn',
+  DATABASE_CONNECTION = 'DATA_SOURCE',
+  USER_TOKEN_REPOSITORY = 'userTokenRepository',
   USER_REPOSITORY = 'userRepository',
   CONNECTED_USER_REPOSITORY = 'connectedUserRepository',
   ROLE_REPOSITORY = "roleRepository",

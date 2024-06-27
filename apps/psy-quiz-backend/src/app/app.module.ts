@@ -1,17 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import * as path from 'node:path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { Connection } from 'typeorm';
-import { configModule } from './config/configure.root';
+import {Connection, DataSource} from 'typeorm';
 import { LoggingMiddleware } from './middleware';
 import { UserModule } from './modules/common/user/user.module';
 import { TokenModule } from './modules/common/token/token.module';
 import { RoleModule } from './modules/common/role/role.module';
-import { GatewayModule } from './modules/common/gateway/gateway.module';
 import { PermissionModule } from './modules/common/permission/permission.module';
 import { AuthModule } from './modules/common/auth/auth.module';
-import { AppGateway } from './modules/common/gateway/gateway.gateway';
 import {TestModule} from "./modules/quiz/test/test.module";
 import {QuestionModule} from "./modules/quiz/question/question.module";
 import {CriterionModule} from "./modules/quiz/criterion/criterion.module";
@@ -22,13 +17,12 @@ import {ScaleAnswerModule} from "./modules/quiz/scale_answer/scale-answer.module
 import {ScaleModule} from "./modules/quiz/scale/scale.module";
 import {TestRunModule} from "./modules/quiz/test_run/test-run.module";
 
-
 @Module({
   imports: [
-    configModule,
-    ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, '../../static'),
-    }),
+    // configModule,
+    // ServeStaticModule.forRoot({
+    //   rootPath: path.resolve(__dirname, '../../static'),
+    // }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'mysql',
@@ -69,7 +63,7 @@ import {TestRunModule} from "./modules/quiz/test_run/test-run.module";
   // providers: [AppGateway],
 })
 export class AppModule implements NestModule {
-  constructor(private connection: Connection) {
+  constructor(private dataSource: DataSource) {
   }
 
   configure(consumer: MiddlewareConsumer): any {

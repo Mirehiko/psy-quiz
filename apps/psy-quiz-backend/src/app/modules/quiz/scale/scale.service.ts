@@ -1,8 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import { IUserGetParamsData } from '../../../shared';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
+import {IUserGetParamsData} from '../../../shared';
 import {BaseService} from "../../common/base-service";
 import {ScaleEntity} from "./schemas/scale.entity";
-import {ScaleRepository} from "./scale-repository";
 
 
 @Injectable()
@@ -11,7 +12,8 @@ export class ScaleService extends BaseService<ScaleEntity, IUserGetParamsData> {
   protected entityOrRelationNotFoundMessage: string = 'Шкала оценки не найдена';
 
   constructor(
-    protected repository: ScaleRepository,
+    @InjectRepository(ScaleEntity)
+    protected repository: Repository<ScaleEntity>
   ) {
     super();
   }

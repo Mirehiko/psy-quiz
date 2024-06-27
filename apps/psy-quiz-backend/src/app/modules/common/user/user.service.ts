@@ -1,10 +1,11 @@
-import {HttpException, HttpStatus, Injectable, Param} from '@nestjs/common';
+import {HttpException, HttpStatus, Inject, Injectable, Param} from '@nestjs/common';
 import {UserEntity} from "./schemas/user.entity";
 import {RoleService} from "../role/role.service";
 import * as bcrypt from 'bcrypt';
-import { UserRepository } from './user-repository';
-import { BanUserDto, IUserGetParamsData, UserRequestDto, UserRolesDto } from '../../../shared';
+import {BanUserDto, IUserGetParamsData, UserRequestDto, UserRolesDto} from '../../../shared';
 import { BaseService } from '../base-service';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 
 
 @Injectable()
@@ -14,7 +15,8 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
   protected entityOrRelationNotFoundMessage: string = 'Пользователь или роль не найдены';
 
   constructor(
-    protected repository: UserRepository,
+    @InjectRepository(UserEntity)
+    protected repository: Repository<UserEntity>,
     private roleService: RoleService,
   ) {
     super();

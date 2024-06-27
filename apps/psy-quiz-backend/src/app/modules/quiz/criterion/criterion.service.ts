@@ -1,6 +1,7 @@
 import {Injectable} from '@nestjs/common';
-import { IUserGetParamsData } from '../../../shared';
-import {CriterionRepository} from "./criterion-repository";
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
+import {IUserGetParamsData} from '../../../shared';
 import {BaseService} from "../../common/base-service";
 import {CriterionEntity} from "./schemas/criterion.entity";
 
@@ -11,7 +12,8 @@ export class CriterionService extends BaseService<CriterionEntity, IUserGetParam
   protected entityOrRelationNotFoundMessage: string = 'Критерий не найден';
 
   constructor(
-    protected repository: CriterionRepository,
+    @InjectRepository(CriterionEntity)
+    protected repository: Repository<CriterionEntity>
   ) {
     super();
   }

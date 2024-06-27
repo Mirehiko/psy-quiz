@@ -1,8 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import { IUserGetParamsData } from '../../../shared';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
+import {IUserGetParamsData} from '../../../shared';
 import {BaseService} from "../../common/base-service";
 import {TestEntity} from "./schemas/test.entity";
-import {TestRepository} from "./test-repository";
 
 
 @Injectable()
@@ -11,7 +12,8 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
   protected entityOrRelationNotFoundMessage: string = 'Тест не найден';
 
   constructor(
-    protected repository: TestRepository,
+    @InjectRepository(TestEntity)
+    protected repository: Repository<TestEntity>
   ) {
     super();
   }

@@ -1,8 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import { IUserGetParamsData } from '../../../shared';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
+import {IUserGetParamsData} from '../../../shared';
 import {BaseService} from "../../common/base-service";
 import {ScaleAnswerEntity} from "./schemas/scale-answer.entity";
-import {ScaleAnswerRepository} from "./scale-answer-repository";
 
 
 @Injectable()
@@ -11,7 +12,8 @@ export class ScaleAnswerService extends BaseService<ScaleAnswerEntity, IUserGetP
   protected entityOrRelationNotFoundMessage: string = 'Ответ не найден';
 
   constructor(
-    protected repository: ScaleAnswerRepository,
+    @InjectRepository(ScaleAnswerEntity)
+    protected repository: Repository<ScaleAnswerEntity>
   ) {
     super();
   }

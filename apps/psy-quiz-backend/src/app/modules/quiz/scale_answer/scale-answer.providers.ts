@@ -1,12 +1,13 @@
-import { Connection } from 'typeorm';
+import {DataSource} from 'typeorm';
 import { Constants } from '../../../shared';
-import {ScaleAnswerRepository} from "./scale-answer-repository";
+import {ScaleAnswerEntity} from "./schemas/scale-answer.entity";
 
 
 export const scaleAnswerProviders = [
   {
     provide: Constants.SCALE_ANSWER_REPOSITORY,
-    useFactory: (connection: Connection) => connection.getRepository(ScaleAnswerRepository),
+    useFactory: (connection: DataSource) => connection.getRepository(ScaleAnswerEntity),
     inject: [Constants.DATABASE_CONNECTION],
   },
 ];
+

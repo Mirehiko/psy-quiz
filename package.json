@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "psy-quiz-backend": "nx serve psy-quiz-backend --configuration development",
-    "psy-quiz-frontend": "nx serve psy-quiz-frontend --configuration development"
+    "psy-quiz-backend": "nx serve psy-quiz-backend",
+    "psy-quiz-frontend": "nx serve psy-quiz-frontend"
   },
   "private": true,
   "dependencies": {

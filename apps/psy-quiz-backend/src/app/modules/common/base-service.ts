@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Param } from '@nestjs/common';
-import {FindOneOptions, Repository} from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { IGetParamsData } from '../../shared';
 import {RequestObjectWithId} from "../../shared/common/dto/objectWithId";
 

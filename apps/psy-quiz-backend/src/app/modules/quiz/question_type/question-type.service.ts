@@ -1,8 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import { IUserGetParamsData } from '../../../shared';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
+import {IUserGetParamsData} from '../../../shared';
 import {BaseService} from "../../common/base-service";
 import {QuestionTypeEntity} from "./schemas/question-type.entity";
-import {QuestionTypeRepository} from "./question-type-repository";
 
 
 @Injectable()
@@ -11,7 +12,8 @@ export class QuestionTypeService extends BaseService<QuestionTypeEntity, IUserGe
   protected entityOrRelationNotFoundMessage: string = 'Тип вопроса не найден';
 
   constructor(
-    protected repository: QuestionTypeRepository,
+    @InjectRepository(QuestionTypeEntity)
+    protected repository: Repository<QuestionTypeEntity>
   ) {
     super();
   }

@@ -1,12 +1,12 @@
-import { Connection } from 'typeorm';
+import {DataSource} from 'typeorm';
 import { Constants } from '../../../shared';
-import {RunAnswerRepository} from "./run-answer-repository";
+import {RunAnswerEntity} from "./schemas/run-answer.entity";
 
 
 export const runAnswerProviders = [
   {
     provide: Constants.RUN_ANSWER_REPOSITORY,
-    useFactory: (connection: Connection) => connection.getRepository(RunAnswerRepository),
+    useFactory: (connection: DataSource) => connection.getRepository(RunAnswerEntity),
     inject: [Constants.DATABASE_CONNECTION],
   },
 ];

@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { ConnectedUserRepository } from './connected-user-repository';
+import {Inject, Injectable} from '@nestjs/common';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 import { ConnectedUserEntity } from './schemas/connected-user.entity';
 import { UserEntity } from '../user/schemas/user.entity';
 
@@ -7,7 +8,8 @@ import { UserEntity } from '../user/schemas/user.entity';
 @Injectable()
 export class ConnectedUserService {
   constructor(
-    private readonly repository: ConnectedUserRepository,
+    @InjectRepository(ConnectedUserEntity)
+    protected repository: Repository<ConnectedUserEntity>
   ) { }
 
   async create(socketId: string, user: UserEntity): Promise<ConnectedUserEntity> {

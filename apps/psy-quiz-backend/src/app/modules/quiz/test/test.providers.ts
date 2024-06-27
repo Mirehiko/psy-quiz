@@ -1,12 +1,12 @@
-import { Connection } from 'typeorm';
+import {DataSource} from 'typeorm';
 import { Constants } from '../../../shared';
-import {TestRepository} from "./test-repository";
+import {TestEntity} from "./schemas/test.entity";
 
 
 export const testProviders = [
   {
     provide: Constants.TEST_REPOSITORY,
-    useFactory: (connection: Connection) => connection.getRepository(TestRepository),
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(TestEntity),
     inject: [Constants.DATABASE_CONNECTION],
   },
 ];

@@ -1,9 +1,10 @@
-import {Injectable} from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 import * as bcrypt from 'bcrypt';
-import { IUserGetParamsData } from '../../../shared';
+import {IUserGetParamsData} from '../../../shared';
 import {BaseService} from "../../common/base-service";
 import {QuestionEntity} from "./schemas/question.entity";
-import {QuestionRepository} from "./question-repository";
 
 
 @Injectable()
@@ -12,7 +13,8 @@ export class QuestionService extends BaseService<QuestionEntity, IUserGetParamsD
   protected entityOrRelationNotFoundMessage: string = 'Вопрос не найден';
 
   constructor(
-    protected repository: QuestionRepository,
+    @InjectRepository(QuestionEntity)
+    protected repository: Repository<QuestionEntity>
   ) {
     super();
   }
