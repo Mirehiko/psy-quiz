@@ -15,7 +15,7 @@ export class QuestionEntity extends BaseEntity {
   @Column({ length: 500 })
   description: string;
 
-  @ManyToOne(() => QuestionTypeEntity, (test) => test.question)
+  @ManyToOne(() => QuestionTypeEntity, (test) => test.questions)
   answerType: QuestionTypeEntity;
 
   @ApiProperty({ example: '', description: 'Варианты ответов' })

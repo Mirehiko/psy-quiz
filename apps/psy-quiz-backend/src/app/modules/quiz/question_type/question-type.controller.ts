@@ -1,32 +1,33 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { QuestionTypeService } from './question-type.service';
+import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
+import { QuestionTypeRequestDto, QuestionTypeResponseDto } from '../dto/question-type.dto';
 
-export class QuestionTypeRequestDto {}
-export class QuestionTypeResponseDto {}
 
 @ApiTags('Тип вопроса')
 @Controller('main')
+@UseInterceptors(new TransformInterceptor())
 export class QuestionTypeController {
   constructor(private readonly service: QuestionTypeService) {}
 
   @Get('question-type/list')
   async getAll(): Promise<QuestionTypeResponseDto[]> {
     const entities = await this.service.getAll();
-    return plainToClass(QuestionTypeResponseDto, entities, { enableCircularCheck: true });
+    return plainToInstance(QuestionTypeResponseDto, entities, { enableCircularCheck: true });
   }
 
   @Get('question-type/:id')
   async getById(@Param('id') id: string): Promise<QuestionTypeResponseDto> {
     const entity = await this.service.getByID(id);
-    return plainToClass(QuestionTypeResponseDto, entity, { enableCircularCheck: true });
+    return plainToInstance(QuestionTypeResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Patch('question-type/:id')
   async update(@Body() requestDto: QuestionTypeRequestDto, @Param() id: string): Promise<QuestionTypeResponseDto> {
     const entity = await this.service.getByID(id);
-    return plainToClass(QuestionTypeResponseDto, entity, { enableCircularCheck: true });
+    return plainToInstance(QuestionTypeResponseDto, entity, { enableCircularCheck: true });
   }
 
   @Delete('question-type/:id')

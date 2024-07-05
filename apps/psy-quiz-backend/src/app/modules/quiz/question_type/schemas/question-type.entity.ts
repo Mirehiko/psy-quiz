@@ -18,5 +18,5 @@ export class QuestionTypeEntity {
 
   @ApiProperty({ example: '', description: 'Варианты ответов' })
   @OneToMany(() => QuestionEntity, (question) => question.answerType)
-  question: QuestionEntity[];
+  questions: QuestionEntity[];
 }

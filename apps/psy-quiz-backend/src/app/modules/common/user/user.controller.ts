@@ -16,7 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { BanUserDto, IUserGetParamsData, UserRequestDto, UserResponseDto, UserRolesDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
@@ -37,7 +37,7 @@ export class UserController {
   @Get('users')
   async getUsers(): Promise<UserResponseDto[]> {
     const users = await this.service.getAll(['roles', 'roles.permissions']);
-    return plainToClass(UserResponseDto, users, { enableCircularCheck: true });
+    return plainToInstance(UserResponseDto, users, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Получение пользователя' })
@@ -47,8 +47,8 @@ export class UserController {
   @Get('user/:id')
   async getUserById(@Param('id') id: string): Promise<UserResponseDto> {
     const user = await this.service.getByID(id, ['roles', 'roles.permissions']);
-    return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
-    // return plainToClass(UserResponseDto, user, { enableCircularCheck: true, excludeExtraneousValues: true });
+    return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
+    // return plainToInstance(UserResponseDto, user, { enableCircularCheck: true, excludeExtraneousValues: true });
   }
 
   @ApiOperation({ summary: 'Получение пользователя полю' })
@@ -58,7 +58,7 @@ export class UserController {
   @Get('user/')
   async getUserBy(@Body() userRequestParams: IUserGetParamsData): Promise<UserResponseDto> {
     const user = await this.service.getBy(userRequestParams, ['roles', 'roles.permissions']);
-    return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
+    return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Обновление пользователя' })
@@ -73,7 +73,7 @@ export class UserController {
     @UploadedFile() avatar
   ): Promise<UserResponseDto> {
     const user = await this.service.updateUser(id, requestDto, avatar);
-    return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
+    return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Создание пользователя' })
@@ -85,7 +85,7 @@ export class UserController {
   // @HttpCode(HttpStatus.CREATED)
   async createUser(@Body() requestDto: UserRequestDto): Promise<UserResponseDto> {
     const user = await this.service.createUser(requestDto);
-    return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
+    return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Удаление пользователя' })

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch, Post, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   AuthResponseDto,
   AuthUserDto,
@@ -30,7 +30,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() authUserDto: AuthUserDto): Promise<AuthResponseDto> {
     const authUser = await this.authService.signIn(authUserDto);
-    return plainToClass(AuthResponseDto, authUser, { enableCircularCheck: true });
+    return plainToInstance(AuthResponseDto, authUser, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Выход из системы' })
@@ -56,7 +56,7 @@ export class AuthController {
   @Post('/by-token')
   async getUserByToken(@Body() body): Promise<UserResponseDto> {
     const user = this.authService.getUserByToken(body.token);
-    return plainToClass(UserResponseDto, user, { enableCircularCheck: true });
+    return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
   }
 
   @Patch('/change-password')

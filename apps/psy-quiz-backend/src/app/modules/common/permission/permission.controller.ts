@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { IGetParamsData, PermissionRequestDto, PermissionResponseDto } from '../../../shared';
 import { Roles } from '../auth/roles-auth.decorator';
@@ -19,7 +19,7 @@ export class PermissionController {
   @Get('permissions')
   async getPermissions(): Promise<PermissionResponseDto[]> {
     const permissions = await this.permissionService.getAll();
-    return plainToClass(PermissionResponseDto, permissions, { enableCircularCheck: true });
+    return plainToInstance(PermissionResponseDto, permissions, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Получение разрешения' })
@@ -27,7 +27,7 @@ export class PermissionController {
   @Get('permission/:id')
   async getPermissionById(@Param('id') id: string): Promise<PermissionResponseDto> {
     const permission = await this.permissionService.getByID(id);
-    return plainToClass(PermissionResponseDto, permission, { enableCircularCheck: true });
+    return plainToInstance(PermissionResponseDto, permission, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Получение разрешения по полю' })
@@ -35,7 +35,7 @@ export class PermissionController {
   @Get('category/:id')
   async getPermissionBy(@Body() requestParams: IGetParamsData): Promise<PermissionResponseDto> {
     const permission = await this.permissionService.getBy(requestParams);
-    return plainToClass(PermissionResponseDto, permission, { enableCircularCheck: true });
+    return plainToInstance(PermissionResponseDto, permission, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Обновление разрешения' })
@@ -48,7 +48,7 @@ export class PermissionController {
     @Body() permissionRequestDto: PermissionRequestDto
   ): Promise<PermissionRequestDto> {
     const permission = await this.permissionService.updatePermission(id, permissionRequestDto);
-    return plainToClass(PermissionResponseDto, permission, { enableCircularCheck: true });
+    return plainToInstance(PermissionResponseDto, permission, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Создание разрешения' })
@@ -58,7 +58,7 @@ export class PermissionController {
   @Post('permission')
   async createPermission(@Body() permissionRequestDto: PermissionRequestDto): Promise<any> {
     const permission = this.permissionService.createPermission(permissionRequestDto);
-    return plainToClass(PermissionResponseDto, permission, { enableCircularCheck: true });
+    return plainToInstance(PermissionResponseDto, permission, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Удаление разрешения' })

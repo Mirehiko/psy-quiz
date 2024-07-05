@@ -13,7 +13,7 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { IGetParamsData, RoleRequestDto, RoleResponseDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -35,7 +35,7 @@ export class RoleController {
   @Get('roles')
   async getRoles(): Promise<RoleResponseDto[]> {
     const roles = await this.service.getAll(['permissions']);
-    return plainToClass(RoleResponseDto, roles, { enableCircularCheck: true });
+    return plainToInstance(RoleResponseDto, roles, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Получение роли' })
@@ -44,7 +44,7 @@ export class RoleController {
   @Get('role/:id')
   async getRoleById(@Param('id') id: string): Promise<RoleResponseDto> {
     const role = await this.service.getByID(id, ['permissions']);
-    return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
+    return plainToInstance(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Получение роли' })
@@ -53,7 +53,7 @@ export class RoleController {
   @Get('role/:id')
   async getRoleBy(@Query() requestParams: IGetParamsData): Promise<RoleResponseDto> {
     const role = await this.service.getBy(requestParams, ['permissions']);
-    return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
+    return plainToInstance(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Обновление роли' })
@@ -64,7 +64,7 @@ export class RoleController {
   @Patch('role/:id')
   async updateRole(@Param('id') id: string, @Body() roleRequestDto: RoleRequestDto): Promise<RoleResponseDto> {
     const role = await this.service.updateRole(id, roleRequestDto);
-    return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
+    return plainToInstance(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Создание роли' })
@@ -74,7 +74,7 @@ export class RoleController {
   @Post('role')
   async createRole(@Body() roleRequestDto: RoleRequestDto): Promise<any> {
     const role = await this.service.createRole(roleRequestDto);
-    return plainToClass(RoleResponseDto, role, { enableCircularCheck: true });
+    return plainToInstance(RoleResponseDto, role, { enableCircularCheck: true });
   }
 
   @ApiOperation({ summary: 'Удаление роли' })
