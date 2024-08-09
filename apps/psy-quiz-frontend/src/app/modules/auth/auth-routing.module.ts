@@ -20,11 +20,11 @@ const routes: Routes = [
     path: 'confirm',
     component: LoginPageComponent
   },
-  {
-    path: '',
-    component: AuthComponent,
-    redirectTo: 'login'
-  },
+  // {
+  //   path: '',
+  //   component: AuthComponent,
+  //   redirectTo: 'login'
+  // },
   {
     path: '**',
     redirectTo: 'login'

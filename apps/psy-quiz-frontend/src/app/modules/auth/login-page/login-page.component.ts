@@ -11,15 +11,17 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  aSub: Subscription;
+  aSub: Subscription = new Subscription();
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  ngOnInit(): void {
+  constructor(private authService: AuthService, private router: Router) {
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, Validators.required)
     });
+  }
+
+  ngOnInit(): void {
+
   }
 
   ngOnDestroy(): void {

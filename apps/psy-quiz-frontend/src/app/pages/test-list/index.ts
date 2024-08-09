@@ -1,1 +1,1 @@
-export * from './test-list.component.scss';
+export * from './test-list.module';

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-test-list',
-  templateUrl: './analytics-page.component.html',
-  styleUrls: ['./analytics-page.component.scss']
+  templateUrl: './test-list.component.html',
+  styleUrls: ['./test-list.component.scss']
 })
-export class TestListComponent implements OnInit {}
+export class TestListComponent {}

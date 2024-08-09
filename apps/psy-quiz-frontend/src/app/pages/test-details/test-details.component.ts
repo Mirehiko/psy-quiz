@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-test-details',
-  templateUrl: './analytics-page.component.html',
-  styleUrls: ['./analytics-page.component.scss']
+  templateUrl: './test-details.component.html',
+  styleUrls: ['./test-details.component.scss']
 })
-export class TestDetailsComponent implements OnInit {}
+export class TestDetailsComponent {}
