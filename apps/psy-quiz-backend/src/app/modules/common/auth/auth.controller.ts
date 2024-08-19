@@ -21,6 +21,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Регистрация пользователя' })
   @ApiResponse({ status: 201, type: UserEntity })
   @Post('registration')
+  // регистрация пользователя
   async register(@Body() userRequestDto: UserRequestDto): Promise<any> {
     return this.authService.signUp(userRequestDto);
   }
@@ -28,6 +29,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Вход в систему' })
   @ApiResponse({ status: 200, type: UserEntity })
   @Post('login')
+  // вход в систему
   async login(@Body() authUserDto: AuthUserDto): Promise<AuthResponseDto> {
     const authUser = await this.authService.signIn(authUserDto);
     return plainToInstance(AuthResponseDto, authUser, { enableCircularCheck: true });
@@ -36,11 +38,13 @@ export class AuthController {
   @ApiOperation({ summary: 'Выход из системы' })
   @ApiResponse({ status: 200, type: UserEntity })
   @Post('logout')
+  // выход из системы
   async logout(@Body() query: { token: string }): Promise<any> {
     return this.authService.logout(query.token);
   }
 
   @Get('/confirm')
+  // подтверждение регистрации
   async confirm(@Query() query: { token: string }): Promise<boolean> {
     await this.authService.confirm(query.token);
     return true;
@@ -48,6 +52,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Восстановление пароля' })
   @Post('/forgotPassword')
+  // восстановить пароль
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<void> {
     return this.authService.forgotPassword(forgotPasswordDto);
   }

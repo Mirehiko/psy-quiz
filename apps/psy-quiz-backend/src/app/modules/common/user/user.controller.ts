@@ -15,25 +15,26 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-// import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { plainToInstance } from 'class-transformer';
 import { BanUserDto, IUserGetParamsData, UserRequestDto, UserResponseDto, UserRolesDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { UserService } from './user.service';
+import {TransformInterceptor} from "../../../interceptors/transform.interceptor";
+import {ValidationPipe} from "../../../pipes/validation.pipe";
 
 @ApiTags('Пользователи')
 @Controller('main')
-// @UseInterceptors(new TransformInterceptor())
+@UseInterceptors(new TransformInterceptor())
 export class UserController {
   constructor(private readonly service: UserService) {}
 
   @ApiOperation({ summary: 'Получение списка пользователей' })
   // @ApiResponse({status: 200, type: [UserResponseDto]})
   @Roles('ADMIN')
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('users')
   async getUsers(): Promise<UserResponseDto[]> {
     const users = await this.service.getAll(['roles', 'roles.permissions']);
@@ -78,7 +79,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Создание пользователя' })
   @ApiResponse({ status: 201, type: UserResponseDto })
-  // @UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   @Post('user')
@@ -92,7 +93,7 @@ export class UserController {
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)
   @Delete('user/:id')
-  async deleteUser(@Param('id') id: string): Promise<any> {
+  async deleteUser(@Param('id') id: string): Promise<void> {
     return await this.service.delete([id]);
   }
 
@@ -100,7 +101,7 @@ export class UserController {
   @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post('user/assignRoles')
-  async assignRolesToUser(@Body() userRolesDto: UserRolesDto): Promise<any> {
+  async assignRolesToUser(@Body() userRolesDto: UserRolesDto): Promise<void> {
     return await this.service.assignRolesToUser(userRolesDto);
   }
 

@@ -25,7 +25,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    * Creating new user
    * @param requestDto
    */
-  async createUser(@Param() requestDto: UserRequestDto): Promise<any> {
+  async createUser(@Param() requestDto: UserRequestDto): Promise<UserEntity> {
     const candidate = await this.repository.findOne({ where: { email: requestDto.email } });
     if (candidate) {
       throw new HttpException('Такой email уже существует. Введите другой email', HttpStatus.CONFLICT);
