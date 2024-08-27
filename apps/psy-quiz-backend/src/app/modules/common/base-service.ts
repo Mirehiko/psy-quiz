@@ -51,9 +51,9 @@ export abstract class BaseService<T extends RequestObjectWithId, U extends IGetP
         return entity;
       }
 
-      // if (paramsData.checkOnly) {
-      // 	return;
-      // }
+      if (paramsData.checkOnly) {
+      	return;
+      }
 
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
     } catch (e) {

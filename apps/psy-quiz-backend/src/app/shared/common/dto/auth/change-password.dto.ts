@@ -8,5 +8,7 @@ export class ChangePasswordDto {
   })
   readonly password: string;
 
-  readonly token: number;
+  @IsNotEmpty()
+  @IsString()
+  readonly token: string;
 }

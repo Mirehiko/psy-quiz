@@ -59,6 +59,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
     }
     user.email = requestDto.email ? requestDto.email : user.email;
     user.password = requestDto.password ? requestDto.password : user.password;
+    user.status = requestDto.status ? requestDto.status : user.status;
     // operation.avatar = userRequestDto.avatar ? userRequestDto.avatar : operation.avatar;
     user.name = requestDto.name ? requestDto.name : user.name;
 
