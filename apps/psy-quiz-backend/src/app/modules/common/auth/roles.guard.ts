@@ -9,6 +9,7 @@ export class RolesGuard implements CanActivate {
   // TODO: Настроить нормальную проверку ролей
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
+      debugger;
       const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
         context.getHandler(),
         context.getClass()

@@ -32,7 +32,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Получение списка пользователей' })
   // @ApiResponse({status: 200, type: [UserResponseDto]})
-  @Roles('ADMIN')
+  // @Roles('ADMIN')
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('users')
