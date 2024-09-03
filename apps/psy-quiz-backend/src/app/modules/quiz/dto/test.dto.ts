@@ -2,10 +2,24 @@ import { ITest } from '../interfaces/i-test';
 import { IQuestion } from '../interfaces/i-question';
 import { IScale } from '../interfaces/i-scale';
 import { ITestRun } from '../interfaces/i-test-run';
+import { IsOptional, IsString } from 'class-validator';
 
 export class TestRequestDto implements ITest {
+  @IsString()
   name: string;
+
+  @IsOptional()
+  @IsString()
   description?: string;
+
+  @IsOptional()
+  questions?: IQuestion[];
+
+  @IsOptional()
+  scales?: IScale[];
+
+  @IsOptional()
+  runs?: ITestRun[];
 }
 
 export class TestResponseDto implements ITest {
@@ -15,4 +29,5 @@ export class TestResponseDto implements ITest {
   questions?: IQuestion[];
   scales?: IScale[];
   runs?: ITestRun[];
+  createdById: string;
 }

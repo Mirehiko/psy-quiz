@@ -12,7 +12,7 @@ export class QuestionEntity extends BaseEntity {
   name: string = '';
 
   @ApiProperty({ example: 'This test...', description: 'Описание' })
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   description: string;
 
   @ManyToOne(() => QuestionTypeEntity, (test) => test.questions)

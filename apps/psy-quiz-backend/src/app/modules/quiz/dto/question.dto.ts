@@ -1,11 +1,26 @@
 import { IQuestion } from '../interfaces/i-question';
 import { IQuestionType } from '../interfaces/i-question-type';
 import { ITest } from '../interfaces/i-test';
+import { IsOptional, IsString } from 'class-validator';
 
 export class QuestionRequestDto implements IQuestion {
+  @IsOptional()
+  @IsString()
   name: string;
-  test: ITest;
-  description?: string;
+
+  @IsOptional()
+  @IsString()
+  description: string;
+
+  @IsOptional()
+  answerType: IQuestionType;
+
+  @IsOptional()
+  @IsString()
+  free_answer: string;
+
+  @IsString()
+  testId: string;
 }
 
 export class QuestionResponseDto implements IQuestion {

@@ -1,10 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body, ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+  UsePipes
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { TestService } from './test.service';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
+import { ValidationPipe } from '../../../pipes/validation.pipe';
 
 
 @ApiTags('Test')
@@ -38,15 +51,32 @@ export class TestController {
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
   }
 
+
+  // @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })
+  // @ApiResponse({
+  //   status: 200,
+  //   type: TestResponseDto,
+  // })
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('test')
+  async create(@Body() requestDto: TestRequestDto, @Req() request): Promise<TestResponseDto> {
+    const entity = await this.service.create(requestDto, request.user);
+    return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
+  }
+
   @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })
   @ApiResponse({
     status: 200,
     type: TestResponseDto,
   })
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Patch('test/:id')
   async update(@Body() requestDto: TestRequestDto, @Param() id: string): Promise<TestResponseDto> {
-    const entity = await this.service.getByID(id);
+    const entity = await this.service.update(id, requestDto);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
   }
 

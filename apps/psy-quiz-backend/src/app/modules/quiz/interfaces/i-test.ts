@@ -9,4 +9,5 @@ export interface ITest {
   questions?: IQuestion[];
   scales?: IScale[];
   runs?: ITestRun[];
+  createdById?: string;
 }

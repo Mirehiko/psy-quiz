@@ -1,10 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch, Post, Req,
+  UseGuards,
+  UseInterceptors,
+  UsePipes
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { QuestionService } from './question.service';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { QuestionRequestDto, QuestionResponseDto } from '../dto/question.dto';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
+import { ValidationPipe } from '../../../pipes/validation.pipe';
+import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
 
 @ApiTags('Вопросы')
 @Controller('main')
@@ -27,6 +40,17 @@ export class QuestionController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('question')
+  async create(@Body() requestDto: QuestionRequestDto, @Req() request): Promise<QuestionResponseDto> {
+    const entity = await this.service.create(request, request.user);
+    return plainToInstance(QuestionResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Patch('question/:id')
   async update(@Body() requestDto: QuestionRequestDto, @Param() id: string): Promise<QuestionResponseDto> {
     const entity = await this.service.getByID(id);
