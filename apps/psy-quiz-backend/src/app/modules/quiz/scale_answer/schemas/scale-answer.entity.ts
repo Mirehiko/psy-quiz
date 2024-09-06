@@ -18,4 +18,8 @@ export class ScaleAnswerEntity {
 
   @ManyToOne(() => ScaleEntity, (test) => test.answers)
   scale: ScaleEntity;
+
+  @ApiProperty({ example: '', description: '' })
+  @Column('text', { nullable: false })
+  createdById: string;
 }

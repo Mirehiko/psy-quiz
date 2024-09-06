@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TestRunEntity } from '../../test_run/schemas/test-run.entity';
+import { IRunAnswer } from '../../interfaces/i-run-answer';
 
 @Entity()
-export class RunAnswerEntity {
+export class RunAnswerEntity implements IRunAnswer {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
   @PrimaryGeneratedColumn()
   id: string;
@@ -18,4 +19,8 @@ export class RunAnswerEntity {
 
   @ManyToOne(() => TestRunEntity, (run) => run.answers)
   run: TestRunEntity;
+
+  @ApiProperty({ example: '', description: '' })
+  @Column('text', { nullable: false })
+  userId: string;
 }

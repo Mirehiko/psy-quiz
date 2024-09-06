@@ -3,9 +3,11 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'ty
 import { CriterionEntity } from '../../criterion/schemas/criterion.entity';
 import { ScaleAnswerEntity } from '../../scale_answer/schemas/scale-answer.entity';
 import { TestEntity } from '../../test/schemas/test.entity';
+import { UserEntity } from '../../../common/user/schemas/user.entity';
+import { IScale } from '../../dto/scale.dto';
 
 @Entity()
-export class ScaleEntity {
+export class ScaleEntity implements IScale {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
   @PrimaryGeneratedColumn()
   id: string;
@@ -28,4 +30,10 @@ export class ScaleEntity {
 
   @ManyToOne(() => TestEntity, (test) => test.scales)
   test: TestEntity;
+
+
+  @ApiProperty({ example: '', description: '' })
+  @Column('text', { nullable: false })
+  createdById: string;
+
 }

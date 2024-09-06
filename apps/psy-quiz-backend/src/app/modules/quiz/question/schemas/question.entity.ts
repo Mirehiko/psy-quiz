@@ -4,9 +4,10 @@ import { BaseEntity } from '../../../common/base-entity';
 import { QuestionAnswerEntity } from '../../question_answer/schemas/question-answer.entity';
 import { QuestionTypeEntity } from '../../question_type/schemas/question-type.entity';
 import { TestEntity } from '../../test/schemas/test.entity';
+import { IQuestion } from '../../interfaces/i-question';
 
 @Entity()
-export class QuestionEntity extends BaseEntity {
+export class QuestionEntity extends BaseEntity implements IQuestion {
   @ApiProperty({ example: 'Psy Test', description: 'Название теста' })
   @Column({ length: 150, nullable: false })
   name: string = '';
@@ -28,4 +29,8 @@ export class QuestionEntity extends BaseEntity {
 
   @ManyToOne(() => TestEntity, (test) => test.questions)
   test: TestEntity;
+
+  @ApiProperty({ example: '', description: '' })
+  @Column('text', { nullable: false })
+  createdById: string;
 }

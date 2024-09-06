@@ -18,4 +18,8 @@ export class QuestionAnswerEntity {
 
   @ManyToOne(() => QuestionEntity, (question) => question.answers)
   question: QuestionEntity;
+
+  @ApiProperty({ example: '', description: '' })
+  @Column('text', { nullable: false })
+  createdById: string;
 }

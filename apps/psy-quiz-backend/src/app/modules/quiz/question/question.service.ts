@@ -24,7 +24,7 @@ export class QuestionService extends BaseService<QuestionEntity, IUserGetParamsD
 
   async create(requestDto: QuestionRequestDto, user: UserEntity): Promise<QuestionEntity> {
     try {
-      const newQuestion = await this.repository.create({ ...requestDto });
+      const newQuestion = await this.repository.create({ ...requestDto, createdById: user.id });
       await this.repository.save(newQuestion);
       return newQuestion; // 201
     } catch (e) {

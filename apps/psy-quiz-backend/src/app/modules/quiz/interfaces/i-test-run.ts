@@ -1,8 +1,17 @@
-import { ITest } from './i-test';
-import { IRunAnswer } from './i-run-answer';
+import { IUser } from '../../common/user/schemas/user.entity';
 
 export interface ITestRun {
-  userId: string;
-  answers?: IRunAnswer[]
-  test: ITest;
+  // name: string;
+  // description?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface ITestRunRequestDto extends ITestRun {
+  // testId: string;
+}
+
+export interface ITestRunResponseDto extends ITestRun {
+  user: IUser;
+  test: ITestRun;
 }

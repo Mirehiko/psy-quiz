@@ -4,7 +4,6 @@ import { BaseEntity } from '../../../common/base-entity';
 import { QuestionEntity } from '../../question/schemas/question.entity';
 import { ScaleEntity } from '../../scale/schemas/scale.entity';
 import { TestRunEntity } from '../../test_run/schemas/test-run.entity';
-import { UserEntity } from '../../../common/user/schemas/user.entity';
 
 @Entity()
 export class TestEntity extends BaseEntity {
@@ -32,8 +31,10 @@ export class TestEntity extends BaseEntity {
   @OneToMany(() => TestRunEntity, (run) => run.test)
   runs: TestRunEntity[];
 
-  @ManyToOne(() => UserEntity, (user) => user.tests)
-  createdBy?: UserEntity;
+  @ApiProperty({ example: '', description: '' })
+  @Column('text', { nullable: false })
+  // @ManyToOne(() => UserEntity, (user) => user.tests)
+  createdById: string;
 
   // @Column('text', {nullable: false})
   // createdById: string;

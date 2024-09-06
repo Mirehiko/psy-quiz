@@ -19,27 +19,27 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
     super();
   }
 
-  async create(test: TestRequestDto, user: UserEntity): Promise<TestEntity> {
+  async create(requestDto: TestRequestDto, user: UserEntity): Promise<TestEntity> {
     try {
-      const newTest = await this.repository.create({ ...test, createdBy: user });
-      await this.repository.save(newTest);
-      return newTest; // 201
+      const newEntity = await this.repository.create({ ...requestDto, createdById: user.id });
+      await this.repository.save(newEntity);
+      return newEntity; // 201
     } catch (e) {
       throw new Error(e);
     }
   }
 
   async update(id: string, requestDto: TestRequestDto): Promise<TestEntity> {
-    let test = await this.repository.findOne({ where: { id } });
-    if (!test) {
+    let entity = await this.repository.findOne({ where: { id } });
+    if (!entity) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
     }
-    test.name = requestDto.name ? requestDto.name : test.name;
-    test.description = requestDto.description ? requestDto.description : test.description;
+    entity.name = requestDto.name ? requestDto.name : entity.name;
+    entity.description = requestDto.description ? requestDto.description : entity.description;
 
     try {
-      await this.repository.save(test);
-      return test;
+      await this.repository.save(entity);
+      return entity;
     } catch (e) {
       throw new Error(e);
     }
