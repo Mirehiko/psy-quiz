@@ -3,8 +3,9 @@ import { IUser } from '../../common/user/schemas/user.entity';
 export interface ITestRun {
   // name: string;
   // description?: string;
-  startDate?: string;
-  endDate?: string;
+  userId?: string;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 export interface ITestRunRequestDto extends ITestRun {

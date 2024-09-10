@@ -1,5 +1,6 @@
 import { ITestRun, ITestRunRequestDto, ITestRunResponseDto } from '../interfaces/i-test-run';
 import { IUser } from '../../common/user/schemas/user.entity';
+import { IsOptional, IsString } from 'class-validator';
 
 export class TestRunRequestDto implements ITestRunRequestDto {
   // @IsString()
@@ -10,6 +11,9 @@ export class TestRunRequestDto implements ITestRunRequestDto {
   // @IsOptional()
   // @IsString()
   // description?: string;
+  @IsOptional()
+  @IsString()
+  userId?: string;
 }
 
 export class TestRunResponseDto implements ITestRunResponseDto {
@@ -17,6 +21,6 @@ export class TestRunResponseDto implements ITestRunResponseDto {
   description: string;
   user: IUser;
   test: ITestRun;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 }
