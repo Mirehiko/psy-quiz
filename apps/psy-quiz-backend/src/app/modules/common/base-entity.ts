@@ -7,14 +7,17 @@ export class BaseEntity {
   id: string;
 
   @ApiProperty({ example: '2022.01.21', description: 'Дата создания' })
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'timestamptz' })
+  // @CreateDateColumn({ type: 'datetime' })
   createdAt: string;
 
   @ApiProperty({ example: '2022.01.21', description: 'Дата обновления' })
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn({ type: 'timestamptz' })
+  // @UpdateDateColumn({ type: 'datetime' })
   updatedAt: string;
 
   @ApiProperty({ example: '2022.01.21', description: 'Дата удаления' })
-  @DeleteDateColumn({ type: 'datetime', nullable: true })
-  deletedAt: string = null;
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
+  // @DeleteDateColumn({ type: 'datetime', nullable: true })
+  deletedAt: string;
 }

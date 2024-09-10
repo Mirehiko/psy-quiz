@@ -23,10 +23,12 @@ export class TestRunEntity extends BaseEntity implements ITestRun {
   createdById: string;
 
   @ApiProperty({ example: '2022.01.21', description: 'Дата начала прохождения теста' })
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'timestamptz' })
+  // @CreateDateColumn({ type: 'datetime' })
   startDate: string;
 
   @ApiProperty({ example: '2022.01.21', description: 'Дата окончания прохождения теста' })
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'timestamptz' })
+  // @CreateDateColumn({ type: 'datetime' })
   endDate: string;
 }

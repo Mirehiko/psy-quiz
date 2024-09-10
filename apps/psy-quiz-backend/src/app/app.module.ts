@@ -24,19 +24,19 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
     // ServeStaticModule.forRoot({
     //   rootPath: path.resolve(__dirname, '../../static'),
     // }),
+
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        type: 'mysql',
+        type: 'postgres',
         host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT) || 3306,
+        port: parseInt(process.env.DB_PORT) || 3308,
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        // entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
         // migrationsRun: true,
         autoLoadEntities: true,
-        charset: 'UTF8'
         // migrations: [
         //   "src/migration/**/*.ts"
         // ],
@@ -45,6 +45,28 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
       //   "src/subscriber/**/*.ts"
       // ],
     }),
+
+    // TypeOrmModule.forRootAsync({
+    //   useFactory: () => ({
+    //     type: 'mysql',
+    //     host: process.env.DB_HOST,
+    //     port: parseInt(process.env.DB_PORT) || 3306,
+    //     username: process.env.DB_USER,
+    //     password: process.env.DB_PASSWORD,
+    //     database: process.env.DB_NAME,
+    //     entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    //     synchronize: true,
+    //     // migrationsRun: true,
+    //     autoLoadEntities: true,
+    //     charset: 'UTF8'
+    //     // migrations: [
+    //     //   "src/migration/**/*.ts"
+    //     // ],
+    //   })
+    //   // subscribers: [
+    //   //   "src/subscriber/**/*.ts"
+    //   // ],
+    // }),
     UserModule,
     AuthModule,
     RoleModule,

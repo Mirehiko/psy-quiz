@@ -8,9 +8,9 @@
 //     provide: 'DATA_SOURCE',
 //     useFactory: async () => {
 //       const dataSource = new DataSource({
-//         type: 'mysql',
+//         type: 'postgres',
 //         host: process.env.DB_HOST,
-//         port: parseInt(process.env.DB_PORT) || 3306,
+//         port: parseInt(process.env.DB_PORT) || 3308,
 //         username: process.env.DB_USER,
 //         password: process.env.DB_PASSWORD,
 //         database: process.env.DB_NAME,
@@ -18,7 +18,6 @@
 //         synchronize: true,
 //         // migrationsRun: true,
 //         // autoLoadEntities: true,
-//         charset: 'UTF8'
 //         // migrations: [
 //         //   "src/migration/**/*.ts"
 //         // ],
@@ -38,19 +37,16 @@
 //   imports: [
 //     TypeOrmModule.forRootAsync({
 //       useFactory: async (configService: ConfigService) => {
-//         console.warn(__dirname);
 //         return {
-//           type: 'mysql',
+//           type: 'postgress',
 //           host: process.env.DB_HOST,
-//           port: parseInt(process.env.DB_PORT) || 3306,
+//           port: parseInt(process.env.DB_PORT) || 3308,
 //           username: process.env.DB_USER,
 //           password: process.env.DB_PASSWORD,
 //           database: process.env.DB_NAME,
-//           entities: [__dirname + '/**/*.entity{.ts,.js}'],
 //           synchronize: true,
 //           // migrationsRun: true,
 //           // autoLoadEntities: true,
-//           charset: 'UTF8'
 //           // migrations: [
 //           //   "src/migration/**/*.ts"
 //           // ],
