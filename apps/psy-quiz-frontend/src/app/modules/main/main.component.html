@@ -1,6 +1,18 @@
-<router-outlet></router-outlet>
-
 <nav>
   <a routerLink="tests">tests</a>
+  <span *ngIf="user">
+    asdasd
+  </span>
+  
+  <a *ngIf="!user" routerLink="/auth/login">войти</a>
 </nav>
-информация о сайте и прочее
+<br>
+<main>
+  информация о сайте и прочее  
+</main>
+<br>
+<aside>
+  список тестов
+</aside>
+
+<router-outlet></router-outlet>

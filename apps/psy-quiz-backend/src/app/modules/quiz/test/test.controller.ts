@@ -1,5 +1,6 @@
 import {
-  Body, ClassSerializerInterceptor,
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -13,12 +14,11 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { TestService } from './test.service';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
-import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
-
+import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
+import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
+import { TestService } from './test.service';
 
 @ApiTags('Test')
 @Controller('main')
@@ -32,7 +32,6 @@ export class TestController {
     type: TestResponseDto,
     isArray: true
   })
-  @UseGuards(JwtAuthGuard)
   @Get('test/list')
   async getAll(): Promise<TestResponseDto[]> {
     const entities = await this.service.getAll();
@@ -42,15 +41,13 @@ export class TestController {
   @ApiOperation({ summary: 'Возвращает тест по его идентификатору' })
   @ApiResponse({
     status: 200,
-    type: TestResponseDto,
+    type: TestResponseDto
   })
-  @UseGuards(JwtAuthGuard)
   @Get('test/:id')
   async getById(@Param('id') id: string): Promise<TestResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
   }
-
 
   // @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })
   // @ApiResponse({
@@ -69,7 +66,7 @@ export class TestController {
   @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })
   @ApiResponse({
     status: 200,
-    type: TestResponseDto,
+    type: TestResponseDto
   })
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
@@ -83,7 +80,7 @@ export class TestController {
   @ApiOperation({ summary: 'Удаляет тест по переданному идентификатору' })
   @ApiResponse({
     status: 200,
-    type: TestResponseDto,
+    type: TestResponseDto
   })
   @UseGuards(JwtAuthGuard)
   @Delete('test/:id')

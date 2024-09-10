@@ -5,6 +5,10 @@ export const appRoutes: Route[] = [
     path: 'main',
     loadChildren: async () => (await import('./modules/main')).MainModule
   },
+  // {
+  // path: 'profile',
+  // loadChildren: async () => (await import('./modules/main')).MainModule
+  // },
   {
     path: 'auth',
     loadChildren: async () => (await import('./modules/auth')).AuthModule

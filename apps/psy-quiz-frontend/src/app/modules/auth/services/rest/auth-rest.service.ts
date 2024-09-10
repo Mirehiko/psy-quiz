@@ -1,34 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, from } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthRestService {
   private baseUrl = 'http://localhost:5002/api/auth';
 
   constructor(private http: HttpClient) {}
 
-  public async login(authUserDto: any): Promise<any> {
-    return new Promise<any>((ok, fail) => {
-      const sub = new Subscription();
+  // public async login(authUserDto: any): Promise<any> {
+  public login(authUserDto: any): Observable<any> {
+    return from(this.http.post(`${this.baseUrl}/login`, authUserDto));
+    // return new Promise<any>((ok, fail) => {
+    //   const sub = new Subscription();
 
-      sub.add(
-        this.http.post(`${this.baseUrl}/login`, authUserDto).subscribe(
-          (res) => {
-            if (sub) {
-              sub.unsubscribe();
-            }
-            ok(res);
-          },
-          (error) => {
-            if (sub) {
-              sub.unsubscribe();
-            }
-            fail(error);
-          }
-        )
-      );
-    });
+    //   sub.add(
+    //     this.http.post(`${this.baseUrl}/login`, authUserDto).subscribe(
+    //       (res) => {
+    //         if (sub) {
+    //           sub.unsubscribe();
+    //         }
+    //         ok(res);
+    //       },
+    //       (error) => {
+    //         if (sub) {
+    //           sub.unsubscribe();
+    //         }
+    //         fail(error);
+    //       }
+    //     )
+    //   );
+    // });
   }
 
   public async logout(authUserDto: any): Promise<void> {

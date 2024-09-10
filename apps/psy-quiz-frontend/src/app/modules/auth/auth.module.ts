@@ -9,10 +9,6 @@ import { LoginPageComponent } from './login-page';
 @NgModule({
   declarations: [AuthComponent, LoginPageComponent],
   imports: [CommonModule, ReactiveFormsModule, AuthRoutingModule],
-  exports: [
-    FormsModule,
-    CommonModule,
-    RouterModule
-  ]
+  exports: [FormsModule, CommonModule, RouterModule]
 })
 export class AuthModule {}
