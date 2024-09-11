@@ -25,7 +25,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    * Creating new user
    * @param requestDto
    */
-  async createUser(@Param() requestDto: UserRequestDto): Promise<UserEntity> {
+  public async createUser(@Param() requestDto: UserRequestDto): Promise<UserEntity> {
     const candidate = await this.repository.findOne({ where: { email: requestDto.email } });
     if (candidate) {
       throw new HttpException('Такой email уже существует. Введите другой email', HttpStatus.CONFLICT);
@@ -52,7 +52,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    * @param requestDto
    * @param avatar
    */
-  async updateUser(@Param() id: string, requestDto: UserRequestDto, avatar?: any): Promise<UserEntity> {
+  public async updateUser(@Param() id: string, requestDto: UserRequestDto, avatar?: any): Promise<UserEntity> {
     let user = await this.repository.findOne({ where: { id } });
     if (!user) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
@@ -82,7 +82,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    * @param id
    * @param password
    */
-  async updateUserPass(@Param() id: string, password: string): Promise<void> {
+  public async updateUserPass(@Param() id: string, password: string): Promise<void> {
     const user = await this.repository.findOne({ where: { id } });
     if (!user) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
@@ -95,7 +95,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    *
    * @param userRolesDto
    */
-  async assignRolesToUser(userRolesDto: UserRolesDto): Promise<any> {
+  public async assignRolesToUser(userRolesDto: UserRolesDto): Promise<UserEntity> {
     const user = await this.repository.findOne({ where: { id: userRolesDto.userId }, relations: ['roles'] });
     const roles = await this.roleService.getBy(
       {
@@ -121,7 +121,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    *
    * @param userRolesDto
    */
-  async removeUserRoles(userRolesDto: UserRolesDto): Promise<any> {
+  public async removeUserRoles(userRolesDto: UserRolesDto): Promise<UserEntity> {
     const user = await this.repository.findOne({ where: { id: userRolesDto.userId }, relations: ['roles'] });
 
     if (userRolesDto.roles.length && user) {
@@ -137,7 +137,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    * Suspend the user
    * @param banUserDto
    */
-  async suspend(banUserDto: BanUserDto): Promise<any> {
+  public async suspend(banUserDto: BanUserDto): Promise<any> {
     const users = await this.repository
       .createQueryBuilder('user')
       .where('operation.id IN (:userIds)', { userIds: banUserDto.userIds })
@@ -159,7 +159,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    *
    * @param banUserDto
    */
-  async unsuspend(banUserDto: BanUserDto): Promise<any> {
+  public async unsuspend(banUserDto: BanUserDto): Promise<any> {
     const users = await this.repository
       .createQueryBuilder('user')
       .where('operation.id IN (:userIds)', { userIds: banUserDto.userIds })
@@ -172,7 +172,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
       });
       await this.repository.save(users);
       const uText = users.length > 1 ? 'Пользователи' : 'Пользователь';
-      return { statusText: `${uText} успешно забанены`, status: HttpStatus.OK };
+      return { statusText: `${uText} успешно разблокирован`, status: HttpStatus.OK };
     }
     throw new HttpException('Пользователи не найдены', HttpStatus.NOT_FOUND);
   }
@@ -181,7 +181,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
    *
    * @param password
    */
-  async hashPassword(password: string): Promise<string> {
+  public async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(this.saltRounds);
     return await bcrypt.hash(password, salt);
   }

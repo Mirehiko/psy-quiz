@@ -22,7 +22,7 @@ export class RoleService extends BaseService<RoleEntity, IGetParamsData> {
    * Creates new role
    * @param role
    */
-  async createRole(role: RoleRequestDto): Promise<any> {
+  async createRole(role: RoleRequestDto): Promise<RoleEntity> {
     const candidate = await this.repository.findOne({ where: { name: role.name } });
     if (candidate) {
       throw new HttpException('Такая роль уже существует. Введите другое имя роли', HttpStatus.CONFLICT);

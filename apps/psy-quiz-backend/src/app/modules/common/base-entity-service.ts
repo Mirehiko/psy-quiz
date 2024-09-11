@@ -5,9 +5,6 @@ import { BaseEntity } from './base-entity';
 import { BaseService } from './base-service';
 
 export class BaseEntityService<T extends BaseEntity, U extends IGetParamsData> extends BaseService<T, U> {
-  protected repository: Repository<T>;
-  protected entityNotFoundMessage: string;
-
   /**
    * Restore deleted entities from trash
    * @param ids

@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Patch, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Query,
+  Res,
+  UseInterceptors
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import {
@@ -11,15 +21,18 @@ import {
 } from '../../../shared';
 import { UserEntity } from '../user/schemas/user.entity';
 import { AuthService } from './auth.service';
+import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 
 // TODO: Use class-transformer
 @ApiTags('Авторизация')
 @Controller('auth')
+@UseInterceptors(new TransformInterceptor())
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: 'Регистрация пользователя' })
   @ApiResponse({ status: 201, type: UserEntity })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('registration')
   // регистрация пользователя
   async register(@Body() userRequestDto: UserRequestDto): Promise<any> {
@@ -28,10 +41,12 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Вход в систему' })
   @ApiResponse({ status: 200, type: UserEntity })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
   // вход в систему
-  async login(@Body() authUserDto: AuthUserDto): Promise<AuthResponseDto> {
-    const authUser = await this.authService.signIn(authUserDto);
+  async login(@Body() requestDto: AuthUserDto): Promise<AuthResponseDto> {
+    console.log(requestDto)
+    const authUser = await this.authService.signIn(requestDto);
     return plainToInstance(AuthResponseDto, authUser, { enableCircularCheck: true });
   }
 

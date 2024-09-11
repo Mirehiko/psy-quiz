@@ -54,10 +54,10 @@ export class AuthService {
 
   /**
    * User login
-   * @param authUserDto
+   * @param requestDto
    */
-  async signIn(authUserDto: AuthUserDto): Promise<AuthResponseDto | false> {
-    const user = await this.validateUser(authUserDto);
+  async signIn(requestDto: AuthUserDto): Promise<AuthResponseDto | false> {
+    const user = await this.validateUser(requestDto);
     const token = await this.generateToken(user, { expiresIn: moment().add(7, 'days').valueOf() });
     if (user.status === UserStatusEnum.PENDING) {
       // operation.status = UserStatusEnum.ACTIVE;
@@ -171,6 +171,9 @@ export class AuthService {
     });
     // TODO: hash password
     // const isPasswordEquals = await bcrypt.compare(authUserDto.password + '', candidate.password);
+    if (!candidate) {
+      throw new UnauthorizedException({ message: 'Incorrect email or password' });
+    }
     const isPasswordEquals = authUserDto.password + '' === candidate.password;
     if (candidate && isPasswordEquals) {
       return candidate;

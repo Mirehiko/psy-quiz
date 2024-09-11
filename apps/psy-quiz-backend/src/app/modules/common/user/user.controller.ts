@@ -23,6 +23,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { UserService } from './user.service';
 import {TransformInterceptor} from "../../../interceptors/transform.interceptor";
 import {ValidationPipe} from "../../../pipes/validation.pipe";
+import { UserEntity } from './schemas/user.entity';
 
 @ApiTags('Пользователи')
 @Controller('main')
@@ -101,7 +102,7 @@ export class UserController {
   @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post('user/assignRoles')
-  async assignRolesToUser(@Body() userRolesDto: UserRolesDto): Promise<void> {
+  async assignRolesToUser(@Body() userRolesDto: UserRolesDto): Promise<UserEntity> {
     return await this.service.assignRolesToUser(userRolesDto);
   }
 

@@ -17,8 +17,8 @@ export class AuthService {
   public login(authUserDto: any): Observable<any> {
     return this.authRestService.login(authUserDto).pipe(
       tap((response: any) => {
-        this.user = response.user;
-        this.token = response.token;
+        this.user = response.data.user;
+        this.token = response.data.token;
         console.warn(this.user);
       })
     );

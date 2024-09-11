@@ -2,13 +2,17 @@
   "name": "@mi-quiz/source",
   "version": "0.0.0",
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "psy-quiz-backend": "nx serve psy-quiz-backend --configuration development",
     "psy-quiz-backend-build": "nx build psy-quiz-backend --configuration development",
     "psy-quiz-frontend": "nx serve psy-quiz-frontend",
     "lint": "nx run-many --all --target=lint",
     "fix": "npx pretty-quick --staged",
-    "fix-everything": "prettier --write apps"
+    "fix-everything": "prettier --write apps",
+    "migration:create": "typeorm migration:create ./apps/psy-quiz-backend/src/migrations/migration",
+    "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate ./apps/psy-quiz-backend/src/migrations/migration -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",
+    "migration:run": "ts-node node_modules/.bin/typeorm migration:run -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts"
   },
   "private": true,
   "dependencies": {

@@ -17,6 +17,8 @@ import { ScaleModule } from './modules/quiz/scale/scale.module';
 import { ScaleAnswerModule } from './modules/quiz/scale_answer/scale-answer.module';
 import { TestModule } from './modules/quiz/test/test.module';
 import { TestRunModule } from './modules/quiz/test_run/test-run.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import typeorm from './config/postgres-datasource'
 
 @Module({
   imports: [
@@ -24,26 +26,14 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
     // ServeStaticModule.forRoot({
     //   rootPath: path.resolve(__dirname, '../../static'),
     // }),
-
+    // TypeOrmModule.forRoot(postgresConfig),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeorm]
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        type: 'postgres',
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT) || 3308,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
-        // migrationsRun: true,
-        autoLoadEntities: true,
-        // migrations: [
-        //   "src/migration/**/*.ts"
-        // ],
-      })
-      // subscribers: [
-      //   "src/subscriber/**/*.ts"
-      // ],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => configService.get('typeorm')
     }),
 
     // TypeOrmModule.forRootAsync({
@@ -86,8 +76,6 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
   // providers: [AppGateway],
 })
 export class AppModule implements NestModule {
-  constructor(private dataSource: DataSource) {}
-
   configure(consumer: MiddlewareConsumer): any {
     consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
