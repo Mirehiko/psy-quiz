@@ -8,12 +8,15 @@ import { AuthService } from '../auth';
 })
 export class MainComponent {
   private authService = inject(AuthService);
+  public tests: any[] = []
 
   public get user() {
     return this.authService.user;
   }
+
   constructor() {
-    console.warn('asdfasdf');
-    console.warn(this.authService.user);
+    if (this.authService.getToken()) {
+      this.authService.getUser().subscribe()
+    }
   }
 }

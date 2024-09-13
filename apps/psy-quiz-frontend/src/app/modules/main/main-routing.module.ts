@@ -5,15 +5,19 @@ import { MainComponent } from './main.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     component: MainComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () => import('../../pages/dashboard/').then((m) => m.DashboardModule)
+      },
+      {
+        path: 'tests',
+        loadChildren: () => import('../../pages/test-list/').then((m) => m.TestListModule)
+      },
+      { path: '**', redirectTo: 'home' },
+    ]
   },
-  {
-    path: 'tests',
-    loadChildren: () => import('../../pages/test-list/').then((m) => m.TestListModule)
-  },
-  { path: '**', redirectTo: '' },
-
 ];
 
 @NgModule({

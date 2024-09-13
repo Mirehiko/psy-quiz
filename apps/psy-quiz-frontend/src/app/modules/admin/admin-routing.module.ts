@@ -5,22 +5,25 @@ import { AdminComponent } from './admin.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     component: AdminComponent,
+    children:[
+      {
+        path: 'tests',
+        loadChildren: () => import('./pages').then((m) => m.TestListModule)
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('./pages').then((m) => m.UserListModule)
+      },
+      {
+        path: 'runs',
+        loadChildren: () => import('./pages').then((m) => m.RunListModule)
+      },
+      { path: '**', redirectTo: '' },
+    ]
   },
-  {
-    path: 'tests',
-    loadChildren: () => import('./pages').then((m) => m.TestListModule)
-  },
-  {
-    path: 'users',
-    loadChildren: () => import('./pages').then((m) => m.UserListModule)
-  },
-  {
-    path: 'runs',
-    loadChildren: () => import('./pages').then((m) => m.RunListModule)
-  },
-  { path: '**', redirectTo: '' },
+
+
 
 ];
 

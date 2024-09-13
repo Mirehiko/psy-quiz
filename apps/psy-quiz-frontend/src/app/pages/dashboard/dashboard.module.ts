@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TestListComponent } from './test-list.component';
+import { DashboardComponent } from './dashboard.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [TestListComponent],
+  declarations: [DashboardComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
         path: '',
-        component: TestListComponent,
+        component: DashboardComponent,
       },
       {
         path: '**',
@@ -18,6 +18,6 @@ import { RouterModule } from '@angular/router';
       }
     ])
   ],
-  providers: []
+
 })
-export class TestListModule {}
+export class DashboardModule {}

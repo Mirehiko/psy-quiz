@@ -1,0 +1,11 @@
+<main>
+  <h1>PSY quiz</h1>
+  информация о сайте и прочее
+</main>
+<br>
+<aside>
+  <h2>Tests</h2>
+  <a routerLink="tests/{{test.id}}" *ngFor="let test of tests">
+    {{test.name}}
+  </a>
+</aside>

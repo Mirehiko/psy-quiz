@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, DataSource } from 'typeorm';
 import { LoggingMiddleware } from './middleware';
 import { AuthModule } from './modules/common/auth/auth.module';
-import { GatewayModule } from './modules/common/gateway/gateway.module';
 import { PermissionModule } from './modules/common/permission/permission.module';
 import { RoleModule } from './modules/common/role/role.module';
 import { TokenModule } from './modules/common/token/token.module';

@@ -33,57 +33,32 @@ export class AuthRestService {
     // });
   }
 
-  public async logout(authUserDto: any): Promise<void> {
-    return await this.http
-      .post<any>(`${this.baseUrl}/logout`, authUserDto)
-      .toPromise()
-      .then((res) => {
-        // return res as AuthResponseDto;
-      });
+  public logout(authUserDto: any): Observable<void> {
+    return from(this.http
+      .post<any>(`${this.baseUrl}/logout`, authUserDto))
   }
 
-  public async register(authUserDto: any): Promise<void> {
-    return await this.http
-      .post<any>(`${this.baseUrl}/registration`, authUserDto)
-      .toPromise()
-      .then((res) => {
-        // return res as AuthResponseDto;
-      });
+  public register(authUserDto: any): Observable<void> {
+    return from(this.http
+      .post<any>(`${this.baseUrl}/registration`, authUserDto))
   }
 
-  public async forgotPassword(authUserDto: any): Promise<void> {
-    return await this.http
-      .post<any>(`${this.baseUrl}/forgotPassword`, authUserDto)
-      .toPromise()
-      .then((res) => {
-        // return res as AuthResponseDto;
-      });
+  public forgotPassword(authUserDto: any): Observable<void> {
+    return from(this.http
+      .post<any>(`${this.baseUrl}/forgotPassword`, authUserDto))
   }
 
-  public async changePassword(authUserDto: any): Promise<void> {
-    return await this.http
-      .post<any>(`${this.baseUrl}/change-password`, authUserDto)
-      .toPromise()
-      .then((res) => {
-        // return res as AuthResponseDto;
-      });
+  public changePassword(authUserDto: any): Observable<void> {
+    return from(this.http
+      .post<any>(`${this.baseUrl}/change-password`, authUserDto));
   }
 
-  public async confirm(authUserDto: any): Promise<void> {
-    return await this.http
-      .post<any>(`${this.baseUrl}/confirm`, authUserDto)
-      .toPromise()
-      .then((res) => {
-        // return res as AuthResponseDto;
-      });
+  public confirm(authUserDto: any): Observable<void> {
+    return from(this.http
+      .post<any>(`${this.baseUrl}/confirm`, authUserDto))
   }
 
-  public async getUserByToken(token: string | null): Promise<any> {
-    return await this.http
-      .post<any>(`${this.baseUrl}/by-token`, { token: token })
-      .toPromise()
-      .then((res) => {
-        return res;
-      });
+  public getUserByToken(token: string | null): Observable<any> {
+    return from(this.http.post<any>(`${this.baseUrl}/by-token`, { token: token }));
   }
 }

@@ -1,5 +1,8 @@
 <nav>
-  <a routerLink="tests">tests</a>
+  <div>
+    <a routerLink="home">Home</a>
+    <a routerLink="tests">tests</a>
+  </div>
   <span *ngIf="user">
     userNAme
   </span>
@@ -7,12 +10,6 @@
   <a *ngIf="!user" routerLink="/auth/login">войти</a>
 </nav>
 <br>
-<main>
-  информация о сайте и прочее
-</main>
-<br>
-<aside>
-  список тестов
-</aside>
+
 
 <router-outlet></router-outlet>

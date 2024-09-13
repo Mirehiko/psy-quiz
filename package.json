@@ -12,7 +12,7 @@
     "fix-everything": "prettier --write apps",
     "migration:create": "typeorm migration:create ./apps/psy-quiz-backend/src/migrations/migration",
     "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate ./apps/psy-quiz-backend/src/migrations/migration -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",
-    "migration:run": "ts-node node_modules/.bin/typeorm migration:run -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts"
+    "migration:run": "ts-node --project ./apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm migration:run -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts"
   },
   "private": true,
   "dependencies": {

@@ -1,3 +1,4 @@
+export * from './dashboard';
 export * from './profile';
 export * from './stats';
 export * from './test-details';
