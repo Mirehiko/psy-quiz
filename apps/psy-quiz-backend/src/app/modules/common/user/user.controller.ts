@@ -16,14 +16,14 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
+import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
+import { ValidationPipe } from '../../../pipes/validation.pipe';
 import { BanUserDto, IUserGetParamsData, UserRequestDto, UserResponseDto, UserRolesDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { UserService } from './user.service';
-import {TransformInterceptor} from "../../../interceptors/transform.interceptor";
-import {ValidationPipe} from "../../../pipes/validation.pipe";
 import { UserEntity } from './schemas/user.entity';
+import { UserService } from './user.service';
 
 @ApiTags('Пользователи')
 @Controller('main')
@@ -35,7 +35,7 @@ export class UserController {
   // @ApiResponse({status: 200, type: [UserResponseDto]})
   // @Roles('ADMIN')
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('users')
   async getUsers(): Promise<UserResponseDto[]> {
     const users = await this.service.getAll(['roles', 'roles.permissions']);

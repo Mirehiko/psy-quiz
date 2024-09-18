@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import {TestService} from "../../../../services/test.service";
 
 
 @Component({
@@ -7,4 +8,12 @@ import { Component, inject } from '@angular/core';
   styleUrls: ['./test-list.component.scss']
 })
 export class TestListComponent {
+  private testService = inject(TestService);
+  public tests: any[] = []
+
+  constructor() {
+    this.testService.getAll().subscribe(tests => {
+      this.tests = tests.data;
+    })
+  }
 }

@@ -32,12 +32,6 @@ export class TestController {
     type: TestResponseDto,
     isArray: true
   })
-  @Get('test/list')
-  async getAll(): Promise<TestResponseDto[]> {
-    const entities = await this.service.getAll();
-    return plainToInstance(TestResponseDto, entities, { enableCircularCheck: true });
-  }
-
   @ApiOperation({ summary: 'Возвращает тест по его идентификатору' })
   @ApiResponse({
     status: 200,

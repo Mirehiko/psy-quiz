@@ -1,15 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UserRestService } from '../rest';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BaseService } from './base.service';
 
 @Injectable()
-export class UserService {
-  private api = inject(UserRestService)
-  public users$ = new BehaviorSubject([])
-
-  public getAll(): Observable<any> {
-    return this.api.getAll().pipe(tap(users => {
-      this.users$.next(users)
-    }))
-  }
+export class UserService extends BaseService {
+  protected api = inject(UserRestService);
 }

@@ -11,8 +11,9 @@ export class UserListComponent {
   private userService = inject(UserService);
 
   public get users$(): Observable<any> {
-    return this.userService.users$
+    return this.userService.entities$
   }
+
   constructor() {
     this.userService.getAll().subscribe()
   }

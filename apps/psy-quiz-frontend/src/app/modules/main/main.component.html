@@ -4,7 +4,7 @@
     <a routerLink="tests">tests</a>
   </div>
   <span *ngIf="user">
-    userNAme
+    {{user.email}}
   </span>
 
   <a *ngIf="!user" routerLink="/auth/login">войти</a>

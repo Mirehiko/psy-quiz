@@ -1,6 +1,8 @@
+import { NgForOf } from "@angular/common";
 import { NgModule } from '@angular/core';
-import { TestListComponent } from './test-list.component';
 import { RouterModule } from '@angular/router';
+import { TestListComponent } from './test-list.component';
+
 
 @NgModule({
   declarations: [TestListComponent],
@@ -14,16 +16,16 @@ import { RouterModule } from '@angular/router';
           {
             path: ':testId',
             loadChildren: () => import('../test-details').then((m) => m.TestDetailsModule)
-          },
+          }
         ]
-      },
+      }
       // {
       //   path: '**',
       //   redirectTo: ''
       // }
-    ])
+    ]),
+    NgForOf
   ],
-  providers: [
-  ],
+  providers: []
 })
 export class TestListModule {}
