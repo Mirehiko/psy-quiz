@@ -3,11 +3,11 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
-  Get,
+  Get, Logger, OnModuleInit,
   Param,
-  Patch, Post, Req,
+  Patch, Post, Req, UnauthorizedException,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
@@ -15,15 +15,36 @@ import { TestRunService } from './test-run.service';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { TestRunRequestDto, TestRunResponseDto } from '../dto/test-run.dto';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
+import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
+  WebSocketGateway,
+  WebSocketServer
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { ConnectedUserService } from '../../common/gateway/connected-user.service';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../../common/user/user.service';
 
 
 @ApiTags('Прохождение теста')
 @Controller('main')
 @UseInterceptors(new TransformInterceptor())
-export class TestRunController {
-  constructor(private readonly service: TestRunService) {}
+@WebSocketGateway({ namespace: 'run', cors: { origin: ['http://localhost:5002', 'http://localhost:3000', 'http://localhost:4200'] } })
+export class TestRunController implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
+  @WebSocketServer()
+  private server: Server;
+  private logger: Logger = new Logger('AppGateway');
 
-  @UseGuards(JwtAuthGuard)
+  constructor(
+    private readonly service: TestRunService,
+    private userService: UserService,
+    private connectedUserService: ConnectedUserService,
+    private jwtService: JwtService
+  ) {}
+
+  // @UseGuards(JwtAuthGuard)
   @Get('test-run/list')
   async getAll(): Promise<TestRunResponseDto[]> {
     const entities = await this.service.getAll();
@@ -73,4 +94,48 @@ export class TestRunController {
   async delete(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
   }
+
+  afterInit(server: Server) {
+    this.logger.log('Socket-server up');
+  }
+
+  async handleDisconnect(client: Socket) {
+    await this.connectedUserService.deleteBySocketId(client.id);
+    client.disconnect();
+    this.logger.log(`Client disconnected: ${client.id}`);
+  }
+
+  async handleConnection(client: Socket, ...args: any[]) {
+    try {
+      const tokenUser = await this.jwtService.verify(client.handshake.headers.authorization);
+      const user = await this.userService.getByID(tokenUser.id, ['roles']);
+      if (!user) {
+        return this.disconnect(client);
+      }
+      this.logger.log(`Client connected: ${client.id}`);
+      client.data.user = user;
+      await this.connectedUserService.create(client.id, user);
+      // return this.server.to(client.id).emit('notifications', notifications);
+    } catch (err) {
+      console.log(err);
+      return this.disconnect(client);
+    }
+  }
+
+  private disconnect(socket: Socket) {
+    socket.emit('Error', new UnauthorizedException());
+    socket.disconnect();
+    this.logger.log(`Client disconnected: ${socket.id}`);
+  }
+
+  async onModuleInit() {
+    await this.connectedUserService.deleteAll();
+  }
+
+  private async sendNotification<T>(socketId: string, eventType: string, data: T): Promise<void> {
+    // TODO: Is it need to change 'Task' to 'TaskResponseDto'?
+    await this.server.to(socketId).emit(eventType, data);
+    // TODO: save changes to database
+  }
+
 }
