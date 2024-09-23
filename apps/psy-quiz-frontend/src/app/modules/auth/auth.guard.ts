@@ -1,24 +1,32 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslocoService } from '@ngneat/transloco';
-import { SupportedLocale, User } from '@reglab/regul-summit-api-lib';
+import { SocketIoService } from '@services';
 import { map, of } from 'rxjs';
 import { AuthService } from './services';
 
 export const isLoggedGuardFn = () => {
   const router = inject(Router);
   const authService = inject(AuthService);
-
+  console.warn('beforecheck');
+  debugger;
   if (!authService.isLoggedIn()) {
+    // const socket = inject(SocketIoService);
+    // socket.setUpOnlineStatus(authService.user.id);
     return of(router.navigateByUrl('/auth'));
   }
+  const socket = inject(SocketIoService);
 
-  const translocoService = inject(TranslocoService);
+  console.warn('aftercheck');
 
   return authService.getUser().pipe(
     map(async (u) => {
-      translocoService.setActiveLang((u as User).locale === SupportedLocale.Ru ? 'ru' : 'en');
-      return !u ? await router.navigateByUrl('/auth') : true;
+      console.warn(u);
+      if (u) {
+        socket.connect();
+        socket.setUpOnlineStatus(authService.user.id);
+        return true;
+      }
+      return await router.navigateByUrl('/auth');
     })
   );
 };

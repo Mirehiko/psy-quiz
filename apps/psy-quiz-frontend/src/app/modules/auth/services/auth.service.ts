@@ -9,8 +9,8 @@ export class AuthService {
   public user: any;
   // protected tokenDto;
   private readonly tokenProjectIdKey = 'token-project-id';
-  protected readonly jwtTokenKey = "jwt-token";
-  protected readonly refreshTokenKey = "refresh-token";
+  protected readonly jwtTokenKey = 'jwt-token';
+  protected readonly refreshTokenKey = 'refresh-token';
 
   constructor(private authRestService: AuthRestService, private router: Router) {}
 
@@ -23,7 +23,8 @@ export class AuthService {
       tap((response: any) => {
         this.user = response.data.user;
         // this.token = response.data.token;
-        this.setToken(response.data.token)
+        console.warn('login');
+        this.setToken(response.data.token);
         console.warn(this.user);
       })
     );
@@ -35,37 +36,45 @@ export class AuthService {
   }
 
   register(): Observable<any> {
-    return of(void 0)
+    return of(void 0);
     // TODO: Добавить возможности регистрации и изменения/востановления пароля
   }
 
   logout(): Observable<void> {
-    return this.authRestService.logout(this.user).pipe(tap(() => {
-      this.user = null;
-      this.removeToken();
-      this.router.navigate(['/login']);
-    }))
+    return this.authRestService.logout(this.user).pipe(
+      tap(() => {
+        this.user = null;
+        this.removeToken();
+        this.router.navigate(['/login']);
+      })
+    );
   }
 
   setToken(token: string): void {
     this.token = token;
-    localStorage.setItem('auth-token', token);
+    localStorage.setItem(this.jwtTokenKey, token);
+    console.warn('save tocken');
   }
 
   removeToken(): void {
     this.token = '';
-    localStorage.removeItem('auth-token');
+    localStorage.removeItem(this.jwtTokenKey);
   }
 
   getToken(): string | null {
-    this.token = localStorage.getItem('auth-token');
+    this.token = localStorage.getItem(this.jwtTokenKey);
     return this.token;
   }
 
   getUser(): Observable<any> {
+    debugger;
     if (!this.user) {
       try {
-        return this.authRestService.getUserByToken(this.getToken()).pipe(data => this.user = data);
+        return this.authRestService.getUserByToken(this.getToken()).pipe(
+          tap((data) => {
+            this.user = data.data;
+          })
+        );
       } catch (e) {
         return this.logout();
       }
@@ -84,22 +93,21 @@ export class AuthService {
   }
 
   public getJwtToken(projectId?: string): string | undefined {
-    if (projectId && sessionStorage.getItem(this.tokenProjectIdKey) !== projectId) {
-      return undefined;
-    }
+    // if (projectId && sessionStorage.getItem(this.tokenProjectIdKey) !== projectId) {
+    //   return undefined;
+    // }
 
-    this.token = sessionStorage.getItem(this.jwtTokenKey) || '';
+    this.token = localStorage.getItem(this.jwtTokenKey) || '';
     if (!this.token) {
-      this.token = sessionStorage.getItem(this.jwtTokenKey) || '';
+      this.token = localStorage.getItem(this.jwtTokenKey) || '';
     }
-    return this.token
+    return this.token;
     // if (!this.tokenDto.jwt) {
-    //   this.tokenDto.jwt = sessionStorage.getItem(this.jwtTokenKey) || '';
+    //   this.tokenDto.jwt = localStorage.getItem(this.jwtTokenKey) || '';
     // }
 
     // return this.tokenDto.jwt;
   }
-
 
   private resetUser(skipRedirect: boolean = false): void {
     this.removeTokens();
@@ -112,18 +120,18 @@ export class AuthService {
     this.token = jwt;
     // this.tokenDto.jwt = jwt;
     // this.tokenDto.refresh = refresh;
-    // sessionStorage.setItem(this.jwtTokenKey, jwt);
-    sessionStorage.setItem(this.tokenProjectIdKey, projectId);
-    // sessionStorage.setItem(this.refreshTokenKey, refresh);
+    // localStorage.setItem(this.jwtTokenKey, jwt);
+    localStorage.setItem(this.tokenProjectIdKey, projectId);
+    // localStorage.setItem(this.refreshTokenKey, refresh);
   }
 
   public removeTokens(): void {
-    this.token = ''
+    this.token = '';
     // this.tokenDto.jwt = '';
     // this.tokenDto.refresh = '';
-    // sessionStorage.removeItem(this.jwtTokenKey);
-    sessionStorage.removeItem(this.tokenProjectIdKey);
-    // sessionStorage.removeItem(this.refreshTokenKey);
+    // localStorage.removeItem(this.jwtTokenKey);
+    localStorage.removeItem(this.tokenProjectIdKey);
+    // localStorage.removeItem(this.refreshTokenKey);
   }
 
   // public changePassword(oldPassword: string, newPassword: string): Observable<any> {

@@ -4,7 +4,7 @@ import { BaseRestService } from './base-rest.service';
 
 @Injectable()
 export class RunRestService extends BaseRestService {
-  protected apiUrl = 'run';
+  protected apiUrl = 'test-run';
 
   public start(id: string): Observable<any> {
     return from(this.http.patch(`${this.baseUrl}/${this.apiUrl}/${id}/start`, undefined));

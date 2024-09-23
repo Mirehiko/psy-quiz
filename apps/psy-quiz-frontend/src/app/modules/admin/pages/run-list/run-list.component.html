@@ -1,1 +1,5 @@
 <h1>Runs</h1>
+<a routerLink="run/{{run.id}}" *ngFor="let run of runs">
+  {{run.name}}
+</a>
+<router-outlet></router-outlet>

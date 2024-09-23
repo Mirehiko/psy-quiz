@@ -1,7 +1,14 @@
-<nav>
-  <a routerLink="users">Users</a>
-  <a routerLink="tests">Tests</a>
-  <a routerLink="runs">Runs</a>
-</nav>
+<div>
+  <nav>
+    <a routerLink="users">Users</a>
+    <a routerLink="tests">Tests</a>
+    <a routerLink="runs">Runs</a>
+  </nav>
+  <nav>
+    <span *ngIf="user">
+      {{user.email}}
+    </span>
+  </nav>
+</div>
 <h1>Dashboard</h1>
 <router-outlet></router-outlet>

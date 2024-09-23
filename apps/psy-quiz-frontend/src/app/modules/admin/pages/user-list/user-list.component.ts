@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserService } from '../../../../services';
+import { SocketIoService, UserService } from '../../../../services';
 
 @Component({
   selector: 'admin-user-list',
@@ -9,12 +9,14 @@ import { UserService } from '../../../../services';
 })
 export class UserListComponent {
   private userService = inject(UserService);
+  // private socketIoService = inject(SocketIoService);
 
   public get users$(): Observable<any> {
-    return this.userService.entities$
+    return this.userService.entities$;
   }
 
   constructor() {
-    this.userService.getAll().subscribe()
+    this.userService.getAll().subscribe();
+    // this.socketIoService.getOnlineStatuses().subscribe((status) => {});
   }
 }

@@ -1,18 +1,26 @@
 import { Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
+  ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer
+  WebSocketServer,
+  WsResponse
 } from '@nestjs/websockets';
+import { Observable, of } from 'rxjs';
 import { Server, Socket } from 'socket.io';
 import { UserService } from '../user/user.service';
 import { ConnectedUserService } from './connected-user.service';
 
-@WebSocketGateway({ cors: { origin: ['http://localhost:5002', 'http://localhost:3000', 'http://localhost:4200'] } })
+@WebSocketGateway({
+  namespace: 'connection',
+  // transports: ['websocket'],
+  cors: { origin: ['http://localhost:5002', 'http://localhost:3000', 'http://localhost:4200'] }
+})
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
   @WebSocketServer()
   server: Server;
@@ -24,6 +32,11 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     private connectedUserService: ConnectedUserService,
     private jwtService: JwtService
   ) {}
+
+  @SubscribeMessage('onlineStatus')
+  onStatusChange(@MessageBody() data, @ConnectedSocket() client: Socket): Observable<WsResponse> {
+    return of({ event: 'onlineStatus', data: client.id });
+  }
 
   afterInit(server: Server) {
     this.logger.log('Socket-server up');
@@ -37,7 +50,13 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
-      const tokenUser = await this.jwtService.verify(client.handshake.headers.authorization);
+      const authHeader = client.handshake.headers.authorization;
+      const bearer = authHeader.split(' ')[0];
+      const token = authHeader.split(' ')[1];
+      if (bearer !== 'Bearer' || !token) {
+        throw new UnauthorizedException({ message: 'User unauthorized' });
+      }
+      const tokenUser = await this.jwtService.verify(token);
       const user = await this.userService.getByID(tokenUser.id, ['roles']);
       if (!user) {
         return this.disconnect(client);

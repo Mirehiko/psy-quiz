@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { isLoggedGuardFn } from './modules/auth/auth.guard';
 
 export const appRoutes: Route[] = [
   {
@@ -11,6 +12,7 @@ export const appRoutes: Route[] = [
   // },
   {
     path: 'admin',
+    canActivate: [isLoggedGuardFn],
     loadChildren: async () => (await import('./modules')).AdminModule
   },
   {

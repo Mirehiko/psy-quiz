@@ -1,8 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, DataSource } from 'typeorm';
+import typeorm from './config/postgres-datasource';
 import { LoggingMiddleware } from './middleware';
 import { AuthModule } from './modules/common/auth/auth.module';
+import { GatewayModule } from './modules/common/gateway/gateway.module';
 import { PermissionModule } from './modules/common/permission/permission.module';
 import { RoleModule } from './modules/common/role/role.module';
 import { TokenModule } from './modules/common/token/token.module';
@@ -16,8 +19,6 @@ import { ScaleModule } from './modules/quiz/scale/scale.module';
 import { ScaleAnswerModule } from './modules/quiz/scale_answer/scale-answer.module';
 import { TestModule } from './modules/quiz/test/test.module';
 import { TestRunModule } from './modules/quiz/test_run/test-run.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import typeorm from './config/postgres-datasource'
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import typeorm from './config/postgres-datasource'
     RoleModule,
     PermissionModule,
     TokenModule,
-    // GatewayModule,
+    GatewayModule,
     CriterionModule,
     QuestionModule,
     QuestionAnswerModule,
