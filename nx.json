@@ -39,10 +39,29 @@
   ],
   "nxCloudAccessToken": "ODI3NGJhMzgtOGQ1MS00ZjljLWFhMjctNjkxYTkxY2I0ZWEyfHJlYWQtd3JpdGU=",
   "targetDefaults": {
+    "@nx/js:tsc": {
+      "inputs": [
+        "production",
+        "^production"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
+      "defaultConfiguration": "development",
+      "options": {
+        "main": "{projectRoot}/src/index.ts"
+      },
+      "cache": false
+    },
     "@angular-devkit/build-angular:browser": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "generators": {
