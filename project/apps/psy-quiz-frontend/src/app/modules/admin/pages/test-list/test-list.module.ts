@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TestListComponent } from './test-list.component';
 import { RouterModule } from '@angular/router';
+import { TestListComponent } from './test-list.component';
 
 @NgModule({
   declarations: [TestListComponent],
@@ -10,7 +10,11 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: '',
-        component: TestListComponent,
+        component: TestListComponent
+      },
+      {
+        path: 'add',
+        loadChildren: () => import('../test-add').then((m) => m.TestAddModule)
       },
       {
         path: '**',

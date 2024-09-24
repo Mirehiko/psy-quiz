@@ -1,5 +1,7 @@
 <h1>Runs</h1>
+<button routerLink="run/add">Create</button>
 <a routerLink="run/{{run.id}}" *ngFor="let run of runs">
-  {{run.name}}
+  <span>{{run.name}}</span>
+  <button (click)="remove(run.id)">remove</button>
 </a>
 <router-outlet></router-outlet>

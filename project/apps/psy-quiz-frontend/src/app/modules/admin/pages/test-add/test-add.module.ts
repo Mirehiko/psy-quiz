@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { UserRestService } from '../../../../rest';
-import { UserService } from '../../../../services';
-import { UserListComponent } from './user-list.component';
+import { TestAddComponent } from './test-add.component';
 
 @NgModule({
-  declarations: [UserListComponent],
+  declarations: [TestAddComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
       {
         path: '',
-        component: UserListComponent
+        component: TestAddComponent
       }
       // {
       //   path: 'add',
@@ -24,6 +24,6 @@ import { UserListComponent } from './user-list.component';
       // }
     ])
   ],
-  providers: [UserRestService, UserService]
+  providers: []
 })
-export class UserListModule {}
+export class TestAddModule {}

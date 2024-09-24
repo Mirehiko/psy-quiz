@@ -1,0 +1,6 @@
+<form [formGroup]="formGroup">
+  <input type="text" formControlName="name">
+  <input type="text" formControlName="description">
+  <button (click)="create()">Create</button>
+  <button routerLink="../">Cancel</button>
+</form>
