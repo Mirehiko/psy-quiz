@@ -16,8 +16,17 @@ export abstract class BaseService {
 
   public getOne(id: string): Observable<any> {
     return this.api.getOne(id).pipe(
-      tap((entities) => {
-        this.entity$.next(entities);
+      tap((entity) => {
+        this.entity$.next(entity.data);
+      })
+    );
+  }
+
+  public update(id: string, requestDto: any): Observable<any> {
+    return this.api.update(id, requestDto).pipe(
+      tap((entity) => {
+        this.entities$.next([...this.entities$.value.map((user) => (user.id === id ? entity.data : user))]);
+        this.entity$.next(entity.data);
       })
     );
   }

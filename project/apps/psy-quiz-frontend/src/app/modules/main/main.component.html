@@ -3,9 +3,9 @@
     <a routerLink="home">Home</a>
     <a routerLink="tests">tests</a>
   </div>
-  <span *ngIf="user">
+  <div *ngIf="user">
     {{user.email}}
-  </span>
+  </div>
 
   <a *ngIf="!user" routerLink="/auth/login">войти</a>
 </nav>

@@ -8,7 +8,6 @@ export const isLoggedGuardFn = () => {
   const router = inject(Router);
   const authService = inject(AuthService);
   console.warn('beforecheck');
-  debugger;
   if (!authService.isLoggedIn()) {
     // const socket = inject(SocketIoService);
     // socket.setUpOnlineStatus(authService.user.id);

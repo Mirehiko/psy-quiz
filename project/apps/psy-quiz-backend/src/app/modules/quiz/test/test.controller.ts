@@ -69,10 +69,11 @@ export class TestController {
     type: TestResponseDto
   })
   @UseGuards(JwtAuthGuard)
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @Patch('test/:id')
-  async update(@Body() requestDto: TestRequestDto, @Param() id: string): Promise<TestResponseDto> {
+  async update(@Body() requestDto: TestRequestDto, @Param('id') id: string): Promise<TestResponseDto> {
+    console.warn(id);
     const entity = await this.service.update(id, requestDto);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
   }

@@ -8,6 +8,10 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
+        path: 'dashboard',
+        loadChildren: () => import('./pages').then((m) => m.DashboardModule)
+      },
+      {
         path: 'test',
         loadChildren: () => import('./pages').then((m) => m.TestListModule)
       },
@@ -19,9 +23,10 @@ const routes: Routes = [
         path: 'run',
         loadChildren: () => import('./pages').then((m) => m.RunListModule)
       },
-      { path: '**', redirectTo: '' }
+      { path: '**', redirectTo: 'dashboard' }
     ]
-  }
+  },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

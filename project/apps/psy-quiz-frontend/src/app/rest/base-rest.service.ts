@@ -19,6 +19,10 @@ export abstract class BaseRestService {
     return from(this.http.post(`${this.baseUrl}/${this.apiUrl}`, requestDto));
   }
 
+  public update(id: string, requestDto: any): Observable<any> {
+    return from(this.http.patch(`${this.baseUrl}/${this.apiUrl}/${id}`, requestDto));
+  }
+
   public remove(id: string): Observable<any> {
     return from(this.http.delete(`${this.baseUrl}/${this.apiUrl}/${id}`));
   }

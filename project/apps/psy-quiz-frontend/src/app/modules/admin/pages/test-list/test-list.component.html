@@ -3,7 +3,7 @@
   <button routerLink="add">Create</button>
 </h1>
 <div *ngFor="let test of tests">
-  <a routerLink="test/{{test.id}}">
+  <a routerLink="{{test.id}}/edit">
     <span>{{test.name}}</span>
     <button (click)="remove(test.id)">remove</button>
   </a>

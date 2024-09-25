@@ -2,17 +2,17 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TestAddComponent } from './test-add.component';
+import { TestEditComponent } from './test-edit.component';
 
 @NgModule({
-  declarations: [TestAddComponent],
+  declarations: [TestEditComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild([
       {
         path: '',
-        component: TestAddComponent
+        component: TestEditComponent
       }
       // {
       //   path: 'add',
@@ -26,4 +26,4 @@ import { TestAddComponent } from './test-add.component';
   ],
   providers: []
 })
-export class TestAddModule {}
+export class TestEditModule {}

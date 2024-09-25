@@ -9,12 +9,17 @@ import { TestListComponent } from './test-list.component';
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: TestListComponent
+        path: 'add',
+        loadChildren: () => import('../test-edit').then((m) => m.TestEditModule)
       },
       {
-        path: 'add',
-        loadChildren: () => import('../test-add').then((m) => m.TestAddModule)
+        path: ':id/edit',
+        loadChildren: () => import('../test-edit').then((m) => m.TestEditModule)
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        component: TestListComponent
       },
       {
         path: '**',

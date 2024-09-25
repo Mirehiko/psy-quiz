@@ -11,17 +11,22 @@ import { UserListComponent } from './user-list.component';
     CommonModule,
     RouterModule.forChild([
       {
+        path: 'add',
+        loadChildren: () => import('../user-edit').then((m) => m.UserEditModule)
+      },
+      {
+        path: ':id/edit',
+        loadChildren: () => import('../user-edit').then((m) => m.UserEditModule)
+      },
+      {
         path: '',
+        pathMatch: 'full',
         component: UserListComponent
+      },
+      {
+        path: '**',
+        redirectTo: ''
       }
-      // {
-      //   path: 'add',
-      //   loadChildren: () => import('./pages').then((m) => m.UserListModule)
-      // },
-      // {
-      //   path: '**',
-      //   redirectTo: ''
-      // }
     ])
   ],
   providers: [UserRestService, UserService]
