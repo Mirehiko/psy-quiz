@@ -44,7 +44,6 @@ export class UserController {
   @Get('user/list')
   async getUsers(): Promise<UserResponseDto[]> {
     const users = await this.service.getAll(['roles', 'roles.permissions']);
-    console.warn(users);
     return plainToInstance(UserResponseDto, users, { enableCircularCheck: true });
   }
 
@@ -80,9 +79,7 @@ export class UserController {
     @Param('id') id: string,
     @UploadedFile() avatar
   ): Promise<UserResponseDto> {
-    console.warn('id', id);
     const user = await this.service.updateUser(id, requestDto, avatar);
-    console.warn(user);
     return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
   }
 

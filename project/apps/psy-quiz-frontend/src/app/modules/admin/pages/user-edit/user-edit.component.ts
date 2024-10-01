@@ -20,12 +20,23 @@ export class UserEditComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+  public statuses = [
+    {
+      title: 'pending',
+      status: 'pending'
+    },
+    {
+      title: 'Active',
+      status: 'active'
+    }
+  ];
 
   constructor() {
     this.formGroup = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       name: new FormControl('', Validators.required),
-      password: new FormControl('')
+      password: new FormControl(''),
+      status: new FormControl('pending')
       // form array
     });
     this.route.params.subscribe((params) => {
@@ -42,7 +53,8 @@ export class UserEditComponent {
             this.formGroup = new FormGroup({
               email: new FormControl(user.email, [Validators.required, Validators.email]),
               name: new FormControl(user.name),
-              password: new FormControl('')
+              password: new FormControl(''),
+              status: new FormControl(user.status)
               // form array
             });
             this.cdr.markForCheck();
@@ -73,10 +85,11 @@ export class UserEditComponent {
   }
 
   clickHandler(): void {
-    const requestDto: { name?: string; email: string; password?: string } = {
+    const requestDto: { name?: string; email: string; password?: string; status?: string } = {
       name: this.formGroup.get('name')?.value,
       email: this.formGroup.get('email')?.value,
-      password: this.formGroup.get('password')?.value
+      password: this.formGroup.get('password')?.value,
+      status: this.formGroup.get('status')?.value
     };
     if (this.isEdit) {
       this.update(requestDto);
