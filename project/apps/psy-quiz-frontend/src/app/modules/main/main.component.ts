@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { SocketIoService } from '@services';
 import { switchMap } from 'rxjs';
 import { AuthService } from '../auth';
 
@@ -9,11 +10,11 @@ import { AuthService } from '../auth';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainComponent {
+  public tests: any[] = [];
+  public user: any | undefined = undefined;
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
-  public tests: any[] = [];
-
-  public user: any | undefined = undefined;
+  private socketService = inject(SocketIoService);
 
   menuItems: any[] = [
     {
@@ -33,6 +34,13 @@ export class MainComponent {
         .pipe(switchMap(() => this.authService.user$))
         .subscribe((user) => {
           this.user = user;
+          this.socketService.connect();
+          if (user) {
+            this.socketService.setUpOnlineStatus(user.id);
+          } else {
+            this.socketService.disconnect();
+          }
+
           this.cdr.markForCheck();
         });
     }

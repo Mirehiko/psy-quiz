@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BanUserDto, IUserGetParamsData, UserRequestDto, UserRolesDto } from '../../../shared';
 import { BaseService } from '../base-service';
 import { RoleService } from '../role/role.service';
+import { RoleEntity } from '../role/schemas/role.entity';
 import { UserEntity } from './schemas/user.entity';
 
 @Injectable()
@@ -34,7 +35,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
     const newUser = await this.repository.create({ ...requestDto });
 
     try {
-      let role;
+      let role: RoleEntity;
       if (!requestDto.roles || !requestDto.roles.length) {
         role = await this.roleService.getByID('1', ['permissions']); // TODO: roles
         newUser.roles = [role];

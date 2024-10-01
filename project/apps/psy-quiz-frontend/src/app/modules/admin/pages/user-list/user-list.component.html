@@ -4,7 +4,7 @@
 </h1>
 <div class="row-list">
   <div *ngFor="let user of users" class="row-item" routerLink="{{user.id}}/edit">
-    <span class="online-status"></span>
+    <span class="online-status" [class.online-status--online]="user.onlineStatus === 'Online'"></span>
     <span>{{ user.name }}</span>
     <span>{{ user.status }}</span>
     <button (click)="remove(user.id)">remove</button>

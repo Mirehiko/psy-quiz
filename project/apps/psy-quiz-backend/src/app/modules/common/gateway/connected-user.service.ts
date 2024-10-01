@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { UserEntity } from '../user/schemas/user.entity';
 import { ConnectedUserEntity } from './schemas/connected-user.entity';
 
@@ -22,11 +22,15 @@ export class ConnectedUserService {
       .getMany();
   }
 
+  async getAllConnectedUsers(): Promise<ConnectedUserEntity[]> {
+    return await this.repository.find({ relations: ['user'] });
+  }
+
   async findByUser(user: UserEntity): Promise<ConnectedUserEntity[]> {
     return this.repository.find({ where: { user } });
   }
 
-  async deleteBySocketId(socketId: string) {
+  async deleteBySocketId(socketId: string): Promise<DeleteResult> {
     return this.repository.delete({ socketId });
   }
 

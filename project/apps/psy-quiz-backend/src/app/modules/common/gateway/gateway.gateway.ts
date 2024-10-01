@@ -26,6 +26,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   server: Server;
 
   private logger: Logger = new Logger('AppGateway');
+  private connectedUsers = new Map<string, string>();
 
   constructor(
     private userService: UserService,
@@ -34,21 +35,54 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   ) {}
 
   @SubscribeMessage('onlineStatus')
-  onStatusChange(@MessageBody() data, @ConnectedSocket() client: Socket): Observable<WsResponse> {
-    return of({ event: 'onlineStatus', data: client.id });
+  async onStatusChange(@ConnectedSocket() client: Socket): Promise<WsResponse> {
+    const authHeader = client.handshake.headers.authorization;
+    const bearer = authHeader.split(' ')[0];
+    const token = authHeader.split(' ')[1];
+    if (bearer !== 'Bearer' || !token) {
+      throw new UnauthorizedException({ message: 'User unauthorized' });
+    }
+    const tokenUser = await this.jwtService.verify(token);
+    const user = await this.userService.getByID(tokenUser.id, ['roles']);
+    if (!user) {
+      return { event: 'onlineStatus', data: { connectionId: client.id, status: 'Offline' } };
+    }
+    if (user.roles.find((role) => +role.id === 1)) {
+      const connectedUsers = await this.connectedUserService.getAllConnectedUsers();
+      return {
+        event: 'onlineStatus',
+        data: {
+          connectionId: client.id,
+          status: 'Online',
+          userId: user.id,
+          users: connectedUsers.map((u) => ({
+            userId: u.user.id,
+            connectionId: u.socketId,
+            status: 'Online'
+          }))
+        }
+      };
+    }
+    return { event: 'onlineStatus', data: { connectionId: client.id, userId: user.id, status: 'Online' } };
   }
 
   afterInit(server: Server) {
     this.logger.log('Socket-server up');
   }
 
-  async handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket): Promise<void> {
     await this.connectedUserService.deleteBySocketId(client.id);
     client.disconnect();
     this.logger.log(`Client disconnected: ${client.id}`);
+    this.server.emit('onlineStatus', {
+      connectionId: client.id,
+      userId: this.connectedUsers.get(client.id),
+      status: 'Offline'
+    });
+    this.connectedUsers.delete(client.id);
   }
 
-  async handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]): Promise<any> {
     try {
       const authHeader = client.handshake.headers.authorization;
       const bearer = authHeader.split(' ')[0];
@@ -59,25 +93,30 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       const tokenUser = await this.jwtService.verify(token);
       const user = await this.userService.getByID(tokenUser.id, ['roles']);
       if (!user) {
-        return this.disconnect(client);
+        return this.disconnect(client, undefined);
       }
       this.logger.log(`Client connected: ${client.id}`);
       client.data.user = user;
       await this.connectedUserService.create(client.id, user);
+      this.connectedUsers.set(client.id, user.id);
+      this.server.emit('onlineStatus', { connectionId: client.id, userId: user.id, status: 'Online' });
       // return this.server.to(client.id).emit('notifications', notifications);
     } catch (err) {
       console.log(err);
-      return this.disconnect(client);
+      return await this.disconnect(client);
     }
   }
 
-  private disconnect(socket: Socket) {
-    socket.emit('Error', new UnauthorizedException());
-    socket.disconnect();
-    this.logger.log(`Client disconnected: ${socket.id}`);
+  private async disconnect(client: Socket, userId?: string): Promise<void> {
+    client.emit('Error', new UnauthorizedException());
+    client.disconnect();
+    await this.connectedUserService.deleteBySocketId(client.id);
+    this.server.emit('onlineStatus', { connectionId: undefined, userId: client.id, status: 'Offline' });
+    this.connectedUsers.delete(client.id);
+    this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     await this.connectedUserService.deleteAll();
   }
 

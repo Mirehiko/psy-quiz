@@ -9,13 +9,13 @@ export class Init1726050963725 implements MigrationInterface {
     userRole.name = 'USER';
     userRole.description = 'Some Might';
     userRole.displayName = 'User';
-    // newRole.permissions = [];
+    userRole.permissions = [];
 
     const adminRole = new RoleEntity();
     adminRole.name = 'ADMIN';
     adminRole.description = 'All Might';
     adminRole.displayName = 'Admin';
-    // newRole.permissions = [];
+    adminRole.permissions = [];
     // await roleRep.insert(adminRole)
     await roleRep.insert([adminRole, userRole]);
 

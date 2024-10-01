@@ -14,23 +14,29 @@ export class SocketIoService {
   constructor() {}
 
   public connect(): void {
-    console.warn(localStorage.getItem('jwt-token'));
+    if (this.socket?.connected) {
+      return;
+    }
     this.socket = io('ws://localhost:5002/connection', {
       // transports: ['websocket'],
       extraHeaders: {
         authorization: 'Bearer ' + localStorage.getItem('jwt-token')
-      }
+      },
+      autoConnect: true
     });
+  }
+
+  public disconnect(): void {
+    this.socket?.disconnect();
   }
 
   public setUpOnlineStatus(userId: string): void {
     this.socket?.emit('onlineStatus', { userId });
   }
 
-  public getOnlineStatuses(): Observable<any> {
+  public getOnlineStatus(): Observable<any> {
     return new Observable((observer) => {
       this.socket?.on('onlineStatus', (status) => {
-        console.warn(status, 'asd');
         observer.next(status);
       });
     });
