@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RunListComponent } from './run-list.component';
 import { RouterModule } from '@angular/router';
+import { RunListComponent } from './run-list.component';
 
 @NgModule({
   declarations: [RunListComponent],
@@ -9,9 +9,22 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: RunListComponent,
+        path: 'add',
+        loadChildren: () => import('../run-edit').then((m) => m.RunEditModule)
       },
+      {
+        path: ':id/edit',
+        loadChildren: () => import('../run-edit').then((m) => m.RunEditModule)
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        component: RunListComponent
+      },
+      {
+        path: '**',
+        redirectTo: ''
+      }
       // {
       //   path: '**',
       //   redirectTo: ''

@@ -6,25 +6,27 @@ const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    children:[
+    children: [
       {
-        path: 'tests',
+        path: 'dashboard',
+        loadChildren: () => import('./pages').then((m) => m.DashboardModule)
+      },
+      {
+        path: 'test',
         loadChildren: () => import('./pages').then((m) => m.TestListModule)
       },
       {
-        path: 'users',
+        path: 'user',
         loadChildren: () => import('./pages').then((m) => m.UserListModule)
       },
       {
-        path: 'runs',
+        path: 'run',
         loadChildren: () => import('./pages').then((m) => m.RunListModule)
       },
-      { path: '**', redirectTo: '' },
+      { path: '**', redirectTo: 'dashboard' }
     ]
   },
-
-
-
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

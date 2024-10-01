@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TestListComponent } from './test-list.component';
 import { RouterModule } from '@angular/router';
+import { TestListComponent } from './test-list.component';
 
 @NgModule({
   declarations: [TestListComponent],
@@ -9,8 +9,17 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule.forChild([
       {
+        path: 'add',
+        loadChildren: () => import('../test-edit').then((m) => m.TestEditModule)
+      },
+      {
+        path: ':id/edit',
+        loadChildren: () => import('../test-edit').then((m) => m.TestEditModule)
+      },
+      {
         path: '',
-        component: TestListComponent,
+        pathMatch: 'full',
+        component: TestListComponent
       },
       {
         path: '**',

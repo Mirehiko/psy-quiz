@@ -1,24 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CardModule } from '../../components';
 import { DashboardComponent } from './dashboard.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
-    CardModule,
     RouterModule.forChild([
       {
         path: '',
-        component: DashboardComponent
+        component: DashboardComponent,
       },
       {
         path: '**',
         redirectTo: ''
       }
     ])
-  ]
+  ],
+
 })
 export class DashboardModule {}

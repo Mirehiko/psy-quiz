@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
-import { TestEntity } from './schemas/test.entity';
-import { TestRequestDto } from '../dto/test.dto';
 import { UserEntity } from '../../common/user/schemas/user.entity';
+import { TestRequestDto } from '../dto/test.dto';
+import { TestEntity } from './schemas/test.entity';
 
 @Injectable()
 export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
@@ -38,7 +38,7 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
     entity.description = requestDto.description ? requestDto.description : entity.description;
 
     try {
-      await this.repository.save(entity);
+      await this.repository.update(id, entity);
       return entity;
     } catch (e) {
       throw new Error(e);

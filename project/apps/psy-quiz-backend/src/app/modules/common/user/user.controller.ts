@@ -19,6 +19,7 @@ import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
 import { BanUserDto, IUserGetParamsData, UserRequestDto, UserResponseDto, UserRolesDto } from '../../../shared';
+import { TestResponseDto } from '../../quiz/dto/test.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
@@ -32,13 +33,18 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @ApiOperation({ summary: 'Получение списка пользователей' })
-  // @ApiResponse({status: 200, type: [UserResponseDto]})
+  @ApiResponse({
+    status: 200,
+    type: UserResponseDto,
+    isArray: true
+  })
   // @Roles('ADMIN')
-  @UseInterceptors(ClassSerializerInterceptor)
+  // @UseInterceptors(ClassSerializerInterceptor)
   // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get('users')
+  @Get('user/list')
   async getUsers(): Promise<UserResponseDto[]> {
     const users = await this.service.getAll(['roles', 'roles.permissions']);
+    console.warn(users);
     return plainToInstance(UserResponseDto, users, { enableCircularCheck: true });
   }
 
@@ -71,10 +77,12 @@ export class UserController {
   @Patch('user/:id')
   async updateUser(
     @Body() requestDto: UserRequestDto,
-    @Param() id: string,
+    @Param('id') id: string,
     @UploadedFile() avatar
   ): Promise<UserResponseDto> {
+    console.warn('id', id);
     const user = await this.service.updateUser(id, requestDto, avatar);
+    console.warn(user);
     return plainToInstance(UserResponseDto, user, { enableCircularCheck: true });
   }
 

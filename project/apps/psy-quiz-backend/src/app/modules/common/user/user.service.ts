@@ -65,9 +65,8 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
 
     if (avatar) {
     }
-
     try {
-      await this.repository.save(user);
+      await this.repository.update(id, user);
       if (requestDto.roles) {
         user = await this.assignRolesToUser({ userId: user.id, roles: requestDto.roles });
       }

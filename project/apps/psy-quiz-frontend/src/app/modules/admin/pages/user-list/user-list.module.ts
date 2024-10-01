@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { UserListComponent } from './user-list.component';
 import { RouterModule } from '@angular/router';
 import { UserRestService } from '../../../../rest';
 import { UserService } from '../../../../services';
+import { UserListComponent } from './user-list.component';
 
 @NgModule({
   declarations: [UserListComponent],
@@ -11,13 +11,22 @@ import { UserService } from '../../../../services';
     CommonModule,
     RouterModule.forChild([
       {
-          path: '',
-          component: UserListComponent,
+        path: 'add',
+        loadChildren: () => import('../user-edit').then((m) => m.UserEditModule)
       },
-        // {
-        //   path: '**',
-        //   redirectTo: ''
-        // }
+      {
+        path: ':id/edit',
+        loadChildren: () => import('../user-edit').then((m) => m.UserEditModule)
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        component: UserListComponent
+      },
+      {
+        path: '**',
+        redirectTo: ''
+      }
     ])
   ],
   providers: [UserRestService, UserService]
