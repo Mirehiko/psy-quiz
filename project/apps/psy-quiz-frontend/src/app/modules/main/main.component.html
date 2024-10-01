@@ -1,14 +1,4 @@
-<nav>
-  <div>
-    <a routerLink="home">Home</a>
-    <a routerLink="tests">tests</a>
-  </div>
-  <span *ngIf="user">
-    {{user.email}}
-  </span>
-
-  <a *ngIf="!user" routerLink="/auth/login">войти</a>
-</nav>
+<app-navigation [menuItems]="menuItems" [user]="user" (clicked)="clickHandler($event)"></app-navigation>
 <br>
 
 

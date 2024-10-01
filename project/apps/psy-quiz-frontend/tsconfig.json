@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "target": "es2022",
     "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,
@@ -10,9 +12,30 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@rest/*": ["apps/psy-quiz-frontend/src/app/rest/*"],
-      "@services": ["apps/psy-quiz-frontend/src/app/services/index.ts"],
-      "@services/*": ["apps/psy-quiz-frontend/src/app/services/*"]
+      "@rest": [
+        "apps/psy-quiz-frontend/src/app/rest/index.ts"
+      ],
+      "@rest/*": [
+        "apps/psy-quiz-frontend/src/app/rest/*"
+      ],
+      "@services": [
+        "apps/psy-quiz-frontend/src/app/services/index.ts"
+      ],
+      "@services/*": [
+        "apps/psy-quiz-frontend/src/app/services/*"
+      ],
+      "@components": [
+        "apps/psy-quiz-frontend/src/app/components/index.ts"
+      ],
+      "@components/*": [
+        "apps/psy-quiz-frontend/src/app/components/*"
+      ],
+      "@pages": [
+        "apps/psy-quiz-frontend/src/app/pages/index.ts"
+      ],
+      "@pages/*": [
+        "apps/psy-quiz-frontend/src/app/pages/*"
+      ]
     }
   },
   "files": [],

@@ -1,0 +1,13 @@
+<nav>
+  <div>
+    <a *ngFor="let item of menuItems" routerLink="{{item.url}}">{{ item.title }}</a>
+  </div>
+  <div *ngIf="user">
+    <span>
+      {{ user.email }}
+    </span>
+    <br>
+    <a (click)="clicked.emit()">logout</a>
+  </div>
+  <a *ngIf="!user" routerLink="/auth/login">Sign in</a>
+</nav>

@@ -67,7 +67,6 @@ export class AuthService {
   }
 
   getUser(): Observable<any> {
-    debugger;
     if (!this.user) {
       try {
         return this.authRestService.getUserByToken(this.getToken()).pipe(
