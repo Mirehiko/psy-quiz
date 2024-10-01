@@ -2,11 +2,12 @@
   <span>Users</span>
   <button routerLink="add">Create</button>
 </h1>
-<div *ngFor="let user of users">
-  <a routerLink="{{user.id}}/edit" >
-    <span>{{user.name}}</span>
+<div class="row-list">
+  <div *ngFor="let user of users" class="row-item" routerLink="{{user.id}}/edit">
+    <span>{{ user.name }}</span>
+    <span>{{ user.status }}</span>
     <button (click)="remove(user.id)">remove</button>
-  </a>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
