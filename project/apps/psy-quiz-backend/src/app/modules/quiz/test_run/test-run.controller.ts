@@ -4,18 +4,17 @@ import {
   Controller,
   Delete,
   Get,
-  Logger, OnModuleInit,
+  Logger,
+  OnModuleInit,
   Param,
   Patch,
   Post,
-  Req, UnauthorizedException,
+  Req,
+  UnauthorizedException,
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -23,24 +22,27 @@ import {
   WebSocketGateway,
   WebSocketServer
 } from '@nestjs/websockets';
+import { plainToInstance } from 'class-transformer';
 import { Server, Socket } from 'socket.io';
-
+import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
+import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
 import { TestRunRequestDto, TestRunResponseDto } from '../dto/test-run.dto';
 import { TestRunService } from './test-run.service';
 
 @ApiTags('Прохождение теста')
 @Controller('main')
 @UseInterceptors(new TransformInterceptor())
-@WebSocketGateway({ namespace: 'run', cors: { origin: ['http://localhost:5002', 'http://localhost:3000', 'http://localhost:4200'] } })
+@WebSocketGateway({
+  namespace: 'run',
+  cors: { origin: ['http://localhost:5002', 'http://localhost:3000', 'http://localhost:4200'] }
+})
 export class TestRunController implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
   @WebSocketServer()
   private server: Server;
   private logger: Logger = new Logger('AppGateway');
-  private usersRunningTest = new Map<string, {userId: string, userConnection: string}>()
+  private usersRunningTest = new Map<string, { userId: string; userConnection: string }>();
 
-  constructor(
-    private readonly service: TestRunService,
-  ) {}
+  constructor(private readonly service: TestRunService) {}
 
   // @UseGuards(JwtAuthGuard)
   @Get('test-run/list')
@@ -135,5 +137,4 @@ export class TestRunController implements OnGatewayInit, OnGatewayConnection, On
     await this.server.to(socketId).emit(eventType, data);
     // TODO: save changes to database
   }
-
 }

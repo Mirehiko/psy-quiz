@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
-import { ScaleEntity } from './schemas/scale.entity';
 import { UserEntity } from '../../common/user/schemas/user.entity';
 import { ScaleRequestDto } from '../dto/scale.dto';
+import { ScaleEntity } from './schemas/scale.entity';
 
 @Injectable()
 export class ScaleService extends BaseService<ScaleEntity, IUserGetParamsData> {

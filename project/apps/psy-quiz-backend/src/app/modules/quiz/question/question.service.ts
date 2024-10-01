@@ -4,11 +4,11 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
-import { QuestionEntity } from './schemas/question.entity';
-import { TestRequestDto } from '../dto/test.dto';
 import { UserEntity } from '../../common/user/schemas/user.entity';
-import { TestEntity } from '../test/schemas/test.entity';
 import { QuestionRequestDto } from '../dto/question.dto';
+import { TestRequestDto } from '../dto/test.dto';
+import { TestEntity } from '../test/schemas/test.entity';
+import { QuestionEntity } from './schemas/question.entity';
 
 @Injectable()
 export class QuestionService extends BaseService<QuestionEntity, IUserGetParamsData> {

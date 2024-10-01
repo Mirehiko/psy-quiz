@@ -1,6 +1,6 @@
-import { ITestRun, ITestRunRequestDto, ITestRunResponseDto } from '../interfaces/i-test-run';
-import { IUser } from '../../common/user/schemas/user.entity';
 import { IsOptional, IsString } from 'class-validator';
+import { IUser } from '../../common/user/schemas/user.entity';
+import { ITestRun, ITestRunRequestDto, ITestRunResponseDto } from '../interfaces/i-test-run';
 
 export class TestRunRequestDto implements ITestRunRequestDto {
   // @IsString()

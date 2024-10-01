@@ -8,11 +8,11 @@ import { TestService } from '../../services/test.service';
 })
 export class DashboardComponent {
   private testService = inject(TestService);
-  public tests: any[] = []
+  public tests: any[] = [];
 
   constructor() {
-    this.testService.getAll().subscribe(tests => {
+    this.testService.getAll().subscribe((tests) => {
       this.tests = tests.data;
-    })
+    });
   }
 }

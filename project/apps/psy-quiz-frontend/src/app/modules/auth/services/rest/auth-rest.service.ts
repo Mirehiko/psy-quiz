@@ -34,28 +34,23 @@ export class AuthRestService {
   }
 
   public logout(authUserDto: any): Observable<void> {
-    return from(this.http
-      .post<any>(`${this.baseUrl}/logout`, authUserDto))
+    return from(this.http.post<any>(`${this.baseUrl}/logout`, authUserDto));
   }
 
   public register(authUserDto: any): Observable<void> {
-    return from(this.http
-      .post<any>(`${this.baseUrl}/registration`, authUserDto))
+    return from(this.http.post<any>(`${this.baseUrl}/registration`, authUserDto));
   }
 
   public forgotPassword(authUserDto: any): Observable<void> {
-    return from(this.http
-      .post<any>(`${this.baseUrl}/forgotPassword`, authUserDto))
+    return from(this.http.post<any>(`${this.baseUrl}/forgotPassword`, authUserDto));
   }
 
   public changePassword(authUserDto: any): Observable<void> {
-    return from(this.http
-      .post<any>(`${this.baseUrl}/change-password`, authUserDto));
+    return from(this.http.post<any>(`${this.baseUrl}/change-password`, authUserDto));
   }
 
   public confirm(authUserDto: any): Observable<void> {
-    return from(this.http
-      .post<any>(`${this.baseUrl}/confirm`, authUserDto))
+    return from(this.http.post<any>(`${this.baseUrl}/confirm`, authUserDto));
   }
 
   public getUserByToken(token: string | null): Observable<any> {

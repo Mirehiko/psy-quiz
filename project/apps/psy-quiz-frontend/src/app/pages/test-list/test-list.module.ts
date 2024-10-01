@@ -1,8 +1,7 @@
-import { NgForOf } from "@angular/common";
+import { NgForOf } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TestListComponent } from './test-list.component';
-
 
 @NgModule({
   declarations: [TestListComponent],

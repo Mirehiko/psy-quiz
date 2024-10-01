@@ -1,7 +1,6 @@
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { ICriterion } from '../interfaces/i-criterion';
 import { IScale } from '../interfaces/i-scale';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
-
 
 export class CriterionRequestDto implements ICriterion {
   @IsNumber()
@@ -20,7 +19,7 @@ export class CriterionRequestDto implements ICriterion {
   name: string;
 
   @IsString()
-  scaleId: string
+  scaleId: string;
 }
 export class CriterionResponseDto implements ICriterion {
   id: string;
@@ -28,5 +27,5 @@ export class CriterionResponseDto implements ICriterion {
   maxScore: number;
   description: string;
   name: string;
-  scale: IScale
+  scale: IScale;
 }

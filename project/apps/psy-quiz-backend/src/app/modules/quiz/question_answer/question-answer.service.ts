@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
-import { QuestionAnswerEntity } from './schemas/question-answer.entity';
 import { UserEntity } from '../../common/user/schemas/user.entity';
 import { QuestionRequestDto } from '../dto/question.dto';
+import { QuestionAnswerEntity } from './schemas/question-answer.entity';
 
 @Injectable()
 export class QuestionAnswerService extends BaseService<QuestionAnswerEntity, IUserGetParamsData> {

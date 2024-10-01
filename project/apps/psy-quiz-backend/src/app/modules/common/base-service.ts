@@ -52,7 +52,7 @@ export abstract class BaseService<T extends RequestObjectWithId, U extends IGetP
       }
 
       if (paramsData.checkOnly) {
-      	return;
+        return;
       }
 
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);

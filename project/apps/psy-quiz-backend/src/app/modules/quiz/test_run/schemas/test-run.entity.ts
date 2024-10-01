@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
+import { ITestRun } from '../../interfaces/i-test-run';
 import { RunAnswerEntity } from '../../run_answer/schemas/run-answer.entity';
 import { TestEntity } from '../../test/schemas/test.entity';
-import { ITestRun } from '../../interfaces/i-test-run';
 
 @Entity()
 export class TestRunEntity extends BaseEntity implements ITestRun {

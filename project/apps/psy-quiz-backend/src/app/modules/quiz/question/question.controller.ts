@@ -5,19 +5,21 @@ import {
   Delete,
   Get,
   Param,
-  Patch, Post, Req,
+  Patch,
+  Post,
+  Req,
   UseGuards,
   UseInterceptors,
   UsePipes
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { QuestionService } from './question.service';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { QuestionRequestDto, QuestionResponseDto } from '../dto/question.dto';
-import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
+import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
+import { QuestionRequestDto, QuestionResponseDto } from '../dto/question.dto';
 import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
+import { QuestionService } from './question.service';
 
 @ApiTags('Вопросы')
 @Controller('main')

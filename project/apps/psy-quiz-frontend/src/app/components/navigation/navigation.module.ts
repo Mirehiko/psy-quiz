@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavigationComponent } from './navigation.component';
 
-
 @NgModule({
   declarations: [NavigationComponent],
   imports: [CommonModule, RouterLink],

@@ -1,11 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { QuestionAnswerService } from './question-answer.service';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { QuestionAnswerRequestDto, QuestionAnswerResponseDto } from '../dto/question-answer.dto';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-
+import { QuestionAnswerRequestDto, QuestionAnswerResponseDto } from '../dto/question-answer.dto';
+import { QuestionAnswerService } from './question-answer.service';
 
 @ApiTags('Варианты ответов')
 @Controller('main')

@@ -1,5 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {TestService} from "../../services/test.service";
+import { Component, inject } from '@angular/core';
+import { TestService } from '../../services/test.service';
 
 @Component({
   selector: 'app-test-list',
@@ -8,11 +8,11 @@ import {TestService} from "../../services/test.service";
 })
 export class TestListComponent {
   private testService = inject(TestService);
-  public tests: any[] = []
+  public tests: any[] = [];
 
   constructor() {
-    this.testService.getAll().subscribe(tests => {
+    this.testService.getAll().subscribe((tests) => {
       this.tests = tests.data;
-    })
+    });
   }
 }

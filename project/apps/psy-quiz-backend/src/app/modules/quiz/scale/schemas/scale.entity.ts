@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../../../common/user/schemas/user.entity';
 import { CriterionEntity } from '../../criterion/schemas/criterion.entity';
+import { IScale } from '../../dto/scale.dto';
 import { ScaleAnswerEntity } from '../../scale_answer/schemas/scale-answer.entity';
 import { TestEntity } from '../../test/schemas/test.entity';
-import { UserEntity } from '../../../common/user/schemas/user.entity';
-import { IScale } from '../../dto/scale.dto';
 
 @Entity()
 export class ScaleEntity implements IScale {
@@ -31,9 +31,7 @@ export class ScaleEntity implements IScale {
   @ManyToOne(() => TestEntity, (test) => test.scales)
   test: TestEntity;
 
-
   @ApiProperty({ example: '', description: '' })
   @Column('text', { nullable: false })
   createdById: string;
-
 }

@@ -13,6 +13,4 @@ export const postgresConfig: TypeOrmModuleOptions = {
   synchronize: true,
   migrationsRun: true,
   autoLoadEntities: true
-}
-
-
+};

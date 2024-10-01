@@ -3,11 +3,11 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { IGetParamsData, PermissionRequestDto, PermissionResponseDto } from '../../../shared';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { PermissionService } from './permission.service';
 import { PermissionEntity } from './schemas/permission.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles.guard';
 
 // TODO: Add auth guard after migrations release
 @ApiTags('Разрешения')

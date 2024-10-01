@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { ScaleEntity } from '../../../quiz/scale/schemas/scale.entity';
+import { ScaleAnswerEntity } from '../../../quiz/scale_answer/schemas/scale-answer.entity';
+import { TestEntity } from '../../../quiz/test/schemas/test.entity';
 import { BaseEntity } from '../../base-entity';
 import { ConnectedUserEntity } from '../../gateway/schemas/connected-user.entity';
 import { RoleEntity } from '../../role/schemas/role.entity';
 import { UserStatusEnum } from '../user-status.enum';
-import { TestEntity } from '../../../quiz/test/schemas/test.entity';
-import { ScaleEntity } from '../../../quiz/scale/schemas/scale.entity';
-import { ScaleAnswerEntity } from '../../../quiz/scale_answer/schemas/scale-answer.entity';
 
 export interface IUser {
   name: string;

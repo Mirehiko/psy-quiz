@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
-import { TestRunEntity } from './schemas/test-run.entity';
 import { UserEntity } from '../../common/user/schemas/user.entity';
 import { TestRunRequestDto } from '../dto/test-run.dto';
+import { TestRunEntity } from './schemas/test-run.entity';
 
 @Injectable()
 export class TestRunService extends BaseService<TestRunEntity, IUserGetParamsData> {

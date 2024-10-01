@@ -15,9 +15,9 @@ const routes: Routes = [
         path: 'tests',
         loadChildren: () => import('../../pages/test-list/').then((m) => m.TestListModule)
       },
-      { path: '**', redirectTo: 'home' },
+      { path: '**', redirectTo: 'home' }
     ]
-  },
+  }
 ];
 
 @NgModule({

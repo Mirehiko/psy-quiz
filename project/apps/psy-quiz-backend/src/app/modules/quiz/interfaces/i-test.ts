@@ -1,6 +1,6 @@
 import { IQuestion } from './i-question';
-import { ITestRun } from './i-test-run';
 import { IScale } from './i-scale';
+import { ITestRun } from './i-test-run';
 
 export interface ITest {
   id?: string;

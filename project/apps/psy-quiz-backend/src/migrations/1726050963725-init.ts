@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 import { RoleEntity } from '../app/modules/common/role/schemas/role.entity';
 import { UserEntity } from '../app/modules/common/user/schemas/user.entity';
 
@@ -17,18 +17,17 @@ export class Init1726050963725 implements MigrationInterface {
     adminRole.displayName = 'Admin';
     // newRole.permissions = [];
     // await roleRep.insert(adminRole)
-    await roleRep.insert([adminRole, userRole])
+    await roleRep.insert([adminRole, userRole]);
 
     const userRep = queryRunner.connection.getRepository(UserEntity);
-    const admin = new UserEntity()
+    const admin = new UserEntity();
     admin.name = 'admin';
     admin.status = 'active';
     admin.email = 'mirehiko@rambler.ru';
     admin.password = '123';
     admin.roles = [adminRole];
-    await userRep.insert(admin)
+    await userRep.insert(admin);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-  }
+  public async down(queryRunner: QueryRunner): Promise<void> {}
 }

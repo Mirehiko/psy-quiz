@@ -10,7 +10,6 @@
         "project": ["./tsconfig.json"],
         "sourceType": "module"
       },
-      "plugins": ["eslint-plugin-rxjs"],
       "rules": {
         "@nx/enforce-module-boundaries": "off",
         "@typescript-eslint/ban-types": "off",

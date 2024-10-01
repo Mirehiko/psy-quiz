@@ -14,10 +14,9 @@ import { TestDetailsComponent } from './test-details.component';
       {
         path: '**',
         redirectTo: ''
-      },
+      }
     ])
   ],
-  providers: [
-  ],
+  providers: []
 })
 export class TestDetailsModule {}
