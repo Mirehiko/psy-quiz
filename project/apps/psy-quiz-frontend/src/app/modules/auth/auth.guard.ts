@@ -22,7 +22,7 @@ export const isLoggedGuardFn = () => {
       console.warn(u);
       if (u) {
         socket.connect();
-        socket.setUpOnlineStatus(authService.user.id);
+        socket.setUpOnlineStatus(authService.user$.value?.id);
         return true;
       }
       return await router.navigateByUrl('/auth');

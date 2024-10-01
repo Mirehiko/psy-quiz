@@ -24,10 +24,10 @@ export class JwtAuthGuard implements CanActivate {
         throw new UnauthorizedException({ message: 'User unauthorized' });
       }
       const user = await this.jwtService.verify(token);
-      // const exists = await this.tokenService.exists(operation.id, token);
-      // if (!exists) {
-      //     throw new UnauthorizedException({message: "User unauthorized"});
-      // }
+      const exists = await this.tokenService.exists(token);
+      if (!exists) {
+        throw new UnauthorizedException({ message: 'User unauthorized' });
+      }
       req.user = await this.userRepository.findOne({
         where: { id: user.id },
         relations: ['roles', 'roles.permissions']

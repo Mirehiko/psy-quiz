@@ -1,15 +1,4 @@
-<div class="menu">
-  <nav>
-    <a routerLink="main">Home</a>
-    <a routerLink="user">Users</a>
-    <a routerLink="test">Tests</a>
-    <a routerLink="run">Runs</a>
-  </nav>
-  <nav>
-    <span *ngIf="user">
-      {{user.email}}
-    </span>
-  </nav>
-</div>
+<app-navigation [menuItems]="menuItems" [user]="user" (clicked)="clickHandler($event)"></app-navigation>
+<br>
 
 <router-outlet></router-outlet>

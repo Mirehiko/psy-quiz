@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { AuthService } from '../auth';
 
 @Component({
@@ -27,10 +28,13 @@ export class MainComponent {
 
   constructor() {
     if (this.authService.getToken()) {
-      this.authService.getUser().subscribe((user) => {
-        this.user = this.authService.user;
-        this.cdr.markForCheck();
-      });
+      this.authService
+        .getUser()
+        .pipe(switchMap(() => this.authService.user$))
+        .subscribe((user) => {
+          this.user = user;
+          this.cdr.markForCheck();
+        });
     }
   }
 

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { AuthService } from '../auth';
 
 @Component({
@@ -9,13 +10,42 @@ import { AuthService } from '../auth';
 })
 export class AdminComponent {
   private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
   public tests: any[] = [];
+  public user: any | undefined = undefined;
 
-  public get user() {
-    return this.authService.user;
-  }
+  menuItems: any[] = [
+    {
+      title: 'Home',
+      url: 'home'
+    },
+    {
+      title: 'Users',
+      url: 'user'
+    },
+    {
+      title: 'Tests',
+      url: 'test'
+    },
+    {
+      title: 'Runs',
+      url: 'run'
+    }
+  ];
 
   constructor() {
-    this.authService.getUser().subscribe();
+    if (this.authService.getToken()) {
+      this.authService
+        .getUser()
+        .pipe(switchMap(() => this.authService.user$))
+        .subscribe((user) => {
+          this.user = user;
+          this.cdr.markForCheck();
+        });
+    }
+  }
+
+  clickHandler($event: any): void {
+    this.authService.logout().subscribe();
   }
 }

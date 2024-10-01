@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
+import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import {
   AuthResponseDto,
   AuthUserDto,
@@ -21,7 +22,6 @@ import {
 } from '../../../shared';
 import { UserEntity } from '../user/schemas/user.entity';
 import { AuthService } from './auth.service';
-import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 
 // TODO: Use class-transformer
 @ApiTags('Авторизация')
@@ -45,7 +45,6 @@ export class AuthController {
   @Post('login')
   // вход в систему
   async login(@Body() requestDto: AuthUserDto): Promise<AuthResponseDto> {
-    console.log(requestDto)
     const authUser = await this.authService.signIn(requestDto);
     return plainToInstance(AuthResponseDto, authUser, { enableCircularCheck: true });
   }

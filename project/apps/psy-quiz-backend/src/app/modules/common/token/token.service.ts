@@ -53,8 +53,8 @@ export class TokenService {
    * @param userId
    * @param token
    */
-  async exists(userId: string, token: string): Promise<boolean> {
-    const row = await this.repository.findOne({ where: { userId, token } });
+  async exists(token: string): Promise<boolean> {
+    const row = await this.repository.findOne({ where: { token } });
     return !!row;
   }
 

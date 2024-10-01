@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { AuthRestService } from './rest/auth-rest.service';
 
 @Injectable()
 export class AuthService {
-  private token: string | null = null;
-  public user: any;
-  // protected tokenDto;
-  private readonly tokenProjectIdKey = 'token-project-id';
+  public user$: BehaviorSubject<any> = new BehaviorSubject(null);
   protected readonly jwtTokenKey = 'jwt-token';
   protected readonly refreshTokenKey = 'refresh-token';
+  private token: string | null = null;
+  private user: any;
+  private readonly tokenProjectIdKey = 'token-project-id';
 
   constructor(private authRestService: AuthRestService, private router: Router) {}
 
@@ -21,11 +21,9 @@ export class AuthService {
   public login(authUserDto: any): Observable<any> {
     return this.authRestService.login(authUserDto).pipe(
       tap((response: any) => {
-        this.user = response.data.user;
+        this.setUser(response.data.user);
         // this.token = response.data.token;
-        console.warn('login');
         this.setToken(response.data.token);
-        console.warn(this.user);
       })
     );
     // const response = await this.authRestService.login(authUserDto);
@@ -41,13 +39,20 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.authRestService.logout(this.user).pipe(
+    return this.authRestService.logout({ token: `Bearer ${this.token}` }).pipe(
       tap(() => {
-        this.user = null;
-        this.removeToken();
-        this.router.navigate(['/login']);
+        this.clearAuthInfo();
+      }),
+      catchError((err) => {
+        this.clearAuthInfo();
+        return of(err);
       })
     );
+  }
+
+  clearAuthInfo(): void {
+    this.setUser(undefined);
+    this.removeToken();
   }
 
   setToken(token: string): void {
@@ -71,7 +76,7 @@ export class AuthService {
       try {
         return this.authRestService.getUserByToken(this.getToken()).pipe(
           tap((data) => {
-            this.user = data.data;
+            this.setUser(data.data);
           })
         );
       } catch (e) {
@@ -110,7 +115,7 @@ export class AuthService {
 
   private resetUser(skipRedirect: boolean = false): void {
     this.removeTokens();
-    this.setUser(null);
+    this.setUser(undefined);
     if (skipRedirect) return;
     this.router.navigateByUrl('/main');
   }
@@ -139,6 +144,7 @@ export class AuthService {
 
   private setUser(user: any | null): void {
     this.user = user;
+    this.user$.next(this.user);
     // this.currentUser$.next(user);
   }
 

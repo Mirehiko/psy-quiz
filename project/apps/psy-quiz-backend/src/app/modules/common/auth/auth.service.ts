@@ -58,13 +58,15 @@ export class AuthService {
    */
   async signIn(requestDto: AuthUserDto): Promise<AuthResponseDto | false> {
     const user = await this.validateUser(requestDto);
-    const token = await this.generateToken(user, { expiresIn: moment().add(7, 'days').valueOf() });
+    const expiresIn = moment().add(7, 'days').valueOf();
+    const token = await this.generateToken(user, { expiresIn });
     if (user.status === UserStatusEnum.PENDING) {
       // operation.status = UserStatusEnum.ACTIVE;
       // await this.userService.usersRepository.save(operation);
       await this.sendConfirmation(user);
       return false;
     }
+    await this.tokenService.create({ token, userId: user.id!, expireAt: expiresIn.toString() });
     return { token, user };
   }
 
@@ -73,7 +75,7 @@ export class AuthService {
    * @param token
    */
   async logout(token: string): Promise<any> {
-    const data = await this.verifyToken(token);
+    const data = await this.verifyToken(token.split(' ')[1]);
     return await this.tokenService.deleteAll(data.id);
   }
 
@@ -186,9 +188,10 @@ export class AuthService {
    * @param token
    * @private
    */
-  private async verifyToken(token): Promise<any> {
-    const data = this.jwtService.verify(token);
-    const tokenExists = await this.tokenService.exists(data.id, token);
+  private async verifyToken(token: string): Promise<any> {
+    const data = await this.jwtService.verify(token);
+    const tokenExists = await this.tokenService.exists(token);
+
     if (tokenExists) {
       return data;
     }
