@@ -11,6 +11,7 @@ import { SocketIoService, UserService } from '../../../../services';
 export class UserListComponent {
   public users: any[] = [];
   private userService = inject(UserService);
+  private socketIoService = inject(SocketIoService);
   // private socketIoService = inject(SocketIoService);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
@@ -21,6 +22,9 @@ export class UserListComponent {
       this.cdr.markForCheck();
     });
     this.userService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    this.socketIoService.getOnlineStatuses().subscribe((status) => {
+      console.warn('status', status);
+    });
   }
 
   remove(testId: string): void {

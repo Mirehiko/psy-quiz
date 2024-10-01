@@ -10,7 +10,7 @@ import { RunService, SocketIoService } from '@services';
 export class RunListComponent {
   private runService = inject(RunService);
   public runs: any[] = [];
-  private socketIoService = inject(SocketIoService);
+  // private socketIoService = inject(SocketIoService);
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -20,7 +20,7 @@ export class RunListComponent {
       .subscribe((runs) => {
         this.runs = runs.data;
       });
-    this.socketIoService.getOnlineStatuses().subscribe((status) => {});
+    // this.socketIoService.getOnlineStatuses().subscribe((status) => {});
   }
 
   // create(): void {

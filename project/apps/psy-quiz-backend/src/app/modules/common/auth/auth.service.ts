@@ -85,7 +85,7 @@ export class AuthService {
    * @param withStatusCheck
    */
   async signUser(user: UserEntity, withStatusCheck: boolean = true): Promise<string> {
-    if (withStatusCheck && user.status === UserStatusEnum.BLOCKED) {
+    if (withStatusCheck && user.suspendedAt) {
       throw new MethodNotAllowedException();
     }
 

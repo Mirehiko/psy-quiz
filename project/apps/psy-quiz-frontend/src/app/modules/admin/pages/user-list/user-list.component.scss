@@ -11,3 +11,21 @@
   border-bottom: 1px solid #eeeeee;
   justify-content: space-between;
 }
+
+.online-status {
+  position: relative;
+  height: 10px;
+  width: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+
+  &::before {
+    content: '';
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background: #0d3052;
+  }
+}
