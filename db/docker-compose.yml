@@ -1,0 +1,43 @@
+version: "3.9"
+
+networks:
+  postgres:
+    driver: bridge
+    attachable: true
+
+services:
+  postgress-db:
+    image: postgres
+    container_name: psy-quiz-postgress-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    ports:
+      - ${PROXY_PORTS}
+    volumes:
+      - ${DB_VOLUMES}
+#    networks:
+#      - postgres
+
+#  pgadmin:
+#    container_name: pgadmin_container
+#    image: dpage/pgadmin
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
+#      PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4habr"
+#      PGADMIN_CONFIG_SERVER_MODE: "False"
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+#    ports:
+#      - "5050:80"
+#    restart: unless-stopped
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: 1G
+#    networks:
+#      - postgres

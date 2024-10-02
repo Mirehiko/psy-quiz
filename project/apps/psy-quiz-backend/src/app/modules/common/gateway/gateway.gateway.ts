@@ -47,7 +47,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     if (!user) {
       return { event: 'onlineStatus', data: { connectionId: client.id, status: 'Offline' } };
     }
-    if (user.roles.find((role) => +role.id === 1)) {
+    if (user.roles.find((role) => role.name === 'ADMIN')) {
       const connectedUsers = await this.connectedUserService.getAllConnectedUsers();
       return {
         event: 'onlineStatus',

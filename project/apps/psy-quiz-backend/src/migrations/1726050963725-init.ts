@@ -16,8 +16,7 @@ export class Init1726050963725 implements MigrationInterface {
     adminRole.description = 'All Might';
     adminRole.displayName = 'Admin';
     adminRole.permissions = [];
-    // await roleRep.insert(adminRole)
-    await roleRep.insert([adminRole, userRole]);
+    const createdRoles = await roleRep.save([adminRole, userRole]);
 
     const userRep = queryRunner.connection.getRepository(UserEntity);
     const admin = new UserEntity();
@@ -25,8 +24,8 @@ export class Init1726050963725 implements MigrationInterface {
     admin.status = 'active';
     admin.email = 'mirehiko@rambler.ru';
     admin.password = '123';
-    admin.roles = [adminRole];
-    await userRep.insert(admin);
+    admin.roles = [createdRoles[0]];
+    await userRep.save(admin);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {}

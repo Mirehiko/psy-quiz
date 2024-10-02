@@ -37,7 +37,7 @@ export class UserService extends BaseService<UserEntity, IUserGetParamsData> {
     try {
       let role: RoleEntity;
       if (!requestDto.roles || !requestDto.roles.length) {
-        role = await this.roleService.getByID('1', ['permissions']); // TODO: roles
+        role = await this.roleService.getBy({ params: { name: 'USER' } }, ['permissions']); // TODO: roles
         newUser.roles = [role];
       }
 

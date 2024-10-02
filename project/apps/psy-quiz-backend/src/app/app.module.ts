@@ -29,6 +29,7 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
     // TypeOrmModule.forRoot(postgresConfig),
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       load: [typeorm]
     }),
     TypeOrmModule.forRootAsync({
