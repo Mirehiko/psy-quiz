@@ -9,7 +9,7 @@ import { TestEntity } from '../../test/schemas/test.entity';
 @Entity()
 export class QuestionEntity extends BaseEntity implements IQuestion {
   @ApiProperty({ example: 'Psy Test', description: 'Название теста' })
-  @Column({ length: 150, nullable: false })
+  @Column({ length: 150, nullable: true })
   name: string = '';
 
   @ApiProperty({ example: 'This test...', description: 'Описание' })

@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { IQuestion } from '../interfaces/i-question';
 import { IQuestionType } from '../interfaces/i-question-type';
 import { ITest } from '../interfaces/i-test';
@@ -19,8 +19,10 @@ export class QuestionRequestDto implements IQuestion {
   @IsString()
   free_answer: string;
 
-  @IsString()
-  testId: string;
+  @IsOptional()
+  @IsNumber()
+  // @IsString() // todo
+  testId: number;
 }
 
 export class QuestionResponseDto implements IQuestion {

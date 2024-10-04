@@ -4,7 +4,9 @@ import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
+import { QuestionRequestDto } from '../dto/question.dto';
 import { TestRequestDto } from '../dto/test.dto';
+import { QuestionEntity } from '../question/schemas/question.entity';
 import { TestEntity } from './schemas/test.entity';
 
 @Injectable()
@@ -14,7 +16,9 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
 
   constructor(
     @InjectRepository(TestEntity)
-    protected repository: Repository<TestEntity>
+    protected repository: Repository<TestEntity>,
+    @InjectRepository(QuestionEntity)
+    protected questionRepo: Repository<QuestionEntity>
   ) {
     super();
   }
@@ -43,5 +47,20 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  async addQuestion(testId: string, requestDto: QuestionRequestDto, user: UserEntity): Promise<QuestionEntity> {
+    const test = await this.repository.findOne({ where: { id: testId } });
+    console.warn(test, requestDto);
+    const question = await this.questionRepo.create({ ...requestDto, test, createdById: user.id });
+    await this.repository.save(question);
+    if (test.questions?.length) {
+      test.questions.push(question);
+    } else {
+      test.questions = [question];
+    }
+    await this.repository.save(test);
+
+    return question;
   }
 }

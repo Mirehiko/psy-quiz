@@ -49,6 +49,7 @@ export class TestEditComponent {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private formBuilder = inject(FormBuilder);
+  private questionIds: number[] = [];
 
   public get questions(): FormArray<FormGroup<IQuestionForm>> {
     return this.formGroup.controls.questions;
@@ -79,8 +80,21 @@ export class TestEditComponent {
             this.formGroup?.controls.name.setValue(test.name);
             this.formGroup?.controls.description.setValue(test.description);
             this.cdr.markForCheck();
+            console.warn('asd');
+            this.testService.getQuestions(test.id).subscribe();
           });
-        return;
+        this.testService.testQuestions$.subscribe((questions) => {
+          const newQuestions = questions.filter((q) => q.id !== this.questionIds.includes(q.id));
+          const oldQuestions = questions.filter((q) => q.id === this.questionIds.includes(q.id));
+          if (oldQuestions.length > 0) {
+            oldQuestions.forEach((question) => {
+              this.updateQuestionForm(question);
+            });
+          }
+          if (newQuestions.length > 0) {
+            this.createQuestionForms(newQuestions);
+          }
+        });
       }
     });
   }
@@ -119,10 +133,32 @@ export class TestEditComponent {
 
   public addQuestion(): void {
     this.questions.push(this.createQuestionForm());
+    if (this.isEdit) {
+      this.testService.addQuestions(this.test.id, {}).subscribe();
+    }
   }
 
   public addAnswer(formGroup: FormGroup<IQuestionForm>): void {
     formGroup.controls.answers.push(this.createAnswerForm());
+  }
+
+  public removeAnswer(form: FormArray<FormGroup<IAnswerForm>>, formIndex: number): void {
+    form.removeAt(formIndex);
+  }
+
+  public removeQuestion(formIndex: number): void {
+    this.questions.removeAt(formIndex);
+  }
+
+  private updateQuestionForm(question: any): void {
+    this.questions.controls.forEach((control: FormGroup<IQuestionForm>) => {
+      if (control.controls.id === question.id) {
+        control.controls.questionName.setValue(question.name);
+        control.controls.description.setValue(question.description);
+        control.controls.freeAnswer.setValue(question.freeAnswer);
+        control.controls.answerType.setValue(question.answerType);
+      }
+    });
   }
 
   private createQuestionForm(question?: any): FormGroup<IQuestionForm> {
@@ -152,13 +188,5 @@ export class TestEditComponent {
 
   private createQuestionForms(questions: any[]): FormArray {
     return new FormArray(questions.map((question) => this.createQuestionForm(question)));
-  }
-
-  public removeAnswer(form: FormArray<FormGroup<IAnswerForm>>, formIndex: number): void {
-    form.removeAt(formIndex);
-  }
-
-  public removeQuestion(formIndex: number): void {
-    this.questions.removeAt(formIndex);
   }
 }

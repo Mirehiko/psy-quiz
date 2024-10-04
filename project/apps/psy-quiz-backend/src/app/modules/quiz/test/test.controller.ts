@@ -17,7 +17,7 @@ import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-import { QuestionResponseDto } from '../dto/question.dto';
+import { QuestionRequestDto, QuestionResponseDto } from '../dto/question.dto';
 import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
 import { QuestionService } from '../question/question.service';
 import { TestService } from './test.service';
@@ -49,17 +49,6 @@ export class TestController {
   async getById(@Param('id') id: string): Promise<TestResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
-  }
-
-  @ApiOperation({ summary: 'Возвращает вопросы к тесту' })
-  @ApiResponse({
-    status: 200,
-    type: TestResponseDto
-  })
-  @Get('test/:id/questions')
-  async getQuestions(@Param('id') id: string): Promise<QuestionResponseDto[]> {
-    const entity = await this.questionService.getManyBy({ params: { testId: id } });
-    return plainToInstance(QuestionResponseDto, entity, { enableCircularCheck: true });
   }
 
   // @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })
@@ -99,5 +88,31 @@ export class TestController {
   @Delete('test/:id')
   async delete(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('test/:id/question')
+  async addQuestion(
+    @Param('id') id: string,
+    @Body() requestDto: QuestionRequestDto,
+    @Req() request
+  ): Promise<QuestionResponseDto> {
+    console.warn(id, requestDto);
+    const entity = await this.service.addQuestion(id, requestDto, request.user);
+    return plainToInstance(QuestionResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @ApiOperation({ summary: 'Возвращает вопросы к тесту' })
+  @ApiResponse({
+    status: 200,
+    type: TestResponseDto
+  })
+  @Get('test/:id/questions')
+  async getQuestions(@Param('id') id: string): Promise<QuestionResponseDto[]> {
+    // const entity = await this.questionService.getManyBy({ params: { testId: id } });
+    const entity = await this.service.getByID(id, ['questions', 'questions.answers']);
+    console.warn(entity);
+    return plainToInstance(QuestionResponseDto, entity.questions, { enableCircularCheck: true });
   }
 }
