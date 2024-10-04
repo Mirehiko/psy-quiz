@@ -16,12 +16,15 @@ export class RunEditComponent {
   public isEdit = false;
   public test: any | undefined = undefined;
   private runService = inject(RunService);
-  private testService = inject(RunService);
+  private testService = inject(TestService);
   private userService = inject(UserService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+
+  public users: any[] = [];
+  public tests: any[] = [];
 
   constructor() {
     this.formGroup = new FormGroup({
@@ -53,6 +56,19 @@ export class RunEditComponent {
         return;
       }
     });
+
+    this.testService.entities$.subscribe((tests) => {
+      this.tests = tests;
+      this.cdr.markForCheck();
+    });
+
+    this.userService.entities$.subscribe((users) => {
+      this.users = users;
+      this.cdr.markForCheck();
+    });
+
+    this.userService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    this.testService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
   create(requestDto: any): void {
@@ -75,10 +91,10 @@ export class RunEditComponent {
   }
 
   clickHandler(): void {
-    const requestDto: { name: string; user: string; test: string } = {
+    const requestDto: { name: string; userId: string; testId: string } = {
       name: this.formGroup.get('name')?.value,
-      user: this.formGroup.get('user')?.value,
-      test: this.formGroup.get('test')?.value
+      userId: this.formGroup.get('user')?.value,
+      testId: this.formGroup.get('test')?.value
     };
     if (this.isEdit) {
       this.update(requestDto);

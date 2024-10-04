@@ -1,7 +1,13 @@
-<h1>Runs</h1>
-<button routerLink="run/add">Create</button>
-<a routerLink="run/{{run.id}}" *ngFor="let run of runs">
-  <span>{{run.name}}</span>
-  <button (click)="remove(run.id)">remove</button>
-</a>
+<h1>
+  <span>Runs</span>
+  <button routerLink="add">Create</button>
+</h1>
+<div class="row-list">
+  <div *ngFor="let run of runs" class="row-item" routerLink="{{run.id}}/edit">
+    <span>user: {{run.userId}}</span>
+    <span>test: {{run.testId}}</span>
+    <span>{{run.createdAt}}</span>
+    <button (click)="remove(run.id)">remove</button>
+  </div>
+</div>
 <router-outlet></router-outlet>

@@ -2,10 +2,13 @@
   <span>Tests</span>
   <button routerLink="add">Create</button>
 </h1>
-<div *ngFor="let test of tests">
-  <a routerLink="{{test.id}}/edit">
+
+<div class="row-list">
+  <div *ngFor="let test of tests" class="row-item" routerLink="{{test.id}}/edit">
     <span>{{test.name}}</span>
     <button (click)="remove(test.id)">remove</button>
-  </a>
+  </div>
 </div>
+
+
 <router-outlet></router-outlet>

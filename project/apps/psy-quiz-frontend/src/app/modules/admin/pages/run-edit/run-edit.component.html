@@ -8,13 +8,13 @@
   <div>
     <select name="user" id="user" formControlName="user">
       <option value="" [defaultSelected]="true">Choose a user</option>
-      <!--      <option *ngFor="let user of " value=""></option>-->
+      <option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</option>
     </select>
   </div>
   <div>
     <select name="test" id="test" formControlName="test">
-      <option value="" [defaultSelected]="true">Choose a user</option>
-      <!--      <option *ngFor="let user of " value=""></option>-->
+      <option value="" [defaultSelected]="true">Choose a test</option>
+      <option *ngFor="let test of tests" value="{{test.id}}">{{test.name}}</option>
     </select>
   </div>
 
