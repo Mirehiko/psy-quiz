@@ -1,57 +1,69 @@
-<br />
 <form *ngIf="formGroup" [formGroup]="formGroup">
-  <div>{{isEdit ? 'Update' : 'Create'}} {{formGroup.get('name')?.value}}</div>
-  <div>
-    <label for="name">name:</label>
-    <input id="name" type="text" formControlName="name" />
-  </div>
-  <div>
-    <label for="description">description:</label>
-    <input id="description" type="text" formControlName="description" />
-  </div>
-  <!--  <div>Status: {{user?.status}}</div>-->
-  <!--  <div>Created at: {{user?.createdAt | date}}</div>-->
-  <br />
-  <button (click)="clickHandler()">{{isEdit ? 'Update' : 'Create'}}</button>
-  <button routerLink="../">Cancel</button>
-  <h2>Вопросы <button (click)="addQuestion()">add</button></h2>
-  <div formArrayName="questions">
-    <div *ngFor="let questionForm of questions.controls; index as questionIndex" formGroupName="{{ questionIndex }}">
-      <div>
-        <label for="name{{ questionIndex }}">name:</label>
-        <input id="name{{ questionIndex }}" type="text" formControlName="questionName" />
-      </div>
-      <div>
-        <label for="description{{ questionIndex }}">description:</label>
-        <input id="description{{ questionIndex }}" type="text" formControlName="description" />
-      </div>
-      <div>
-        <label for="answerType">question type:</label>
-        <select name="answerType" id="answerType" formControlName="answerType">
-          <option *ngFor="let type of questionTypes" value="{{type.id}}">{{ type.name }}</option>
-        </select>
-      </div>
-      <div formArrayName="answers">
-        <div>Варианты ответов: <button (click)="addAnswer(questionForm)">addAnswer</button></div>
-        <div *ngFor="let answerForm of getAnswers(questionForm).controls; index as answerIndex" formGroupName="{{ answerIndex }}">
-          <div>
-            <label for="name{{ answerIndex }}">name:</label>
-            <input id="name{{ answerIndex }}" type="text" formControlName="name" />
-          </div>
-          <div>
-            <label for="description{{ answerIndex }}">description:</label>
-            <input id="description{{ answerIndex }}" type="text" formControlName="description" />
-          </div>
-          <button (click)="removeAnswer(questionForm.controls.answers, answerIndex)"></button>
-        </div>
-      </div>
-      <div>
-        <label for="freeAnswer{{ questionIndex }}">freeAnswer:</label>
-        <input id="freeAnswer{{ questionIndex }}" type="text" formControlName="freeAnswer" />
-      </div>
-
-      <button (click)="removeQuestion(questionIndex)">remove</button>
+  <app-title title="{{isEdit ? 'Update' : 'Create'}} {{formGroup.get('name')?.value}}"></app-title>
+  <div class="test-main">
+    <div>
+      <label for="name">name:</label>
+      <input id="name" type="text" formControlName="name" />
+    </div>
+    <div>
+      <label for="description">description:</label>
+      <input id="description" type="text" formControlName="description" />
+    </div>
+    <br />
+    <div>
+      <button (click)="clickHandler()">{{isEdit ? 'Update' : 'Create'}}</button>
+      <button routerLink="../">Cancel</button>
     </div>
   </div>
+  <div class="test-body">
+    <h2>Вопросы <button (click)="addQuestion()">add</button></h2>
+    <div class="test-questions" formArrayName="questions">
+      <div class="test-question" *ngFor="let questionForm of questions.controls; index as questionIndex" formGroupName="{{ questionIndex }}">
+        <div class="question-info">
+          <div>
+            <label for="name{{ questionIndex }}">name:</label>
+            <input id="name{{ questionIndex }}" type="text" formControlName="questionName" />
+          </div>
+          <div>
+            <label for="answerType">question type:</label>
+            <select name="answerType" id="answerType" formControlName="answerType">
+              <option *ngFor="let type of questionTypes" value="{{type.id}}">{{ type.name }}</option>
+            </select>
+          </div>
+        </div>
 
+        <div>
+          <label for="description{{ questionIndex }}">description:</label>
+          <input id="description{{ questionIndex }}" type="text" formControlName="description" />
+        </div>
+        <hr>
+        <div class="question-answers">
+          <div>Варианты ответов: <button (click)="addAnswer(questionForm)">addAnswer</button></div>
+          <div class="answer-list" formArrayName="answers">
+
+            <div class="answer-item" *ngFor="let answerForm of getAnswers(questionForm).controls; index as answerIndex" formGroupName="{{ answerIndex }}">
+              <div class="answer-body">
+                <div>
+                  <label for="name{{ answerIndex }}">name:</label>
+                  <input id="name{{ answerIndex }}" type="text" formControlName="name" />
+                </div>
+                <button class="remove" (click)="removeAnswer(questionForm.controls.answers, answerIndex)">x</button>
+              </div>
+
+              <div>
+                <label for="description{{ answerIndex }}">description:</label>
+                <input id="description{{ answerIndex }}" type="text" formControlName="description" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <label for="freeAnswer{{ questionIndex }}">freeAnswer:</label>
+            <input id="freeAnswer{{ questionIndex }}" type="text" formControlName="freeAnswer" />
+          </div>
+        </div>
+        <hr>
+        <button (click)="removeQuestion(questionIndex)">remove</button>
+      </div>
+    </div>
+  </div>
 </form>

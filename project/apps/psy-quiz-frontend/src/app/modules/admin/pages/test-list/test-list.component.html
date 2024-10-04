@@ -1,7 +1,4 @@
-<h1>
-  <span>Tests</span>
-  <button routerLink="add">Create</button>
-</h1>
+<app-title title="Tests"><button routerLink="add">+</button></app-title>
 
 <div class="row-list">
   <div *ngFor="let test of tests" class="row-item" routerLink="{{test.id}}/edit">

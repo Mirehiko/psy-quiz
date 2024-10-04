@@ -1,6 +1,8 @@
 :host {
   display: block;
   width: 100%;
+  background: #8da1ac;
+  color: #fff;
 
   nav {
     display: flex;
@@ -11,9 +13,17 @@
   div {
     display: flex;
     align-items: center;
+    gap: 4px;
   }
 
   a {
-    padding: 0 4px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 4px;
+    transition: all 0.3s ease;
+    &:hover {
+      background: #495b63;
+    }
   }
 }

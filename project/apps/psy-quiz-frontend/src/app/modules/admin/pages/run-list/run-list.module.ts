@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TitleModule } from '../../components';
 import { RunListComponent } from './run-list.component';
 
 @NgModule({
   declarations: [RunListComponent],
   imports: [
     CommonModule,
+    TitleModule,
     RouterModule.forChild([
       {
         path: 'add',

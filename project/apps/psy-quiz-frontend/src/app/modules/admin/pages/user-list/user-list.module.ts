@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserRestService } from '../../../../rest';
 import { UserService } from '../../../../services';
+import { TitleModule } from '../../components';
 import { UserListComponent } from './user-list.component';
 
 @NgModule({
   declarations: [UserListComponent],
   imports: [
     CommonModule,
+    TitleModule,
     RouterModule.forChild([
       {
         path: 'add',

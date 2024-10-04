@@ -1,7 +1,5 @@
-<h1>
-  <span>Runs</span>
-  <button routerLink="add">Create</button>
-</h1>
+<app-title title="Runs"><button routerLink="add">+</button></app-title>
+
 <div class="row-list">
   <div *ngFor="let run of runs" class="row-item" routerLink="{{run.id}}/edit">
     <span>user: {{run.userId}}</span>

@@ -1,6 +1,5 @@
-<br />
 <form *ngIf="formGroup" [formGroup]="formGroup">
-  <div>{{isEdit ? 'Update' : 'Create'}} {{formGroup.get('name')?.value}}</div>
+  <app-title title="{{isEdit ? 'Update' : 'Create'}} {{formGroup.get('name')?.value}}"></app-title>
   <div>
     <label for="name">name:</label>
     <input id="name" type="text" formControlName="name" />
