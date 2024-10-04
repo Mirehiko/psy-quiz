@@ -5,6 +5,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionService, TestService } from '@services';
 import { switchMap } from 'rxjs';
 
+interface IAnswerForm {
+  id: FormControl<string | null>;
+  name: FormControl<string | null>;
+  description: FormControl<string | null>;
+}
+
+interface IQuestionForm {
+  id: FormControl<string | null>;
+  questionName: FormControl<string | null>;
+  description: FormControl<string | null>;
+  answerType: FormControl<number | null>;
+  freeAnswer: FormControl<string | null>;
+  answers: FormArray<FormGroup<IAnswerForm>>;
+}
+
+interface ITestForm {
+  name: FormControl<string | null>;
+  description: FormControl<string | null>;
+  questions: FormArray<FormGroup<IQuestionForm>>;
+}
+
 @Component({
   selector: 'admin-test-edit',
   templateUrl: './test-edit.component.html',
@@ -12,7 +33,7 @@ import { switchMap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestEditComponent {
-  public formGroup: FormGroup;
+  public formGroup: FormGroup<ITestForm>;
   public isEdit = false;
   public test: any | undefined = undefined;
   public questionTypes = [
@@ -29,15 +50,19 @@ export class TestEditComponent {
   private cdr = inject(ChangeDetectorRef);
   private formBuilder = inject(FormBuilder);
 
-  public get questions(): FormArray<FormGroup> {
-    return this.formGroup.get('questions') as FormArray<FormGroup>;
+  public get questions(): FormArray<FormGroup<IQuestionForm>> {
+    return this.formGroup.controls.questions;
+  }
+
+  public getAnswers(formGroup: FormGroup<IQuestionForm>): FormArray<FormGroup<IAnswerForm>> {
+    return formGroup.controls.answers;
   }
 
   constructor() {
-    this.formGroup = this.formBuilder.group({
-      name: this.formBuilder.control('', Validators.required),
-      description: this.formBuilder.control(''),
-      questions: this.formBuilder.array<FormGroup>([])
+    this.formGroup = this.formBuilder.group<ITestForm>({
+      name: this.formBuilder.control<string>('', Validators.required),
+      description: this.formBuilder.control<string>(''),
+      questions: this.formBuilder.array<FormGroup<IQuestionForm>>([])
     });
 
     this.route.params.subscribe((params) => {
@@ -51,8 +76,8 @@ export class TestEditComponent {
           )
           .subscribe((test) => {
             this.test = test;
-            this.formGroup?.get('name')?.setValue(test.name);
-            this.formGroup?.get('description')?.setValue(test.description);
+            this.formGroup?.controls.name.setValue(test.name);
+            this.formGroup?.controls.description.setValue(test.description);
             this.cdr.markForCheck();
           });
         return;
@@ -82,8 +107,8 @@ export class TestEditComponent {
 
   public clickHandler(): void {
     const requestDto: { name: string; description?: string } = {
-      name: this.formGroup.get('name')?.value,
-      description: this.formGroup.get('description')?.value
+      name: this.formGroup.controls.name.value!,
+      description: this.formGroup.controls.description.value!
     };
     if (this.isEdit) {
       this.update(requestDto);
@@ -96,23 +121,41 @@ export class TestEditComponent {
     this.questions.push(this.createQuestionForm());
   }
 
-  private createQuestionForm(question?: any): FormGroup {
+  public addAnswer(formGroup: FormGroup<IQuestionForm>): void {
+    formGroup.controls.answers.push(this.createAnswerForm());
+  }
+
+  private createQuestionForm(question?: any): FormGroup<IQuestionForm> {
     const name: string = '';
     const description: string = '';
     const answerType: number = 0;
-    const answers: FormArray | undefined = undefined;
     const free_answer: string = '';
-    return new FormGroup({
-      id: new FormControl(question?.id || undefined),
-      questionName: new FormControl(name || ''),
-      description: new FormControl(description || ''),
-      answerType: new FormControl(answerType || 0),
-      freeAnswer: new FormControl(free_answer || '')
+    return new FormGroup<IQuestionForm>({
+      id: this.formBuilder.control<string>(question?.id || undefined),
+      questionName: this.formBuilder.control<string>(name || ''),
+      description: this.formBuilder.control<string>(description || ''),
+      answerType: this.formBuilder.control<number>(answerType || 0),
+      freeAnswer: this.formBuilder.control<string>(free_answer || ''),
+      answers: this.formBuilder.array<FormGroup<IAnswerForm>>([])
+    });
+  }
+
+  private createAnswerForm(question?: any): FormGroup<IAnswerForm> {
+    const name: string = '';
+    const description: string = '';
+    return new FormGroup<IAnswerForm>({
+      id: this.formBuilder.control<string>(question?.id || undefined),
+      name: this.formBuilder.control<string>(name || ''),
+      description: this.formBuilder.control<string>(description || '')
     });
   }
 
   private createQuestionForms(questions: any[]): FormArray {
     return new FormArray(questions.map((question) => this.createQuestionForm(question)));
+  }
+
+  public removeAnswer(form: FormArray<FormGroup<IAnswerForm>>, formIndex: number): void {
+    form.removeAt(formIndex);
   }
 
   public removeQuestion(formIndex: number): void {

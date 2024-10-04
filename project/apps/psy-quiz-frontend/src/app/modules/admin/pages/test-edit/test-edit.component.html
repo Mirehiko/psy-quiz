@@ -16,14 +16,14 @@
   <button routerLink="../">Cancel</button>
   <h2>Вопросы <button (click)="addQuestion()">add</button></h2>
   <div formArrayName="questions">
-    <div *ngFor="let questionControl of questions.controls; index as i" formGroupName="{{ i }}">
+    <div *ngFor="let questionForm of questions.controls; index as questionIndex" formGroupName="{{ questionIndex }}">
       <div>
-        <label for="name{{ i }}">name:</label>
-        <input id="name{{ i }}" type="text" formControlName="questionName" />
+        <label for="name{{ questionIndex }}">name:</label>
+        <input id="name{{ questionIndex }}" type="text" formControlName="questionName" />
       </div>
       <div>
-        <label for="description{{ i }}">description:</label>
-        <input id="description{{ i }}" type="text" formControlName="description" />
+        <label for="description{{ questionIndex }}">description:</label>
+        <input id="description{{ questionIndex }}" type="text" formControlName="description" />
       </div>
       <div>
         <label for="answerType">question type:</label>
@@ -31,12 +31,26 @@
           <option *ngFor="let type of questionTypes" value="{{type.id}}">{{ type.name }}</option>
         </select>
       </div>
+      <div formArrayName="answers">
+        <div>Варианты ответов: <button (click)="addAnswer(questionForm)">addAnswer</button></div>
+        <div *ngFor="let answerForm of getAnswers(questionForm).controls; index as answerIndex" formGroupName="{{ answerIndex }}">
+          <div>
+            <label for="name{{ answerIndex }}">name:</label>
+            <input id="name{{ answerIndex }}" type="text" formControlName="name" />
+          </div>
+          <div>
+            <label for="description{{ answerIndex }}">description:</label>
+            <input id="description{{ answerIndex }}" type="text" formControlName="description" />
+          </div>
+          <button (click)="removeAnswer(questionForm.controls.answers, answerIndex)"></button>
+        </div>
+      </div>
       <div>
-        <label for="freeAnswer{{ i }}">freeAnswer:</label>
-        <input id="freeAnswer{{ i }}" type="text" formControlName="freeAnswer" />
+        <label for="freeAnswer{{ questionIndex }}">freeAnswer:</label>
+        <input id="freeAnswer{{ questionIndex }}" type="text" formControlName="freeAnswer" />
       </div>
 
-      <button (click)="removeQuestion(i)">remove</button>
+      <button (click)="removeQuestion(questionIndex)">remove</button>
     </div>
   </div>
 
