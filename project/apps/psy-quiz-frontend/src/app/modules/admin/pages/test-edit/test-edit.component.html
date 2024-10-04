@@ -14,4 +14,30 @@
   <br />
   <button (click)="clickHandler()">{{isEdit ? 'Update' : 'Create'}}</button>
   <button routerLink="../">Cancel</button>
+  <h2>Вопросы <button (click)="addQuestion()">add</button></h2>
+  <div formArrayName="questions">
+    <div *ngFor="let questionControl of questions.controls; index as i" formGroupName="{{ i }}">
+      <div>
+        <label for="name{{ i }}">name:</label>
+        <input id="name{{ i }}" type="text" formControlName="questionName" />
+      </div>
+      <div>
+        <label for="description{{ i }}">description:</label>
+        <input id="description{{ i }}" type="text" formControlName="description" />
+      </div>
+      <div>
+        <label for="answerType">question type:</label>
+        <select name="answerType" id="answerType" formControlName="answerType">
+          <option *ngFor="let type of questionTypes" value="{{type.id}}">{{ type.name }}</option>
+        </select>
+      </div>
+      <div>
+        <label for="freeAnswer{{ i }}">freeAnswer:</label>
+        <input id="freeAnswer{{ i }}" type="text" formControlName="freeAnswer" />
+      </div>
+
+      <button (click)="removeQuestion(i)">remove</button>
+    </div>
+  </div>
+
 </form>

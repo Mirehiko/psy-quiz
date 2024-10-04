@@ -17,14 +17,16 @@ import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
+import { QuestionResponseDto } from '../dto/question.dto';
 import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
+import { QuestionService } from '../question/question.service';
 import { TestService } from './test.service';
 
 @ApiTags('Test')
 @Controller('main')
 @UseInterceptors(new TransformInterceptor())
 export class TestController {
-  constructor(private readonly service: TestService) {}
+  constructor(private readonly service: TestService, private readonly questionService: QuestionService) {}
 
   @ApiOperation({ summary: 'Возвращает список тестов' })
   @ApiResponse({
@@ -47,6 +49,17 @@ export class TestController {
   async getById(@Param('id') id: string): Promise<TestResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @ApiOperation({ summary: 'Возвращает вопросы к тесту' })
+  @ApiResponse({
+    status: 200,
+    type: TestResponseDto
+  })
+  @Get('test/:id/questions')
+  async getQuestions(@Param('id') id: string): Promise<QuestionResponseDto[]> {
+    const entity = await this.questionService.getManyBy({ params: { testId: id } });
+    return plainToInstance(QuestionResponseDto, entity, { enableCircularCheck: true });
   }
 
   // @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })
@@ -73,7 +86,6 @@ export class TestController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Patch('test/:id')
   async update(@Body() requestDto: TestRequestDto, @Param('id') id: string): Promise<TestResponseDto> {
-    console.warn(id);
     const entity = await this.service.update(id, requestDto);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
   }

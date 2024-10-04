@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Param } from '@nestjs/common';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { IGetParamsData } from '../../shared';
 import { RequestObjectWithId } from '../../shared/common/dto/objectWithId';
 
@@ -53,6 +53,30 @@ export abstract class BaseService<T extends RequestObjectWithId, U extends IGetP
 
       if (paramsData.checkOnly) {
         return;
+      }
+
+      throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  /**
+   * Get entity by
+   * @param paramsData
+   * @param relations
+   */
+  public async getManyBy(@Param() paramsData: U, relations: string[] = []): Promise<T[]> {
+    try {
+      const requestObject: FindManyOptions<any> = {
+        where: { ...paramsData.params }
+      };
+
+      requestObject.relations = relations;
+
+      const entity = await this.repository.find(requestObject);
+      if (entity) {
+        return entity;
       }
 
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);

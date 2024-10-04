@@ -1,17 +1,14 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { IUserGetParamsData } from '../../../shared';
+import { IQuestionGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
 import { QuestionRequestDto } from '../dto/question.dto';
-import { TestRequestDto } from '../dto/test.dto';
-import { TestEntity } from '../test/schemas/test.entity';
 import { QuestionEntity } from './schemas/question.entity';
 
 @Injectable()
-export class QuestionService extends BaseService<QuestionEntity, IUserGetParamsData> {
+export class QuestionService extends BaseService<QuestionEntity, IQuestionGetParamsData> {
   protected entityNotFoundMessage: string = 'Нет такого вопроса';
   protected entityOrRelationNotFoundMessage: string = 'Вопрос не найден';
 

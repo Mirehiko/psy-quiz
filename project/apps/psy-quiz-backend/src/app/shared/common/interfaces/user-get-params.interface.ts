@@ -10,3 +10,11 @@ export interface IUserGetParams extends IGetParams {
   roleName?: string;
   checkOnly?: boolean;
 }
+
+export interface IQuestionGetParamsData extends IGetParamsData {
+  params: IQuestionParams;
+}
+
+export interface IQuestionParams extends IGetParams {
+  testId?: string;
+}
