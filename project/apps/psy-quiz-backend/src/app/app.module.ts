@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Connection, DataSource } from 'typeorm';
 import typeorm from './config/postgres-datasource';
 import { LoggingMiddleware } from './middleware';
 import { AuthModule } from './modules/common/auth/auth.module';
