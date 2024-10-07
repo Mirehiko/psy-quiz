@@ -1,0 +1,60 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": 2022,
+        "project": ["./tsconfig.json"],
+        "sourceType": "module"
+      },
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": "off",
+        "@angular-eslint/contextual-lifecycle": "off",
+        "@angular-eslint/no-empty-lifecycle-method": "off",
+        "@angular-eslint/no-host-metadata-property": "off",
+        "@angular-eslint/no-output-on-prefix": "off",
+        "@angular-eslint/use-lifecycle-interface": "off",
+        "@nx/enforce-module-boundaries": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-case-declarations": "off",
+        "no-constant-condition": "off",
+        "no-empty": "off",
+        "no-fallthrough": "off",
+        "no-var": "off",
+        "no-extra-boolean-cast": "off",
+        "no-prototype-builtins": "off",
+        "no-unsafe-optional-chaining": "off",
+        "no-useless-escape": "off",
+        "prefer-const": "off",
+        "rxjs/no-unsafe-takeuntil": ["error", { "alias": ["takeUntilDestroyed"] }]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@nx/angular-template"],
+      "rules": {
+        "@angular-eslint/template/no-negated-async": "off",
+        "@angular-eslint/template/eqeqeq": "off"
+      }
+    }
+  ]
+}

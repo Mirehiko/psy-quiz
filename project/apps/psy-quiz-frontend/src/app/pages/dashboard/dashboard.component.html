@@ -1,0 +1,12 @@
+<aside></aside>
+<main>
+  <h1>PSY quiz</h1>
+  <div>информация о сайте и прочее</div>
+  <div>
+    <h2>Tests <a routerLink="../tests">all</a></h2>
+    <div class="cards">
+      <card routerLink="tests/{{test.id}}" *ngFor="let test of tests" [entity]="{title: test.name}"></card>
+    </div>
+  </div>
+</main>
+<aside></aside>

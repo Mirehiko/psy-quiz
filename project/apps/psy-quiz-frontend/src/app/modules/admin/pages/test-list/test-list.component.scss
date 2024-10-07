@@ -1,0 +1,13 @@
+.row-list {
+  width: 500px;
+}
+
+.row-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-bottom: 1px solid #eeeeee;
+  justify-content: space-between;
+}

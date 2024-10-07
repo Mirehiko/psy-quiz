@@ -1,0 +1,25 @@
+<form *ngIf="formGroup" [formGroup]="formGroup">
+  <app-title title="{{isEdit ? 'Update' : 'Create'}} {{formGroup.get('name')?.value}}"></app-title>
+  <div>
+    <label for="name">name:</label>
+    <input id="name" type="text" formControlName="name" />
+  </div>
+  <div>
+    <label for="email">email:</label>
+    <input id="email" type="email" formControlName="email" />
+  </div>
+  <div>
+    <label for="password">password:</label>
+    <input id="password" type="text" formControlName="password" />
+  </div>
+  <div>
+    <label for="status">status:</label>
+    <select name="status" id="status" formControlName="status">
+      <option *ngFor="let status of statuses" value="{{status.status}}">{{ status.title }}</option>
+    </select>
+  </div>
+  <div *ngIf="user?.createdAt">Created at: {{ user?.createdAt | date }}</div>
+  <br />
+  <button (click)="clickHandler()">{{ isEdit ? 'Update' : 'Create' }}</button>
+  <button routerLink="../">Cancel</button>
+</form>
