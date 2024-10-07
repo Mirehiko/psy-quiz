@@ -2,10 +2,9 @@ name: CI
 
 on:
   push:
-    branches:
-      - ci-cd
+    branches: [ "ci-cd" ]
   pull_request:
-      - ci-cd
+    branches: [ "ci-cd" ]
 
 permissions:
   actions: read
