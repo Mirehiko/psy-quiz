@@ -3,11 +3,8 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ "feature/ci-cd" ]
-  pull_request:
-    branches: [ "feature/ci-cd" ]
+on: [push, pull_request]
+
 
 permissions:
   actions: read
