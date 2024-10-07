@@ -31,3 +31,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
+
+      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
+      # - run: npx nx-cloud record -- echo Hello World
+      # - run: npx nx affected -t lint test build
