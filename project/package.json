@@ -5,14 +5,16 @@
   "type": "commonjs",
   "scripts": {
     "psy-quiz-backend": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx serve psy-quiz-backend --configuration development",
+    "psy-quiz-backend-build-prod": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx build psy-quiz-backend",
     "psy-quiz-backend-build": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx build psy-quiz-backend --configuration development",
     "psy-quiz-frontend": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx serve psy-quiz-frontend",
     "lint": "nx run-many --all --target=lint",
     "fix": "npx pretty-quick --staged",
     "fix-everything": "prettier --write apps",
-    "migration:create": "typeorm migration:create ./apps/psy-quiz-backend/src/migrations/migration",
-    "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate ./apps/psy-quiz-backend/src/migrations/migration -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",
-    "migration:run": "ts-node --project ./apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm migration:run -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts"
+    "migration:create": "typeorm migration:create apps/psy-quiz-backend/src/migrations/migration",
+    "migration:drop:schema": "ts-node --project apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm schema:drop -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",
+    "migration:generate": "ts-node --project apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm migration:generate apps/psy-quiz-backend/src/migrations/migration -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",
+    "migration:run": "ts-node --project apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm migration:run -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts"
   },
   "private": true,
   "dependencies": {
