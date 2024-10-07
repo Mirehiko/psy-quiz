@@ -11,6 +11,7 @@
     "lint": "nx run-many --all --target=lint",
     "fix": "npx pretty-quick --staged",
     "fix-everything": "prettier --write apps",
+    "test": "nx test psy-quiz-backend --no-cloud",
     "migration:create": "typeorm migration:create apps/psy-quiz-backend/src/migrations/migration",
     "migration:drop:schema": "ts-node --project apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm schema:drop -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",
     "migration:generate": "ts-node --project apps/psy-quiz-backend/tsconfig.app.json node_modules/.bin/typeorm migration:generate apps/psy-quiz-backend/src/migrations/migration -d apps/psy-quiz-backend/src/app/config/postgres-datasource.ts",

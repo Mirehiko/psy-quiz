@@ -1,36 +1,42 @@
-name: CI
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+name: Node.js CI
+
+on: [push, pull_request]
 
 permissions:
   actions: read
   contents: read
 
 jobs:
-  main:
+  build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
+#      - name: Run Docker Compose
+#        run: docker-compose up -d
+
       - uses: actions/checkout@v4
+      - run: ls
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-
-      # Connect your workspace on nx.app and uncomment this to enable task distribution.
-      # The "--stop-agents-after" is optional, but allows idle agents to shut down once the "build" targets have been requested
-      # - run: npx nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="build"
-
-      # Cache node_modules
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
+          cache-dependency-path: project/package-lock.json
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
-
       - run: npm ci
-      - uses: nrwl/nx-set-shas@v4
+#      - run: npm run psy-quiz-backend-build-prod
+      - name: Run tests
+        run: npm run test
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
-      - run: npx nx affected -t lint test build
+      # - run: npx nx affected -t lint test build
