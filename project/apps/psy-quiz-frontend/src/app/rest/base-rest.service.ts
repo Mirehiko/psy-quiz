@@ -1,11 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable, from } from 'rxjs';
+import { API_TOKEN } from '../api-token';
 
 export abstract class BaseRestService {
-  protected baseUrl = 'http://localhost:5002/api/main';
+  protected baseUrl: string;
   protected http = inject(HttpClient);
   protected abstract apiUrl: string;
+  protected apiToken = inject(API_TOKEN);
+
+  constructor() {
+    this.baseUrl = `${this.apiToken}/main`;
+  }
 
   public getAll(): Observable<any> {
     return from(this.http.get<any>(`${this.baseUrl}/${this.apiUrl}/list`));

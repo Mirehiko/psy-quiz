@@ -1,12 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, Subscription, from } from 'rxjs';
+import { API_TOKEN } from '../../../../api-token';
 
 @Injectable()
 export class AuthRestService {
-  private baseUrl = 'http://localhost:5002/api/auth';
+  private apiToken = inject(API_TOKEN);
+  private readonly baseUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.baseUrl = `${this.apiToken}/auth`;
+  }
 
   // public async login(authUserDto: any): Promise<any> {
   public login(authUserDto: any): Observable<any> {

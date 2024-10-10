@@ -1,8 +1,8 @@
 #version: "3.9"
 
-#networks:
-#  psy:
-#    driver: bridge
+networks:
+  psy:
+    driver: bridge
 #    external: true
 #  postgres:
 #    driver: bridge
@@ -22,8 +22,8 @@ services:
       - ${PROXY_PORTS}
     volumes:
       - ${DB_VOLUMES}
-#    networks:
-#      - psy
+    networks:
+      - psy
 
   backend-app:
     container_name: backend-app
@@ -41,8 +41,22 @@ services:
     ports:
       - ${SERVER_PORTS}
     command: ${SERVER_COMMAND}
-#    networks:
-#      - psy
+    networks:
+      - psy
+
+  frontend-app:
+    container_name: frontend-app
+    restart: always
+    build:
+      context: ./project
+      dockerfile: ./frontend.Dockerfile
+      target: ${BUILD_TARGET}
+    env_file:
+      - .env
+    ports:
+      - ${FRONTEND_PORTS}
+    networks:
+      - psy
 
 #volumes:
 #  api:

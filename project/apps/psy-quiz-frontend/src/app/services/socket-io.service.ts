@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
+import { API_SOCKET_TOKEN } from '../api-token';
 
 enum OnlineStatus {
   Online = 'Online',
@@ -10,6 +11,7 @@ enum OnlineStatus {
 @Injectable()
 export class SocketIoService {
   public socket: Socket | undefined;
+  private socketToken = inject(API_SOCKET_TOKEN);
 
   constructor() {}
 
@@ -17,7 +19,7 @@ export class SocketIoService {
     if (this.socket?.connected) {
       return;
     }
-    this.socket = io('ws://localhost:5002/connection', {
+    this.socket = io(`${this.socketToken}/connection`, {
       // transports: ['websocket'],
       extraHeaders: {
         authorization: 'Bearer ' + localStorage.getItem('jwt-token')
