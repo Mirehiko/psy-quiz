@@ -1,3 +1,4 @@
+import { Field, ID } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
@@ -9,10 +10,12 @@ import { TestRunEntity } from '../../test_run/schemas/test-run.entity';
 export class TestEntity extends BaseEntity {
   @ApiProperty({ example: 'Psy Test', description: 'Название теста' })
   @Column({ length: 150 })
+  @Field((type) => ID)
   name: string;
 
   @ApiProperty({ example: 'This test...', description: 'Описание' })
   @Column({ length: 500, nullable: true, default: '' })
+  @Field()
   description: string;
 
   @ApiProperty({ example: '', description: '' })
@@ -34,6 +37,7 @@ export class TestEntity extends BaseEntity {
   @ApiProperty({ example: '', description: '' })
   @Column('text', { nullable: false })
   // @ManyToOne(() => UserEntity, (user) => user.tests)
+  @Field()
   createdById: string;
 
   // @Column('text', {nullable: false})

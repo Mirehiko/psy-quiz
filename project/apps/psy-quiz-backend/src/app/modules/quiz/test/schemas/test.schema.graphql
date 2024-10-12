@@ -1,0 +1,20 @@
+type Test {
+  id: ID!
+  name: String!
+  description: String!
+}
+
+type Query {
+  getAll: [Test],
+  getOne: Test
+}
+
+type RemoveAnswer {
+  status: Int!
+  statusText: String!
+}
+
+type Mutation {
+  add(name: String!): Test
+  remove(id: String!): RemoveAnswer
+}

@@ -1,5 +1,7 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeorm from './config/postgres-datasource';
 import { LoggingMiddleware } from './middleware';
@@ -26,6 +28,13 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
     //   rootPath: path.resolve(__dirname, '../../static'),
     // }),
     // TypeOrmModule.forRoot(postgresConfig),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: true,
+      autoSchemaFile: false,
+      sortSchema: true,
+      typePaths: ['./**/*.graphql']
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
