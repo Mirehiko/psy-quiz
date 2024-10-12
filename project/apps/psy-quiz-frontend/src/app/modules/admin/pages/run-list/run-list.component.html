@@ -1,0 +1,11 @@
+<app-title title="Runs"><button routerLink="add">+</button></app-title>
+
+<div class="row-list">
+  <div *ngFor="let run of runs" class="row-item" routerLink="{{run.id}}/edit">
+    <span>user: {{run.userId}}</span>
+    <span>test: {{run.testId}}</span>
+    <span>{{run.createdAt}}</span>
+    <button (click)="remove(run.id)">remove</button>
+  </div>
+</div>
+<router-outlet></router-outlet>

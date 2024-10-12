@@ -1,0 +1,63 @@
+form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.test-main {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.test {
+  &-body {
+    overflow: auto;
+    padding: 10px;
+    margin-bottom: 50px;
+  }
+  &-questions {
+    display: grid;
+    gap: 8px;
+  }
+  &-question {
+    border: 1px solid #eeeeee;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 2px 6px 0px rgb(0 0 0 / 18%);
+  }
+
+}
+.question {
+  &-info {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
+}
+
+.answer {
+  &-list {
+    display: grid;
+    gap: 8px;
+  }
+  &-item {
+    display: grid;
+    gap: 8px;
+  }
+  &-body {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
+}
+button.remove {
+  border: 1px solid #ccc;
+  height: 20px;
+  width: 20px;
+  background: transparent;
+  border-radius: 50%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}

@@ -1,0 +1,99 @@
+#version: "3.9"
+
+networks:
+  psy:
+    driver: bridge
+#    external: true
+#  postgres:
+#    driver: bridge
+#    attachable: true
+
+services:
+  postgres:
+    image: postgres
+    container_name: psy-quiz-postgress
+    restart: always
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    ports:
+      - ${PROXY_PORTS}
+    volumes:
+      - ${DB_VOLUMES}
+    networks:
+      - psy
+
+  backend-app:
+    container_name: backend-app
+    restart: always
+    depends_on:
+      - postgres
+    build:
+      context: ./project
+      dockerfile: ./Dockerfile
+      target: ${BUILD_TARGET}
+    volumes:
+      - ${SERVER_VOLUMES}
+    env_file:
+      - .env
+    ports:
+      - ${SERVER_PORTS}
+    command: ${SERVER_COMMAND}
+    networks:
+      - psy
+
+  frontend-app:
+    container_name: frontend-app
+    restart: always
+    build:
+      context: ./project
+      dockerfile: ./frontend.Dockerfile
+      target: ${BUILD_TARGET}
+    env_file:
+      - .env
+    ports:
+      - ${FRONTEND_PORTS}
+    networks:
+      - psy
+
+#volumes:
+#  api:
+#    external: true
+#  postgress:
+#    driver: local
+
+#  frontend-app:
+#    container_name: frontend-app
+#    restart: always
+#    ports:
+#      - 4200:4200
+#    depends_on:
+#      - api
+
+#  gateway:
+#    image: nginx:1.22.0.alpine
+#    ports:
+#      - 80:80
+#    volumes:
+#      - ./gateway.nginx.conf:etc/nginx/conf.d/default.conf
+#  pgadmin:
+#    container_name: pgadmin_container
+#    image: dpage/pgadmin
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
+#      PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4habr"
+#      PGADMIN_CONFIG_SERVER_MODE: "False"
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+#    ports:
+#      - "5050:80"
+#    restart: unless-stopped
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: 1G
+#    networks:
+#      - postgres

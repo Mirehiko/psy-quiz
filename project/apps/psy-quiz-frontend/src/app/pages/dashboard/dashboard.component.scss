@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+}
+main {
+  width: 960px;
+}
+.cards {
+  display: flex;
+  gap: 8px;
+}
