@@ -9,6 +9,7 @@ import { ScaleEntity } from '../scale/schemas/scale.entity';
 import { TestRunEntity } from '../test_run/schemas/test-run.entity';
 import { TestEntity } from './schemas/test.entity';
 import { TestController } from './test.controller';
+import { TestResolver } from './test.resolver';
 import { TestService } from './test.service';
 
 @Module({
@@ -18,7 +19,7 @@ import { TestService } from './test.service';
     QuestionModule
     // forwardRef(() => QuestionModule),
   ],
-  providers: [TestService],
+  providers: [TestService, TestResolver],
   exports: [TestService],
   controllers: [TestController]
 })

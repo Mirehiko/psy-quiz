@@ -22,6 +22,17 @@ services:
       - ${PROXY_PORTS}
     volumes:
       - ${DB_VOLUMES}
+
+  graphql-engine:
+    image: hasura/graphql-engine:v1.0.0-beta.6
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
 #    networks:
 #      - psy
 
