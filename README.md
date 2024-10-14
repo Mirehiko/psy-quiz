@@ -9,7 +9,9 @@
 [comment]: <> (![Linux]&#40;https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black&#41;)
 
 [Требования](#require)  
-[Запуск](#run)  
+[Установка зависимостей и переменных окружения](#env)  
+[Developmnent](#dev)
+[Production](#prod)
 
 ## <a id="require"></a> Требования 
 
@@ -28,16 +30,25 @@
 **Docker**   
 Установить в системе docker
 
-## <a id="run"></a> Запуск 
+## <a id="env"></a> Установка зависимостей и переменных окружения
+1. Перейти в папку cli
+2. Выполнить команду `npm i -g .`
+3. перейти в корень проекта
+4. Выполнить команду `miterm setup-env`
+5. Выполнить команду `miterm install`
 
-### База данных и переменные окружения
-1. Создать в папке `psy-quiz/db` файл `.env`, как указано в `psy-quiz/db/.env.example`
-2. Выполнить в папке `psy-quiz/db` команду `docker compose up -d`
-3. Создать в папке `psy-quiz/project` файл `.env`, как указано в `psy-quiz/project/.env.example`. Данные для подключения к базе данных должны совпадать с `psy-quiz/db/.env` 
+[//]: # (### Установка зависимостей)
+[//]: # (1. Перейти в папку `psy-quiz/project`)
+[//]: # (2. Выполнить команду `miterm install`)
 
-### Установка зависимостей
-1. Перейти в папку `psy-quiz/project`
-2. Выполнить команду `npm ci`
+[//]: # (## <a id="run"></a> Запуск)
+
+## <a id="dev"></a> Development
+
+### База данных
+1. Выполнить в папке `psy-quiz/db` команду `docker compose -f docker-up -d` 
+
+
 
 ### Backend
 Для запуска сервера в dev режиме выполнить следующие команды по порядку:
@@ -47,3 +58,4 @@
 ### Frontend
 Для запуска фронтенда в dev режиме выполнить команду `npm run psy-quiz-frontend`
 
+## <a id="prod"></a> Production

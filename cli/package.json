@@ -1,0 +1,22 @@
+{
+  "name": "@mirehiko/term",
+  "version": "0.0.2",
+  "type": "commonjs",
+  "description": "A CLI to ...",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "keywords": [
+    "cli"
+  ],
+  "bin": {
+    "miterm": "./bin/index.js"
+  },
+  "author": "mirehiko",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.7.5",
+    "yargs": "^17.7.2"
+  }
+}
