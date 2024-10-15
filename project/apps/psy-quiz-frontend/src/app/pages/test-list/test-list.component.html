@@ -1,3 +1,9 @@
-<h1>Tests</h1>
-<a routerLink="tests/{{test.id}}" *ngFor="let test of tests"> {{test.name}} </a>
-<router-outlet></router-outlet>
+<aside></aside>
+<main>
+  <h1>Tests</h1>
+  <div class="cards">
+    <card routerLink="{{test.id}}" *ngFor="let test of tests" [entity]="{title: test.name}"></card>
+  </div>
+  <router-outlet></router-outlet>
+</main>
+<aside></aside>

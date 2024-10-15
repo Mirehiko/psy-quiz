@@ -75,7 +75,7 @@ export class TestRunController implements OnGatewayInit, OnGatewayConnection, On
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Patch('test-run/start')
+  @Patch('test-run/:id/start')
   async startRun(@Param('id') id: string, @Req() request): Promise<TestRunResponseDto> {
     const entity = await this.service.startRun(id, request.user);
     return plainToInstance(TestRunResponseDto, entity, { enableCircularCheck: true });
@@ -83,7 +83,7 @@ export class TestRunController implements OnGatewayInit, OnGatewayConnection, On
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Patch('test-run/finish')
+  @Patch('test-run/:id/finish')
   async finishRun(@Param('id') id: string, @Req() request): Promise<TestRunResponseDto> {
     const entity = await this.service.finishRun(id, request.user);
     return plainToInstance(TestRunResponseDto, entity, { enableCircularCheck: true });

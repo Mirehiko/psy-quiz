@@ -7,6 +7,10 @@ main {
   width: 960px;
 }
 .cards {
-  display: flex;
+  display: grid;
   gap: 8px;
+  grid-template-columns: auto auto auto;
+  card {
+    width: auto;
+  }
 }

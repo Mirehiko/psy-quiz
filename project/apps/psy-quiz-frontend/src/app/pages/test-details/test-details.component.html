@@ -1,1 +1,13 @@
-test details
+<aside></aside>
+<main>
+  <ng-container *ngIf="test">
+    <h1>{{test.name}}</h1>
+    <div>{{test.description}}</div>
+
+    <div>
+      <button (click)="startTest()">Начать</button>
+      <button (click)="continueTest()">Продолжить</button>
+    </div>
+  </ng-container>
+</main>
+<aside></aside>

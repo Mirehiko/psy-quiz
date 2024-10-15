@@ -1,18 +1,27 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TestService } from '../../services/test.service';
 
 @Component({
   selector: 'app-test-list',
   templateUrl: './test-list.component.html',
-  styleUrls: ['./test-list.component.scss']
+  styleUrls: ['./test-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestListComponent {
-  private testService = inject(TestService);
   public tests: any[] = [];
+  private testService = inject(TestService);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
-    this.testService.getAll().subscribe((tests) => {
-      this.tests = tests.data;
-    });
+    this.testService
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((tests) => {
+        this.tests = tests.data;
+        console.warn(tests);
+        this.cdr.markForCheck();
+      });
   }
 }

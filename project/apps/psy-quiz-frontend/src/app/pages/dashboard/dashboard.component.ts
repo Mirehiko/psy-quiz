@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TestService } from '../../services/test.service';
 
 @Component({
@@ -11,11 +12,15 @@ export class DashboardComponent {
   public tests: any[] = [];
   private testService = inject(TestService);
   private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
-    this.testService.getAll().subscribe((tests) => {
-      this.tests = tests.data;
-      this.cdr.markForCheck();
-    });
+    this.testService
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((tests) => {
+        this.tests = tests.data;
+        this.cdr.markForCheck();
+      });
   }
 }
