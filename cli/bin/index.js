@@ -1,15 +1,8 @@
 #! /usr/bin/env node
-const yargs = require('yargs');
 const fs = require('node:fs');
-const { promisify } = require('node:util');
+const vorpal = require('vorpal')();
+const { execSync } = require('child_process');
 
-// const argv = yargs.default(process.argv.slice(2))
-//   .command('$0', '', () => {
-//   }, (argv) => {
-//     console.log('== MI-Term CLI!==');
-//     console.log(argv);
-//   })
-//   .parse();
 const defaultEnvContent = `
 #################################################################################
 # WARNING: Current configuration is default and must replaced in production mode #
@@ -37,68 +30,36 @@ BUILD_TARGET="development" // development | production
 FRONTEND_PORTS=8080:8080
 `;
 
-const setupDefaultEnv = yargs
-  .default(process.argv.slice(2))
-  .command({
-    command: 'setup-env [url]',
-    aliases: ['.env'],
-    desc: 'setup default environment',
-    // builder: yargs => yargs.default('value', 'true'),
-    handler: (argv) => {
-      console.log('Setup default environment');
-      if (!argv.url) {
-        fs.writeFile('./.env', defaultEnvContent, (err) => {
-          if (err) {
-            console.error(err);
-          } else {
-            copyEnvFile();
-          }
-        });
-      } else {
-        copyEnvFile();
-      }
-    }
-  })
-  // .command({
-  //   command: 'build',
-  //   desc: 'run server',
-  //   handler: (argv) => {
-  //     yargs.op;
-  //   }
-  // })
-  // .command({
-  //   command: 'run migration',
-  //   desc: 'run server'
-  // })
-  .help()
-  .wrap(72)
-  .parse();
 
-const install = yargs
-  .default(process.argv.slice(2))
-  .command({
-    command: 'install',
-    desc: 'install deps',
-    // builder: yargs => yargs.default('value', 'true'),
-    handler: (argv) => {
-      yargs.default(argv.url);
+vorpal
+  .command('setup-env ')
+  .action((argv, cb) => {
+    console.log('Setup default environment');
+    if (!argv.url) {
+      fs.writeFile('./.env', defaultEnvContent, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          copyEnvFile();
+        }
+      });
+    } else {
+      copyEnvFile();
     }
-  })
-  // .command({
-  //   command: 'build',
-  //   desc: 'run server',
-  //   handler: (argv) => {
-  //     yargs.op;
-  //   }
-  // })
-  // .command({
-  //   command: 'run migration',
-  //   desc: 'run server'
-  // })
-  .help()
-  .wrap(72)
-  .parse();
+    cb();
+  });
 
+vorpal
+  .command('install ')
+  .action((argv, cb) => {
+    console.log('Installing deps');
+    execSync('npm ci --prefix ./project');
+    cb();
+  });
+
+vorpal
+  .delimiter('miterm')
+  .show();
 
 function copyEnvFile() {
   fs.copyFile('.env', './project/.env', (err) => {
@@ -106,3 +67,4 @@ function copyEnvFile() {
     console.log('.env was copied to ./project/.env');
   });
 }
+

@@ -11,12 +11,12 @@
     "cli"
   ],
   "bin": {
-    "miterm": "./bin/index.js"
+    "miterm": "bin/index.js"
   },
   "author": "mirehiko",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^22.7.5",
-    "yargs": "^17.7.2"
+    "vorpal": "^1.12.0"
   }
 }
