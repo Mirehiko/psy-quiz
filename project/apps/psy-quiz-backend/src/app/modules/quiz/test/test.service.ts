@@ -50,10 +50,9 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
   }
 
   async addQuestion(testId: string, requestDto: QuestionRequestDto, user: UserEntity): Promise<QuestionEntity> {
-    const test = await this.repository.findOne({ where: { id: testId } });
-    console.warn(test, requestDto);
-    const question = await this.questionRepo.create({ ...requestDto, test, createdById: user.id });
-    await this.repository.save(question);
+    const test = await this.repository.findOne({ where: { id: testId }, relations: ['questions'] });
+    const question = await this.questionRepo.create({ ...requestDto, test: testId, createdById: user.id });
+    await this.questionRepo.save(question);
     if (test.questions?.length) {
       test.questions.push(question);
     } else {

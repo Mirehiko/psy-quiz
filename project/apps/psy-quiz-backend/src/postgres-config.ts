@@ -13,7 +13,7 @@ export const postgresConfig: TypeOrmModuleOptions = {
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
-  synchronize: false, // todo: заменить на начальную миграцию
+  synchronize: true, // todo: заменить на начальную миграцию
   migrationsRun: true,
   migrationsTransactionMode: 'each',
   autoLoadEntities: true

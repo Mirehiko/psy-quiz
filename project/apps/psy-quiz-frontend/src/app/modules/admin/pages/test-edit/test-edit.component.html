@@ -15,18 +15,18 @@
       <button routerLink="../">Cancel</button>
     </div>
   </div>
-  <div class="test-body">
+  <div *ngIf="isEdit" class="test-body">
     <h2>Вопросы <button (click)="addQuestion()">add</button></h2>
     <div class="test-questions" formArrayName="questions">
       <div class="test-question" *ngFor="let questionForm of questions.controls; index as questionIndex" formGroupName="{{ questionIndex }}">
         <div class="question-info">
           <div>
             <label for="name{{ questionIndex }}">name:</label>
-            <input id="name{{ questionIndex }}" type="text" formControlName="questionName" />
+            <input id="name{{ questionIndex }}" type="text" (change)="questionChanged(questionForm)" formControlName="questionName" />
           </div>
           <div>
             <label for="answerType">question type:</label>
-            <select name="answerType" id="answerType" formControlName="answerType">
+            <select name="answerType" id="answerType" (change)="questionChanged(questionForm)" formControlName="answerType">
               <option *ngFor="let type of questionTypes" value="{{type.id}}">{{ type.name }}</option>
             </select>
           </div>
@@ -34,7 +34,7 @@
 
         <div>
           <label for="description{{ questionIndex }}">description:</label>
-          <input id="description{{ questionIndex }}" type="text" formControlName="description" />
+          <input id="description{{ questionIndex }}" type="text" (change)="questionChanged(questionForm)" formControlName="description" />
         </div>
         <hr>
         <div class="question-answers">
@@ -62,7 +62,7 @@
           </div>
         </div>
         <hr>
-        <button (click)="removeQuestion(questionIndex)">remove</button>
+        <button (click)="removeQuestion(questionIndex, questionForm)">remove</button>
       </div>
     </div>
   </div>

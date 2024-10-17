@@ -110,9 +110,7 @@ export class TestController {
   })
   @Get('test/:id/questions')
   async getQuestions(@Param('id') id: string): Promise<QuestionResponseDto[]> {
-    // const entity = await this.questionService.getManyBy({ params: { testId: id } });
-    const entity = await this.service.getByID(id, ['questions', 'questions.answers']);
-    console.warn(entity);
-    return plainToInstance(QuestionResponseDto, entity.questions, { enableCircularCheck: true });
+    const test = await this.service.getBy({ params: { id }, withRelations: true }, ['questions']);
+    return plainToInstance(QuestionResponseDto, test.questions, { enableCircularCheck: true });
   }
 }

@@ -35,6 +35,7 @@ export class QuestionService extends BaseService<QuestionEntity, IQuestionGetPar
     if (!question) {
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
     }
+
     question.name = requestDto.name ? requestDto.name : question.name;
     question.description = requestDto.description ? requestDto.description : question.description;
     // question.answerType = requestDto.answerType ? requestDto.answerType : question.answerType;

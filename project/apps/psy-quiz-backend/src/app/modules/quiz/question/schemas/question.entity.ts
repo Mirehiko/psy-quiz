@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
 import { IQuestion } from '../../interfaces/i-question';
 import { QuestionAnswerEntity } from '../../question_answer/schemas/question-answer.entity';
@@ -28,7 +28,8 @@ export class QuestionEntity extends BaseEntity implements IQuestion {
   free_answer: string;
 
   @ManyToOne(() => TestEntity, (test) => test.questions)
-  test: TestEntity;
+  @JoinColumn({ name: 'test' })
+  test: string;
 
   @ApiProperty({ example: '', description: '' })
   @Column('text', { nullable: false })

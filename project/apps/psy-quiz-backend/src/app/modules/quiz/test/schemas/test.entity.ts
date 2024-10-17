@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
 import { QuestionEntity } from '../../question/schemas/question.entity';
 import { ScaleEntity } from '../../scale/schemas/scale.entity';
@@ -21,6 +21,7 @@ export class TestEntity extends BaseEntity {
 
   @ApiProperty({ example: '', description: 'Вопросы' })
   @OneToMany(() => QuestionEntity, (question) => question.test)
+  @JoinColumn()
   questions: QuestionEntity[];
 
   @ApiProperty({ example: '', description: 'Шкалы оценивания' })

@@ -16,5 +16,5 @@ export interface IQuestionGetParamsData extends IGetParamsData {
 }
 
 export interface IQuestionParams extends IGetParams {
-  testId?: string;
+  test?: string;
 }

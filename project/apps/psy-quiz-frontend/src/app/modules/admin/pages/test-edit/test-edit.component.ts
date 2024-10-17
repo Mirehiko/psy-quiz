@@ -84,16 +84,8 @@ export class TestEditComponent {
             this.testService.getQuestions(test.id).subscribe();
           });
         this.testService.testQuestions$.subscribe((questions) => {
-          const newQuestions = questions.filter((q) => q.id !== this.questionIds.includes(q.id));
-          const oldQuestions = questions.filter((q) => q.id === this.questionIds.includes(q.id));
-          if (oldQuestions.length > 0) {
-            oldQuestions.forEach((question) => {
-              this.updateQuestionForm(question);
-            });
-          }
-          if (newQuestions.length > 0) {
-            this.createQuestionForms(newQuestions);
-          }
+          this.formGroup.controls.questions = this.createQuestionForms(questions);
+          this.cdr.markForCheck();
         });
       }
     });
@@ -146,8 +138,20 @@ export class TestEditComponent {
     form.removeAt(formIndex);
   }
 
-  public removeQuestion(formIndex: number): void {
-    this.questions.removeAt(formIndex);
+  public removeQuestion(formIndex: number, form: FormGroup<IQuestionForm>): void {
+    if (form.controls.id) {
+      this.questionService
+        .remove(form.controls.id.value!)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.testService.testQuestions$.next(
+            this.testService.testQuestions$.value.filter((q) => q.id !== form.controls.id.value)
+          );
+          this.questions.removeAt(formIndex);
+        });
+    } else {
+      this.questions.removeAt(formIndex);
+    }
   }
 
   private updateQuestionForm(question: any): void {
@@ -162,10 +166,10 @@ export class TestEditComponent {
   }
 
   private createQuestionForm(question?: any): FormGroup<IQuestionForm> {
-    const name: string = '';
-    const description: string = '';
-    const answerType: number = 0;
-    const free_answer: string = '';
+    const name: string = question?.name;
+    const description: string = question?.description;
+    const answerType: number = question?.answerType;
+    const free_answer: string = question?.free_answer;
     return new FormGroup<IQuestionForm>({
       id: this.formBuilder.control<string>(question?.id || undefined),
       questionName: this.formBuilder.control<string>(name || ''),
@@ -186,7 +190,22 @@ export class TestEditComponent {
     });
   }
 
-  private createQuestionForms(questions: any[]): FormArray {
-    return new FormArray(questions.map((question) => this.createQuestionForm(question)));
+  private createQuestionForms(questions: any[]): FormArray<FormGroup<IQuestionForm>> {
+    return new FormArray<FormGroup<IQuestionForm>>(questions.map((question) => this.createQuestionForm(question)));
+  }
+
+  public questionChanged(questionForm: FormGroup<IQuestionForm>): void {
+    this.questionService
+      .update(questionForm.controls.id.value!, {
+        name: questionForm.controls.questionName.value!,
+        description: questionForm.controls.description.value!,
+        answerType: questionForm.controls.answerType.value!,
+        freeAnswer: questionForm.controls.freeAnswer.value!
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        // this.formGroup.reset();
+        // this.router.navigate(['..']);
+      });
   }
 }

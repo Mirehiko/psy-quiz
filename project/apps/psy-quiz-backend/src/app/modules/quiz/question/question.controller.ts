@@ -51,11 +51,11 @@ export class QuestionController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @Patch('question/:id')
-  async update(@Body() requestDto: QuestionRequestDto, @Param() id: string): Promise<QuestionResponseDto> {
-    const entity = await this.service.getByID(id);
+  async update(@Param('id') id: string, @Body() requestDto: QuestionRequestDto): Promise<QuestionResponseDto> {
+    const entity = await this.service.update(id, requestDto);
     return plainToInstance(QuestionResponseDto, entity, { enableCircularCheck: true });
   }
 

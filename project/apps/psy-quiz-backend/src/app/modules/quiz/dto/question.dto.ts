@@ -1,7 +1,7 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 import { IQuestion } from '../interfaces/i-question';
 import { IQuestionType } from '../interfaces/i-question-type';
-import { ITest } from '../interfaces/i-test';
 
 export class QuestionRequestDto implements IQuestion {
   @IsOptional()
@@ -20,17 +20,24 @@ export class QuestionRequestDto implements IQuestion {
   free_answer: string;
 
   @IsOptional()
-  @IsNumber()
-  // @IsString() // todo
-  testId: number;
+  @IsString()
+  testId: string;
 }
 
+@Exclude()
 export class QuestionResponseDto implements IQuestion {
+  @Expose()
   id: string;
+  @Expose()
   name: string;
+  @Expose()
   description?: string;
+  @Expose()
   answerType: IQuestionType;
+  @Expose()
   answers?: IQuestion[];
+  @Expose()
   free_answer?: string;
-  test: ITest;
+  @Expose()
+  testId: string;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { QuestionEntity } from '../../question/schemas/question.entity';
 
 @Entity()
@@ -17,6 +17,7 @@ export class QuestionAnswerEntity {
   description: string;
 
   @ManyToOne(() => QuestionEntity, (question) => question.answers)
+  @JoinColumn()
   question: QuestionEntity;
 
   @ApiProperty({ example: '', description: '' })
