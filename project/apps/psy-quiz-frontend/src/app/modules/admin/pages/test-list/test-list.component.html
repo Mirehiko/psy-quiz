@@ -1,8 +1,10 @@
 <app-title title="Tests"><button routerLink="add">+</button></app-title>
 
 <div class="row-list">
-  <div *ngFor="let test of tests" class="row-item" routerLink="{{test.id}}/edit">
-    <span>{{test.name}}</span>
+  <div *ngFor="let test of tests" class="row-item">
+    <div class="row-item-content" routerLink="{{test.id}}/edit">
+      <span>{{test.name}}</span>
+    </div>
     <button (click)="remove(test.id)">remove</button>
   </div>
 </div>
