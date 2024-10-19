@@ -77,8 +77,20 @@ export class QuestionController {
     @Body() requestDto: QuestionAnswerRequestDto,
     @Req() request
   ): Promise<QuestionAnswerResponseDto> {
-    console.warn(id, requestDto);
     const entity = await this.service.addAnswer(id, requestDto, request.user);
+    return plainToInstance(QuestionAnswerResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Patch('question/:id/answer/:answerId')
+  async updateAnswer(
+    @Param('id') id: string,
+    @Param('answerId') answerId: string,
+    @Body() requestDto: QuestionAnswerRequestDto,
+    @Req() request
+  ): Promise<QuestionAnswerResponseDto> {
+    const entity = await this.service.updateAnswer(id, answerId, requestDto, request.user);
     return plainToInstance(QuestionAnswerResponseDto, entity, { enableCircularCheck: true });
   }
 

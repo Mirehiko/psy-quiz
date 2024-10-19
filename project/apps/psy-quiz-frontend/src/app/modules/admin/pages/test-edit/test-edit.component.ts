@@ -3,17 +3,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService, TestService } from '@services';
-import { TestStore } from '@store';
+import { QuestionAnswerResponseDto, QuestionResponseDto } from '@shared/dto';
+import { QuestionStore, TestStore } from '@store';
 import { filter, switchMap, tap } from 'rxjs';
 
 interface IAnswerForm {
-  id: FormControl<string | null>;
+  id: FormControl<string | undefined | null>;
   name: FormControl<string | null>;
   description: FormControl<string | null>;
 }
 
 interface IQuestionForm {
-  id: FormControl<string | null>;
+  id: FormControl<string | undefined | null>;
   questionName: FormControl<string | null>;
   description: FormControl<string | null>;
   answerType: FormControl<number | null>;
@@ -45,6 +46,8 @@ export class TestEditComponent {
   ];
   private testService = inject(TestService);
   private testStore = inject(TestStore);
+  private questionStore = inject(QuestionStore);
+  // private answerStore = inject(AnswerStore);
   private questionService = inject(QuestionService);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
@@ -80,12 +83,15 @@ export class TestEditComponent {
             this.formGroup?.controls.name.setValue(test.name);
             this.formGroup?.controls.description.setValue(test.description || '');
             this.cdr.markForCheck();
-            this.testService.getQuestions(test.id).subscribe();
+            this.testService.getQuestions(test.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
           });
-        this.testService.testQuestions$.subscribe((questions) => {
+        this.questionStore.entities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((questions) => {
           this.formGroup.controls.questions = this.createQuestionForms(questions);
           this.cdr.markForCheck();
         });
+        // this.answerStore.entities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((answers) => {
+        //   console.warn(answers);
+        // });
       }
     });
   }
@@ -132,12 +138,15 @@ export class TestEditComponent {
   public addAnswer(formGroup: FormGroup<IQuestionForm>): void {
     formGroup.controls.answers.push(this.createAnswerForm());
     this.questionService
-      .addAnswer(formGroup.controls.id.value!, {})
+      .addAnswer(formGroup.controls.id.value!, {
+        name: '',
+        description: ''
+      })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap((answer) => {
-          this.testService.testQuestions$.next(
-            this.testService.testQuestions$.value.map((q) => {
+          this.questionStore.entities$.next(
+            this.questionStore.entities$.value.map((q) => {
               // if (q.id === answer.)
               return q;
             })
@@ -147,13 +156,12 @@ export class TestEditComponent {
       .subscribe();
   }
 
-  public removeAnswer(
-    form: FormGroup<IAnswerForm>,
-    formIndex: number,
-    formArray: FormArray<FormGroup<IAnswerForm>>
-  ): void {
+  public removeAnswer(form: FormGroup<IAnswerForm>, formIndex: number, questionForm: FormGroup<IQuestionForm>): void {
     if (form.controls.id.value) {
-      this.questionService.removeAnswer('questionID', form.controls.id.value!);
+      this.questionService
+        .removeAnswer(questionForm.controls.id.value!, form.controls.id.value!)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe();
     }
   }
 
@@ -163,8 +171,8 @@ export class TestEditComponent {
         .remove(form.controls.id.value!)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
-          this.testService.testQuestions$.next(
-            this.testService.testQuestions$.value.filter((q) => q.id !== form.controls.id.value)
+          this.questionStore.entities$.next(
+            this.questionStore.entities$.value.filter((q) => q.id !== form.controls.id.value)
           );
           this.questions.removeAt(formIndex);
         });
@@ -184,32 +192,36 @@ export class TestEditComponent {
     });
   }
 
-  private createQuestionForm(question?: any): FormGroup<IQuestionForm> {
-    const name: string = question?.name;
-    const description: string = question?.description;
-    const answerType: number = question?.answerType;
-    const free_answer: string = question?.free_answer;
+  private createQuestionForm(question?: QuestionResponseDto): FormGroup<IQuestionForm> {
+    const name: string = question?.name!;
+    const description: string = question?.description!;
+    const answerType: number = question?.answerType as unknown as number;
+    const free_answer: string = question?.free_answer!;
+    let answers = this.formBuilder.array<FormGroup<IAnswerForm>>([]);
+    question?.answers?.forEach((answer) => {
+      answers.push(this.createAnswerForm(answer));
+    });
     return new FormGroup<IQuestionForm>({
-      id: this.formBuilder.control<string>(question?.id || undefined),
+      id: this.formBuilder.control<string | undefined>(question?.id),
       questionName: this.formBuilder.control<string>(name || ''),
       description: this.formBuilder.control<string>(description || ''),
       answerType: this.formBuilder.control<number>(answerType || 0),
       freeAnswer: this.formBuilder.control<string>(free_answer || ''),
-      answers: this.formBuilder.array<FormGroup<IAnswerForm>>([])
+      answers: answers
     });
   }
 
-  private createAnswerForm(question?: any): FormGroup<IAnswerForm> {
-    const name: string = '';
-    const description: string = '';
+  private createAnswerForm(answer?: QuestionAnswerResponseDto): FormGroup<IAnswerForm> {
+    const name: string = answer?.name!;
+    const description: string = answer?.description!;
     return new FormGroup<IAnswerForm>({
-      id: this.formBuilder.control<string>(question?.id || undefined),
+      id: this.formBuilder.control<string | undefined>(answer?.id),
       name: this.formBuilder.control<string>(name || ''),
       description: this.formBuilder.control<string>(description || '')
     });
   }
 
-  private createQuestionForms(questions: any[]): FormArray<FormGroup<IQuestionForm>> {
+  private createQuestionForms(questions: QuestionResponseDto[]): FormArray<FormGroup<IQuestionForm>> {
     return new FormArray<FormGroup<IQuestionForm>>(questions.map((question) => this.createQuestionForm(question)));
   }
 
@@ -226,5 +238,17 @@ export class TestEditComponent {
         // this.formGroup.reset();
         // this.router.navigate(['..']);
       });
+  }
+
+  public saveAnswer(questionId: string, answerForm: FormGroup<IAnswerForm>, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.questionService
+      .updateAnswer(questionId, answerForm.controls.id.value!, {
+        name: answerForm.controls.name.value!,
+        description: answerForm.controls.description.value!
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 }

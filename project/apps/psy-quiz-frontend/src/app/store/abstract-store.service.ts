@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 
 export abstract class AbstractStoreService<T extends { id?: string }> {
   public entities$ = new BehaviorSubject<T[]>([]);
@@ -31,5 +31,9 @@ export abstract class AbstractStoreService<T extends { id?: string }> {
     } else {
       this.entity$.next(id);
     }
+  }
+
+  public getBy<ValueType>(field: keyof T, value: ValueType): T | undefined {
+    return this.entities$.value.find((a) => a[field] === value);
   }
 }

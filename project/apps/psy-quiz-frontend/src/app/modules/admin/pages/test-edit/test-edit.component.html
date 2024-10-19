@@ -45,14 +45,22 @@
               <div class="answer-body">
                 <div>
                   <label for="name{{ answerIndex }}">name:</label>
-                  <input id="name{{ answerIndex }}" type="text" formControlName="name" />
+                  <input id="name{{ answerIndex }}"
+                         type="text"
+                         formControlName="name"
+                         (keydown.enter)="saveAnswer(questionForm.controls.id.value!, answerForm, $event)"
+                  />
                 </div>
-                <button class="remove" (click)="removeAnswer(answerForm, answerIndex, questionForm.controls.answers)">x</button>
+                <button class="remove"
+                        (click)="removeAnswer(answerForm, answerIndex, questionForm)">x</button>
               </div>
 
               <div>
                 <label for="description{{ answerIndex }}">description:</label>
-                <input id="description{{ answerIndex }}" type="text" formControlName="description" />
+                <input id="description{{ answerIndex }}"
+                       type="text"
+                       formControlName="description"
+                       (keydown.enter)="saveAnswer(questionForm.controls.id.value!, answerForm, $event)" />
               </div>
             </div>
           </div>

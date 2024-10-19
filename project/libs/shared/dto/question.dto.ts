@@ -1,6 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
-import { IQuestion, IQuestionType } from '../interfaces';
+import { IQuestion, IQuestionAnswer, IQuestionType } from '../interfaces';
+import { QuestionAnswerResponseDto } from './question-answer.dto';
 
 export class QuestionRequestDto implements IQuestion {
   @IsOptional()
@@ -34,7 +35,7 @@ export class QuestionResponseDto implements IQuestion {
   @Expose()
   answerType: IQuestionType;
   @Expose()
-  answers?: IQuestion[];
+  answers?: QuestionAnswerResponseDto[];
   @Expose()
   free_answer?: string;
   @Expose()

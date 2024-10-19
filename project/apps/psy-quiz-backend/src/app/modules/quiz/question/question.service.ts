@@ -70,6 +70,28 @@ export class QuestionService extends BaseService<QuestionEntity, IQuestionGetPar
     return answer;
   }
 
+  async updateAnswer(
+    questionId: string,
+    answerId: string,
+    requestDto: QuestionAnswerRequestDto,
+    user: UserEntity
+  ): Promise<QuestionAnswerEntity> {
+    // const question = await this.repository.findOne({ where: { id: questionId }, relations: ['answers'] });
+    const answer = await this.answerRepository.findOne({ where: { id: answerId } });
+    answer.name = requestDto.name ? requestDto.name : answer.name;
+    answer.description = requestDto.description ? requestDto.description : answer.description;
+    // const answer = await this.answerRepository.findOne({ ...requestDto, : question, createdById: user.id });
+    await this.answerRepository.save(answer);
+    // if (question.answers?.length) {
+    //   question.answers.push(answer);
+    // } else {
+    //   question.answers = [answer];
+    // }
+    // await this.repository.save(question);
+
+    return answer;
+  }
+
   async removeAnswer(questionId: string, answerId: string): Promise<any> {
     const question = await this.repository.findOne({ where: { id: questionId }, relations: ['answers'] });
     question.answers = question.answers.filter((answer) => answer.id === answerId);
