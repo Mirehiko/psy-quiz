@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TestService } from '../../../../services/test.service';
+import { TestService } from '@services';
+import { TestResponseDto } from '@shared/dto';
 
 @Component({
   selector: 'admin-test-list',
@@ -9,7 +10,7 @@ import { TestService } from '../../../../services/test.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestListComponent {
-  public tests: any[] = [];
+  public tests: TestResponseDto[] = [];
   private testService = inject(TestService);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);

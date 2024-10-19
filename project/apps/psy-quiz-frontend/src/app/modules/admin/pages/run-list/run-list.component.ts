@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RunService, SocketIoService } from '@services';
+import { TestRunResponseDto } from '@shared/dto';
 
 @Component({
   selector: 'admin-run-list',
@@ -9,7 +10,7 @@ import { RunService, SocketIoService } from '@services';
 })
 export class RunListComponent {
   private runService = inject(RunService);
-  public runs: any[] = [];
+  public runs: TestRunResponseDto[] = [];
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
 

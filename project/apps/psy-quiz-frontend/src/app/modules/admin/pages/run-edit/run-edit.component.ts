@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RunService, TestService, UserService } from '@services';
-import { switchMap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'admin-run-edit',
@@ -14,7 +14,7 @@ import { switchMap } from 'rxjs';
 export class RunEditComponent {
   public formGroup: FormGroup;
   public isEdit = false;
-  public test: any | undefined = undefined;
+  public run: any | undefined = undefined;
   private runService = inject(RunService);
   private testService = inject(TestService);
   private userService = inject(UserService);
@@ -42,13 +42,14 @@ export class RunEditComponent {
           .getOne(params['id'])
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            switchMap(() => this.runService.entity$)
+            filter((test) => test !== null),
+            switchMap(() => this.runService.entity$.pipe(filter((run) => run !== null)))
           )
-          .subscribe((test) => {
-            this.test = test;
+          .subscribe((run) => {
+            this.run = run;
             this.formGroup = new FormGroup({
-              name: new FormControl(test.name, Validators.required),
-              description: new FormControl(test.description)
+              name: new FormControl(run.name, Validators.required),
+              description: new FormControl(run.description)
               // form array
             });
             this.cdr.markForCheck();
@@ -83,7 +84,7 @@ export class RunEditComponent {
 
   update(requestDto: any): void {
     this.runService
-      .update(this.test.id, requestDto)
+      .update(this.run.id, requestDto)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         // this.router.navigate(['..']);

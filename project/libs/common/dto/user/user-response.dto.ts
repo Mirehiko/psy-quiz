@@ -1,4 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
+import { OnlineStatus } from '../../../shared';
 import { RoleResponseDto } from '../role';
 
 @Exclude()
@@ -28,7 +29,10 @@ export class UserResponseDto {
   updatedAt?: string;
 
   @Expose()
-  suspendedAt?: Date = null;
+  suspendedAt?: Date = undefined;
+
+  @Expose()
+  onlineStatus?: OnlineStatus;
 
   @Expose()
   suspendReason?: string = '';

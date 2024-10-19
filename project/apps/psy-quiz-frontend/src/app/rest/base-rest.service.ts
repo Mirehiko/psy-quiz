@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { IResponse } from '@shared/interfaces';
 import { Observable, from } from 'rxjs';
 import { API_TOKEN } from '../api-token';
 
-export abstract class BaseRestService {
+export abstract class BaseRestService<T> {
   protected baseUrl: string;
   protected http = inject(HttpClient);
   protected abstract apiUrl: string;
@@ -13,20 +14,20 @@ export abstract class BaseRestService {
     this.baseUrl = `${this.apiToken}/main`;
   }
 
-  public getAll(): Observable<any> {
-    return from(this.http.get<any>(`${this.baseUrl}/${this.apiUrl}/list`));
+  public getAll(): Observable<IResponse<T[]>> {
+    return from(this.http.get<IResponse<T[]>>(`${this.baseUrl}/${this.apiUrl}/list`));
   }
 
-  public getOne(id: string): Observable<any> {
-    return from(this.http.get(`${this.baseUrl}/${this.apiUrl}/${id}`));
+  public getOne(id: string): Observable<IResponse<T>> {
+    return from(this.http.get<IResponse<T>>(`${this.baseUrl}/${this.apiUrl}/${id}`));
   }
 
-  public create(requestDto: any): Observable<any> {
-    return from(this.http.post(`${this.baseUrl}/${this.apiUrl}`, requestDto));
+  public create(requestDto: any): Observable<IResponse<T>> {
+    return from(this.http.post<IResponse<T>>(`${this.baseUrl}/${this.apiUrl}`, requestDto));
   }
 
-  public update(id: string, requestDto: any): Observable<any> {
-    return from(this.http.patch(`${this.baseUrl}/${this.apiUrl}/${id}`, requestDto));
+  public update(id: string, requestDto: any): Observable<IResponse<T>> {
+    return from(this.http.patch<IResponse<T>>(`${this.baseUrl}/${this.apiUrl}/${id}`, requestDto));
   }
 
   public remove(id: string): Observable<any> {

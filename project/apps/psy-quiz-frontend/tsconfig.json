@@ -4,6 +4,7 @@
     "target": "es2022",
     "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -17,7 +18,13 @@
       "@components": ["apps/psy-quiz-frontend/src/app/components/index.ts"],
       "@components/*": ["apps/psy-quiz-frontend/src/app/components/*"],
       "@pages": ["apps/psy-quiz-frontend/src/app/pages/index.ts"],
-      "@pages/*": ["apps/psy-quiz-frontend/src/app/pages/*"]
+      "@pages/*": ["apps/psy-quiz-frontend/src/app/pages/*"],
+      "@common/interfaces": ["libs/common/interfaces/index.ts"],
+      "@common/dto": ["libs/common/dto/index.ts"],
+      "@common/*": ["libs/common/*"],
+      "@shared/interfaces": ["libs/shared/interfaces/index.ts"],
+      "@shared/dto": ["libs/shared/dto/index.ts"],
+      "@shared/*": ["libs/shared/*"]
     }
   },
   "files": [],

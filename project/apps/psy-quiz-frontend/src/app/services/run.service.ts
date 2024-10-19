@@ -1,17 +1,19 @@
 import { Injectable, inject } from '@angular/core';
+import { TestRunResponseDto } from '@shared/dto';
+import { IResponse } from '@shared/interfaces';
 import { Observable } from 'rxjs';
 import { RunRestService } from '../rest';
 import { BaseService } from './base.service';
 
 @Injectable()
-export class RunService extends BaseService {
+export class RunService extends BaseService<TestRunResponseDto> {
   protected api = inject(RunRestService);
 
-  public start(id: string): Observable<any> {
+  public start(id: string): Observable<IResponse<Boolean>> {
     return this.api.start(id);
   }
 
-  public finish(id: string): Observable<any> {
+  public finish(id: string): Observable<IResponse<Boolean>> {
     return this.api.finish(id);
   }
 }

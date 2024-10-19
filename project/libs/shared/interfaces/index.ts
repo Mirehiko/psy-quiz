@@ -7,3 +7,5 @@ export * from './i-scale';
 export * from './i-scale-answer';
 export * from './i-test';
 export * from './i-test-run';
+export * from './i-response';
+export * from './i-user-online-status';

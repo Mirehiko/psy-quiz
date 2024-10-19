@@ -11,6 +11,8 @@ import {
   WebSocketServer,
   WsResponse
 } from '@nestjs/websockets';
+import { OnlineStatus } from '@shared/enums';
+import { IExtendedUserOnlineStatus, IUserOnlineStatus } from '@shared/interfaces';
 import { Server, Socket } from 'socket.io';
 import { UserService } from '../user/user.service';
 import { ConnectedUserService } from './connected-user.service';
@@ -34,7 +36,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   ) {}
 
   @SubscribeMessage('onlineStatus')
-  async onStatusChange(@ConnectedSocket() client: Socket): Promise<WsResponse> {
+  async onStatusChange(@ConnectedSocket() client: Socket): Promise<WsResponse<IExtendedUserOnlineStatus>> {
     const authHeader = client.handshake.headers.authorization;
     const bearer = authHeader.split(' ')[0];
     const token = authHeader.split(' ')[1];
@@ -44,7 +46,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const tokenUser = await this.jwtService.verify(token);
     const user = await this.userService.getByID(tokenUser.id, ['roles']);
     if (!user) {
-      return { event: 'onlineStatus', data: { connectionId: client.id, status: 'Offline' } };
+      return { event: 'onlineStatus', data: { connectionId: client.id, status: OnlineStatus.Offline } };
     }
     if (user.roles.find((role) => role.name === 'ADMIN')) {
       const connectedUsers = await this.connectedUserService.getAllConnectedUsers();
@@ -52,17 +54,17 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         event: 'onlineStatus',
         data: {
           connectionId: client.id,
-          status: 'Online',
+          status: OnlineStatus.Online,
           userId: user.id,
           users: connectedUsers.map((u) => ({
             userId: u.user.id,
             connectionId: u.socketId,
-            status: 'Online'
+            status: OnlineStatus.Online
           }))
         }
       };
     }
-    return { event: 'onlineStatus', data: { connectionId: client.id, userId: user.id, status: 'Online' } };
+    return { event: 'onlineStatus', data: { connectionId: client.id, userId: user.id, status: OnlineStatus.Online } };
   }
 
   afterInit(server: Server) {
@@ -76,7 +78,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     this.server.emit('onlineStatus', {
       connectionId: client.id,
       userId: this.connectedUsers.get(client.id),
-      status: 'Offline'
+      status: OnlineStatus.Offline
     });
     this.connectedUsers.delete(client.id);
   }
@@ -98,7 +100,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       client.data.user = user;
       await this.connectedUserService.create(client.id, user);
       this.connectedUsers.set(client.id, user.id);
-      this.server.emit('onlineStatus', { connectionId: client.id, userId: user.id, status: 'Online' });
+      this.server.emit('onlineStatus', { connectionId: client.id, userId: user.id, status: OnlineStatus.Online });
       // return this.server.to(client.id).emit('notifications', notifications);
     } catch (err) {
       console.log(err);
@@ -110,7 +112,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     client.emit('Error', new UnauthorizedException());
     client.disconnect();
     await this.connectedUserService.deleteBySocketId(client.id);
-    this.server.emit('onlineStatus', { connectionId: undefined, userId: client.id, status: 'Offline' });
+    this.server.emit('onlineStatus', { connectionId: undefined, userId: client.id, status: OnlineStatus.Offline });
     this.connectedUsers.delete(client.id);
     this.logger.log(`Client disconnected: ${client.id}`);
   }

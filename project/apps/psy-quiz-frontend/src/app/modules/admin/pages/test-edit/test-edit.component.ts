@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { QuestionService, TestService } from '@services';
-import { switchMap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 
 interface IAnswerForm {
   id: FormControl<string | null>;
@@ -45,11 +45,9 @@ export class TestEditComponent {
   private testService = inject(TestService);
   private questionService = inject(QuestionService);
   private destroyRef = inject(DestroyRef);
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private formBuilder = inject(FormBuilder);
-  private questionIds: number[] = [];
 
   public get questions(): FormArray<FormGroup<IQuestionForm>> {
     return this.formGroup.controls.questions;
@@ -73,12 +71,12 @@ export class TestEditComponent {
           .getOne(params['id'])
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            switchMap(() => this.testService.entity$)
+            switchMap(() => this.testService.entity$.pipe(filter((test) => test !== null)))
           )
           .subscribe((test) => {
             this.test = test;
             this.formGroup?.controls.name.setValue(test.name);
-            this.formGroup?.controls.description.setValue(test.description);
+            this.formGroup?.controls.description.setValue(test.description || '');
             this.cdr.markForCheck();
             console.warn('asd');
             this.testService.getQuestions(test.id).subscribe();
@@ -126,20 +124,40 @@ export class TestEditComponent {
   public addQuestion(): void {
     this.questions.push(this.createQuestionForm());
     if (this.isEdit) {
-      this.testService.addQuestions(this.test.id, {}).subscribe();
+      this.testService.addQuestions(this.test.id, {}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
     }
   }
 
   public addAnswer(formGroup: FormGroup<IQuestionForm>): void {
     formGroup.controls.answers.push(this.createAnswerForm());
+    this.questionService
+      .addAnswer(formGroup.controls.id.value!, {})
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        tap((answer) => {
+          this.testService.testQuestions$.next(
+            this.testService.testQuestions$.value.map((q) => {
+              // if (q.id === answer.)
+              return q;
+            })
+          );
+        })
+      )
+      .subscribe();
   }
 
-  public removeAnswer(form: FormArray<FormGroup<IAnswerForm>>, formIndex: number): void {
-    form.removeAt(formIndex);
+  public removeAnswer(
+    form: FormGroup<IAnswerForm>,
+    formIndex: number,
+    formArray: FormArray<FormGroup<IAnswerForm>>
+  ): void {
+    if (form.controls.id.value) {
+      this.questionService.removeAnswer('questionID', form.controls.id.value!);
+    }
   }
 
   public removeQuestion(formIndex: number, form: FormGroup<IQuestionForm>): void {
-    if (form.controls.id) {
+    if (form.controls.id.value) {
       this.questionService
         .remove(form.controls.id.value!)
         .pipe(takeUntilDestroyed(this.destroyRef))

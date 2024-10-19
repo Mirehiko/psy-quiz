@@ -47,7 +47,7 @@
                   <label for="name{{ answerIndex }}">name:</label>
                   <input id="name{{ answerIndex }}" type="text" formControlName="name" />
                 </div>
-                <button class="remove" (click)="removeAnswer(questionForm.controls.answers, answerIndex)">x</button>
+                <button class="remove" (click)="removeAnswer(answerForm, answerIndex, questionForm.controls.answers)">x</button>
               </div>
 
               <div>

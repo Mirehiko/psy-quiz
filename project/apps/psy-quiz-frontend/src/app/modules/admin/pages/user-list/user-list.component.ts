@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnDestroy, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { UserResponseDto } from '@common/dto';
 import { SocketIoService, UserService } from '@services';
 import { Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from '../../../auth';
@@ -10,7 +11,7 @@ import { AuthService } from '../../../auth';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent {
-  public users: any[] = [];
+  public users: UserResponseDto[] = [];
   private userService = inject(UserService);
   private socketIoService = inject(SocketIoService);
   private destroyRef = inject(DestroyRef);

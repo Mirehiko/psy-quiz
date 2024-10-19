@@ -1,14 +1,16 @@
 import { Injectable, inject } from '@angular/core';
+import { QuestionResponseDto, TestResponseDto } from '@shared/dto';
+import { IResponse } from '@shared/interfaces';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { TestRestService } from '../rest';
 import { BaseService } from './base.service';
 
 @Injectable()
-export class TestService extends BaseService {
+export class TestService extends BaseService<TestResponseDto> {
   protected api = inject(TestRestService);
-  public testQuestions$ = new BehaviorSubject<any[]>([]);
+  public testQuestions$ = new BehaviorSubject<QuestionResponseDto[]>([]);
 
-  public getQuestions(id: number): Observable<any> {
+  public getQuestions(id: string): Observable<IResponse<QuestionResponseDto[]>> {
     return this.api.getQuestions(id).pipe(
       tap((questions) => {
         this.testQuestions$.next(questions.data);
@@ -16,7 +18,7 @@ export class TestService extends BaseService {
     );
   }
 
-  public addQuestions(id: number, requestDto: any): Observable<any> {
+  public addQuestions(id: string, requestDto: any): Observable<IResponse<QuestionResponseDto>> {
     return this.api.addQuestion(id, requestDto).pipe(
       tap((question) => {
         this.testQuestions$.next([...this.testQuestions$.value, question.data]);

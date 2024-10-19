@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { IExtendedUserOnlineStatus } from '@shared/interfaces';
 import { Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { API_SOCKET_TOKEN } from '../api-token';
@@ -36,7 +37,7 @@ export class SocketIoService {
     this.socket?.emit('onlineStatus', { userId });
   }
 
-  public getOnlineStatus(): Observable<any> {
+  public getOnlineStatus(): Observable<IExtendedUserOnlineStatus> {
     return new Observable((observer) => {
       this.socket?.on('onlineStatus', (status) => {
         observer.next(status);

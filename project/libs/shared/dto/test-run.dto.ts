@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
 import { IUser } from '../../common';
-import { ITestRun, ITestRunRequestDto, ITestRunResponseDto } from '../interfaces/i-test-run';
+import { ITestRun, ITestRunRequestDto, ITestRunResponseDto } from '../interfaces';
 
 export class TestRunRequestDto implements ITestRunRequestDto {
   // @IsString()
@@ -17,10 +17,14 @@ export class TestRunRequestDto implements ITestRunRequestDto {
 }
 
 export class TestRunResponseDto implements ITestRunResponseDto {
+  id: string;
   name: string;
   description: string;
   user: IUser;
   test: ITestRun;
   startDate: Date;
   endDate: Date;
+  userId: string;
+  testId: string;
+  createdAt: Date;
 }

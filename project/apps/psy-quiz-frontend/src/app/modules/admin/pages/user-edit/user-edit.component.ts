@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@services';
-import { switchMap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'admin-user-edit',
@@ -46,7 +46,7 @@ export class UserEditComponent {
           .getOne(params['id'])
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            switchMap(() => this.userService.entity$)
+            switchMap(() => this.userService.entity$.pipe(filter((user) => user !== null)))
           )
           .subscribe((user) => {
             this.user = user;
