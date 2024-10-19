@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TestResponseDto } from '@shared/dto';
 import { TestService } from '../../services/test.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { TestService } from '../../services/test.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestListComponent {
-  public tests: any[] = [];
+  public tests: TestResponseDto[] = [];
   private testService = inject(TestService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
@@ -20,7 +21,6 @@ export class TestListComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((tests) => {
         this.tests = tests.data;
-        console.warn(tests);
         this.cdr.markForCheck();
       });
   }

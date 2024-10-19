@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth';
 import { RunService, TestService } from '@services';
+import { TestResponseDto } from '@shared/dto';
 import { TestStore } from '@store';
 import { filter, map, switchMap, tap } from 'rxjs';
 
@@ -13,7 +14,7 @@ import { filter, map, switchMap, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestDetailsComponent {
-  public test: any;
+  public test: TestResponseDto;
   private testService = inject(TestService);
   private testStore = inject(TestStore);
   private runService = inject(RunService);
@@ -35,10 +36,15 @@ export class TestDetailsComponent {
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {});
-    this.testStore.entity$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entity) => {
-      this.test = entity;
-      this.cdr.markForCheck();
-    });
+    this.testStore.entity$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((test) => test !== undefined)
+      )
+      .subscribe((test) => {
+        this.test = test;
+        this.cdr.markForCheck();
+      });
   }
 
   public startTest(): void {

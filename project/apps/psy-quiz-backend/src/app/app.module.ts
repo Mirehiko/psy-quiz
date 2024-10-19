@@ -12,7 +12,6 @@ import { UserModule } from './modules/common/user/user.module';
 import { CriterionModule } from './modules/quiz/criterion/criterion.module';
 import { QuestionModule } from './modules/quiz/question/question.module';
 import { QuestionAnswerModule } from './modules/quiz/question_answer/question-answer.module';
-import { QuestionTypeModule } from './modules/quiz/question_type/question-type.module';
 import { RunAnswerModule } from './modules/quiz/run_answer/run-answer.module';
 import { ScaleModule } from './modules/quiz/scale/scale.module';
 import { ScaleAnswerModule } from './modules/quiz/scale_answer/scale-answer.module';
@@ -44,7 +43,6 @@ import { TestRunModule } from './modules/quiz/test_run/test-run.module';
     CriterionModule,
     QuestionModule,
     QuestionAnswerModule,
-    QuestionTypeModule,
     RunAnswerModule,
     ScaleModule,
     ScaleAnswerModule,

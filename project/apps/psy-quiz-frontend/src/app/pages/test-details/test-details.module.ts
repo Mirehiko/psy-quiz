@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { QuestionCardModule } from '@components';
 import { RunComponent } from '@pages/run/run.component';
 import { TestDetailsComponent } from './test-details.component';
 
@@ -9,6 +10,7 @@ import { TestDetailsComponent } from './test-details.component';
   declarations: [TestDetailsComponent, RunComponent],
   imports: [
     CommonModule,
+    QuestionCardModule,
     RouterModule.forChild([
       {
         path: '',

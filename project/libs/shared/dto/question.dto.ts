@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
+import { QuestionType } from '../enums';
 import { IQuestion, IQuestionAnswer, IQuestionType } from '../interfaces';
 import { QuestionAnswerResponseDto } from './question-answer.dto';
 
@@ -13,7 +14,7 @@ export class QuestionRequestDto implements IQuestion {
   description: string;
 
   @IsOptional()
-  answerType: IQuestionType;
+  answerType: QuestionType;
 
   @IsOptional()
   @IsString()
@@ -33,7 +34,7 @@ export class QuestionResponseDto implements IQuestion {
   @Expose()
   description?: string;
   @Expose()
-  answerType: IQuestionType;
+  answerType: QuestionType;
   @Expose()
   answers?: QuestionAnswerResponseDto[];
   @Expose()

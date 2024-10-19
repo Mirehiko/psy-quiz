@@ -1,9 +1,8 @@
 <aside></aside>
 <main>
   <h1>{{ test.name }}</h1>
-  questions
-  <div *ngFor="let question of questions">
-    {{question | json}}
+  <div class="question-list">
+    <question-card *ngFor="let question of questions" [question]="question"></question-card>
   </div>
 </main>
 <aside></aside>

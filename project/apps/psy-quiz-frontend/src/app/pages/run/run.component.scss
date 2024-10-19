@@ -6,3 +6,8 @@
 main {
   width: 960px;
 }
+.question-list {
+  display: grid;
+  grid-column: 1;
+  gap: 8px;
+}

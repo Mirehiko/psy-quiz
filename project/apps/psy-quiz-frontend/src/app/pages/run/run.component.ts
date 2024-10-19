@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { QuestionService, RunService, TestService } from '@services';
+import { RunService, TestService } from '@services';
+import { QuestionResponseDto, TestResponseDto } from '@shared/dto';
 import { QuestionStore, RunStore, TestStore } from '@store';
 import { filter, map, switchMap } from 'rxjs';
 
@@ -20,8 +21,8 @@ export class RunComponent {
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
-  public test: any;
-  public questions: any[] = [];
+  public test: TestResponseDto;
+  public questions: QuestionResponseDto[] = [];
 
   constructor() {
     this.route.params
@@ -38,15 +39,18 @@ export class RunComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {});
 
-    this.testStore.entity$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entity) => {
-      this.test = entity;
-      console.warn(entity);
-      this.cdr.markForCheck();
-    });
+    this.testStore.entity$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((test) => test !== undefined)
+      )
+      .subscribe((test) => {
+        this.test = test;
+        this.cdr.markForCheck();
+      });
 
-    this.questionStore.entities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entities) => {
-      this.questions = entities;
-      console.warn(entities);
+    this.questionStore.entities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((questions) => {
+      this.questions = questions;
       this.cdr.markForCheck();
     });
   }

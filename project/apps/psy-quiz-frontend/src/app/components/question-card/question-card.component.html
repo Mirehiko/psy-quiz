@@ -1,0 +1,17 @@
+<div class="question-header">
+  <div>{{question.name}}</div>
+  <div>{{question.description}}</div>
+</div>
+<div class="question-body">
+  <div *ngFor="let answer of question.answers" class="answer">
+    <form class="answer-body">
+      <ng-container *ngIf="question.answerType === questionType.Textarea">
+        <textarea></textarea>
+      </ng-container>
+      <ng-container *ngIf="question.answerType !== questionType.Textarea">
+        <input type="{{question.answerType}}" name="{{question.id}}">
+      </ng-container>
+    </form>
+    <div class="answer-header">{{answer.name}}</div>
+  </div>
+</div>

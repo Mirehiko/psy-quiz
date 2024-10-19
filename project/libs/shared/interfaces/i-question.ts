@@ -1,10 +1,10 @@
-import { IQuestionType } from './i-question-type';
+import { QuestionType } from '../enums';
 
 export interface IQuestion {
   id?: string;
   name?: string;
   description?: string;
-  answerType?: IQuestionType;
+  answerType?: QuestionType;
   answers?: IQuestion[];
   free_answer?: string;
 }
