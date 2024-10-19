@@ -2,19 +2,15 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class InitialMigration1728289238743 implements MigrationInterface {
   name = 'InitialMigration1728289238743';
-
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE "run_answer_entity" ("id" SERIAL NOT NULL, "questionId" character varying(150) NOT NULL, "answer" character varying(500) NOT NULL, "userId" text NOT NULL, "runId" integer, CONSTRAINT "PK_4e2981fc403d9a43494d24a61e8" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "question_answer_entity" ("id" SERIAL NOT NULL, "name" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, "createdById" text NOT NULL, "questionId" integer, CONSTRAINT "PK_2f213a195cc88605a4e1ee253b7" PRIMARY KEY ("id"))`
+      `CREATE TABLE "question_answer_entity" ("id" SERIAL NOT NULL, "name" character varying(150) NOT NULL, "description" character varying(500), "createdById" text NOT NULL, "questionId" integer, CONSTRAINT "PK_2f213a195cc88605a4e1ee253b7" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "question_type_entity" ("id" SERIAL NOT NULL, "name" character varying(150) NOT NULL, "description" character varying(500), CONSTRAINT "PK_12a317bc9999d909d53774659aa" PRIMARY KEY ("id"))`
-    );
-    await queryRunner.query(
-      `CREATE TABLE "question_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150), "description" character varying(500), "free_answer" text, "createdById" text NOT NULL, "answerTypeId" integer, "testId" integer, CONSTRAINT "PK_14a0a509f33d8cd3a96a448dcd7" PRIMARY KEY ("id"))`
+      `CREATE TABLE "question_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150), "description" character varying(500), "answerType" "public"."question_entity_answertype_enum" NOT NULL DEFAULT 'checkbox', "free_answer" text, "createdById" text NOT NULL, "test" integer, CONSTRAINT "PK_14a0a509f33d8cd3a96a448dcd7" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "criterion_entity" ("id" SERIAL NOT NULL, "minScore" integer NOT NULL, "maxScore" integer NOT NULL, "name" text NOT NULL, "description" text, "createdById" text NOT NULL, "scaleId" integer, CONSTRAINT "PK_aeafbfbdcdb8d59a057a8334c9b" PRIMARY KEY ("id"))`
@@ -40,7 +36,6 @@ export class InitialMigration1728289238743 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TABLE "role_entity" ("id" SERIAL NOT NULL, "name" character varying(50) NOT NULL, "displayName" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, CONSTRAINT "PK_7bc1bd2364b6e9bf7c84b1e52e2" PRIMARY KEY ("id"))`
     );
-    await queryRunner.query(`CREATE TYPE "public"."user_entity_status_enum" AS ENUM('pending', 'active')`);
     await queryRunner.query(
       `CREATE TABLE "user_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150) NOT NULL, "email" character varying(150) NOT NULL, "password" character varying(150) NOT NULL, "avatar" text, "suspendedAt" TIMESTAMP, "status" "public"."user_entity_status_enum" NOT NULL DEFAULT 'pending', "suspendReason" text, CONSTRAINT "PK_b54f8ea623b17094db7667d8206" PRIMARY KEY ("id"))`
     );
@@ -72,13 +67,10 @@ export class InitialMigration1728289238743 implements MigrationInterface {
       `ALTER TABLE "run_answer_entity" ADD CONSTRAINT "FK_fd80db538ea8ac4bd1d4f00b7de" FOREIGN KEY ("runId") REFERENCES "test_run_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE "question_answer_entity" ADD CONSTRAINT "FK_cd30ea1c3bdbfb0ab5cbc1e236f" FOREIGN KEY ("questionId") REFERENCES "question_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE "question_answer_entity" ADD CONSTRAINT "FK_cd30ea1c3bdbfb0ab5cbc1e236f" FOREIGN KEY ("questionId") REFERENCES "question_entity"("id") ON DELETE CASCADE ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE "question_entity" ADD CONSTRAINT "FK_0b891cb2719bf0496e52c41062a" FOREIGN KEY ("answerTypeId") REFERENCES "question_type_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "question_entity" ADD CONSTRAINT "FK_7005feb36a900e918086cee045d" FOREIGN KEY ("testId") REFERENCES "test_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE "question_entity" ADD CONSTRAINT "FK_d75e0decada4543b2c424e4ef45" FOREIGN KEY ("test") REFERENCES "test_entity"("id") ON DELETE CASCADE ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE "criterion_entity" ADD CONSTRAINT "FK_e157edc67d5599bb231589ee33a" FOREIGN KEY ("scaleId") REFERENCES "scale_entity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
@@ -131,8 +123,7 @@ export class InitialMigration1728289238743 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "scale_entity" DROP CONSTRAINT "FK_31cc64eb49d782729f35a6f46b4"`);
     await queryRunner.query(`ALTER TABLE "scale_answer_entity" DROP CONSTRAINT "FK_1115a2d042718c68ea5ea5726fb"`);
     await queryRunner.query(`ALTER TABLE "criterion_entity" DROP CONSTRAINT "FK_e157edc67d5599bb231589ee33a"`);
-    await queryRunner.query(`ALTER TABLE "question_entity" DROP CONSTRAINT "FK_7005feb36a900e918086cee045d"`);
-    await queryRunner.query(`ALTER TABLE "question_entity" DROP CONSTRAINT "FK_0b891cb2719bf0496e52c41062a"`);
+    await queryRunner.query(`ALTER TABLE "question_entity" DROP CONSTRAINT "FK_d75e0decada4543b2c424e4ef45"`);
     await queryRunner.query(`ALTER TABLE "question_answer_entity" DROP CONSTRAINT "FK_cd30ea1c3bdbfb0ab5cbc1e236f"`);
     await queryRunner.query(`ALTER TABLE "run_answer_entity" DROP CONSTRAINT "FK_fd80db538ea8ac4bd1d4f00b7de"`);
     await queryRunner.query(`DROP INDEX "public"."IDX_63f06698e4071b610eca2da812"`);
@@ -144,7 +135,6 @@ export class InitialMigration1728289238743 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "profile_entity"`);
     await queryRunner.query(`DROP TABLE "user_token"`);
     await queryRunner.query(`DROP TABLE "user_entity"`);
-    await queryRunner.query(`DROP TYPE "public"."user_entity_status_enum"`);
     await queryRunner.query(`DROP TABLE "role_entity"`);
     await queryRunner.query(`DROP TABLE "permission_entity"`);
     await queryRunner.query(`DROP TABLE "connected_user_entity"`);
@@ -154,7 +144,6 @@ export class InitialMigration1728289238743 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "scale_answer_entity"`);
     await queryRunner.query(`DROP TABLE "criterion_entity"`);
     await queryRunner.query(`DROP TABLE "question_entity"`);
-    await queryRunner.query(`DROP TABLE "question_type_entity"`);
     await queryRunner.query(`DROP TABLE "question_answer_entity"`);
     await queryRunner.query(`DROP TABLE "run_answer_entity"`);
   }

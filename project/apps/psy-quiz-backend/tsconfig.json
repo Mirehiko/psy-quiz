@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "ts-node": {
+    // Do not forget to `npm i -D tsconfig-paths`
+    "require": ["tsconfig-paths/register"]
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"
@@ -18,7 +22,7 @@
       "@common/*": ["libs/common/*"],
       "@shared/interfaces": ["libs/shared/interfaces/index.ts"],
       "@shared/dto": ["libs/shared/dto/index.ts"],
-      "@shared/*": ["libs/shared/*"],
+      "@shared/*": ["libs/shared/*"]
     }
   }
 }
