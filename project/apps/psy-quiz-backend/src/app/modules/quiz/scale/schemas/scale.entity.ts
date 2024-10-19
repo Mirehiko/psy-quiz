@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IScale } from '@shared/interfaces';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { UserEntity } from '../../../common/user/schemas/user.entity';
 import { CriterionEntity } from '../../criterion/schemas/criterion.entity';
-import { IScale } from '../../dto/scale.dto';
 import { ScaleAnswerEntity } from '../../scale_answer/schemas/scale-answer.entity';
 import { TestEntity } from '../../test/schemas/test.entity';
 

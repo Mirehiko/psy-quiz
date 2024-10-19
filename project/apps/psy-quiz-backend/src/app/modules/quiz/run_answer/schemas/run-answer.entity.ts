@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IRunAnswer } from '@shared/interfaces';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IRunAnswer } from '../../interfaces/i-run-answer';
 import { TestRunEntity } from '../../test_run/schemas/test-run.entity';
 
 @Entity()

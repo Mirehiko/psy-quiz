@@ -12,13 +12,17 @@ import {
   UseInterceptors,
   UsePipes
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  QuestionAnswerRequestDto,
+  QuestionAnswerResponseDto,
+  QuestionRequestDto,
+  QuestionResponseDto
+} from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-import { QuestionRequestDto, QuestionResponseDto } from '../dto/question.dto';
-import { TestRequestDto, TestResponseDto } from '../dto/test.dto';
 import { QuestionService } from './question.service';
 
 @ApiTags('Вопросы')
@@ -63,5 +67,37 @@ export class QuestionController {
   @Delete('question/:id')
   async delete(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('question/:id/answer')
+  async addAnswer(
+    @Param('id') id: string,
+    @Body() requestDto: QuestionAnswerRequestDto,
+    @Req() request
+  ): Promise<QuestionAnswerResponseDto> {
+    console.warn(id, requestDto);
+    const entity = await this.service.addAnswer(id, requestDto, request.user);
+    return plainToInstance(QuestionAnswerResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Delete('question/:id/answer/:answerId')
+  async removeAnswer(@Param('id') id: string, @Param('answerId') answerId: string): Promise<any> {
+    return await this.service.removeAnswer(id, answerId);
+    // return plainToInstance(QuestionResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @ApiOperation({ summary: 'Возвращает варианты ответов на вопрос' })
+  @ApiResponse({
+    status: 200,
+    type: QuestionAnswerResponseDto
+  })
+  @Get('question/:id/answers')
+  async getAnswers(@Param('id') id: string): Promise<QuestionAnswerResponseDto[]> {
+    const question = await this.service.getBy({ params: { id }, withRelations: true }, ['answers']);
+    return plainToInstance(QuestionAnswerResponseDto, question.answers, { enableCircularCheck: true });
   }
 }

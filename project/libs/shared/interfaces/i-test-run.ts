@@ -1,4 +1,4 @@
-import { IUser } from '../../common/user/schemas/user.entity';
+import { IUser } from '../../common';
 
 export interface ITestRun {
   // name: string;

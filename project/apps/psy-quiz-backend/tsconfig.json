@@ -11,6 +11,14 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@common/interfaces": ["libs/common/interfaces/index.ts"],
+      "@common/dto": ["libs/common/dto/index.ts"],
+      "@common/*": ["libs/common/*"],
+      "@shared/interfaces": ["libs/shared/interfaces/index.ts"],
+      "@shared/dto": ["libs/shared/dto/index.ts"],
+      "@shared/*": ["libs/shared/*"],
+    }
   }
 }

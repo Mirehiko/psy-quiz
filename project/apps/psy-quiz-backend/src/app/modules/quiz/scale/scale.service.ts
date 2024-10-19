@@ -1,10 +1,10 @@
+import { IUserGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ScaleRequestDto } from '@shared/dto';
 import { Repository } from 'typeorm';
-import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
-import { ScaleRequestDto } from '../dto/scale.dto';
 import { ScaleEntity } from './schemas/scale.entity';
 
 @Injectable()

@@ -1,3 +1,4 @@
+import { AuthResponseDto, AuthUserDto, ChangePasswordDto, ForgotPasswordDto, UserRequestDto } from '@common/dto';
 import {
   BadRequestException,
   HttpException,
@@ -10,7 +11,6 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { SignOptions } from 'jsonwebtoken';
 import moment from 'moment';
-import { AuthResponseDto, AuthUserDto, ChangePasswordDto, ForgotPasswordDto, UserRequestDto } from '../../../shared';
 import { CreateUserTokenDto } from '../token/dto';
 import { TokenService } from '../token/token.service';
 import { UserEntity } from '../user/schemas/user.entity';

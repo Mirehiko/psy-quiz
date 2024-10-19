@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { RunAnswerRequestDto, RunAnswerResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-import { RunAnswerRequestDto, RunAnswerResponseDto } from '../dto/run-answer.dto';
 import { RunAnswerService } from './run-answer.service';
 
 @ApiTags('Ответ на тест')

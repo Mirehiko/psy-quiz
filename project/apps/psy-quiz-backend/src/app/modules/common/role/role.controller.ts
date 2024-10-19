@@ -1,3 +1,5 @@
+import { RoleRequestDto, RoleResponseDto } from '@common/dto';
+import { IGetParamsData } from '@common/interfaces';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -15,7 +17,6 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { IGetParamsData, RoleRequestDto, RoleResponseDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { RoleService } from './role.service';

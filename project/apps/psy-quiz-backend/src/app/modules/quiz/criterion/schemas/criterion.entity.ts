@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ICriterion } from '@shared/interfaces';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ICriterion } from '../../interfaces/i-criterion';
 import { ScaleEntity } from '../../scale/schemas/scale.entity';
 
 @Entity()

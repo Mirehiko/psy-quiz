@@ -1,6 +1,5 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { ICriterion } from '../interfaces/i-criterion';
-import { IScale } from '../interfaces/i-scale';
+import { ICriterion, IScale } from '../interfaces';
 
 export class CriterionRequestDto implements ICriterion {
   @IsNumber()

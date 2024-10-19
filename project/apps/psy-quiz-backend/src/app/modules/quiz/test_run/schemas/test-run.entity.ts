@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ITestRun } from '@shared/interfaces';
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
-import { ITestRun } from '../../interfaces/i-test-run';
 import { RunAnswerEntity } from '../../run_answer/schemas/run-answer.entity';
 import { TestEntity } from '../../test/schemas/test.entity';
 

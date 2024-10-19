@@ -1,7 +1,7 @@
+import { RequestObjectWithId } from '@common/dto/objectWithId';
+import { IGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Param } from '@nestjs/common';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { IGetParamsData } from '../../shared';
-import { RequestObjectWithId } from '../../shared/common/dto/objectWithId';
 
 export abstract class BaseService<T extends RequestObjectWithId, U extends IGetParamsData> {
   protected repository: Repository<T>;

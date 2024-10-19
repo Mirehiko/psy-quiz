@@ -1,11 +1,10 @@
+import { IUserGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QuestionRequestDto, TestRequestDto } from '@shared/dto';
 import { Repository } from 'typeorm';
-import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
-import { QuestionRequestDto } from '../dto/question.dto';
-import { TestRequestDto } from '../dto/test.dto';
 import { QuestionEntity } from '../question/schemas/question.entity';
 import { TestEntity } from './schemas/test.entity';
 

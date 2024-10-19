@@ -1,4 +1,4 @@
-import { IGetParams, IGetParamsData } from '.';
+import { IGetParams, IGetParamsData } from './index';
 
 export interface IUserGetParamsData extends IGetParamsData {
   params: IUserGetParams;

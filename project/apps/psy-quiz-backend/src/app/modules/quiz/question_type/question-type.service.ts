@@ -1,7 +1,7 @@
+import { IUserGetParamsData } from '@common/interfaces';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { QuestionTypeEntity } from './schemas/question-type.entity';
 

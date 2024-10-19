@@ -1,10 +1,10 @@
+import { PermissionRequestDto, PermissionResponseDto } from '@common/dto';
+import { IGetParamsData } from '@common/interfaces';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import { IGetParamsData, PermissionRequestDto, PermissionResponseDto } from '../../../shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Roles } from '../auth/roles-auth.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { PermissionService } from './permission.service';
 import { PermissionEntity } from './schemas/permission.entity';

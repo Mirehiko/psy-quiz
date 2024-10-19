@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ScaleAnswerRequestDto, ScaleAnswerResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-import { ScaleAnswerRequestDto, ScaleAnswerResponseDto } from '../dto/scale-answer.dto';
 import { ScaleAnswerService } from './scale-answer.service';
 
 @ApiTags('Ответы по шкале оценки')

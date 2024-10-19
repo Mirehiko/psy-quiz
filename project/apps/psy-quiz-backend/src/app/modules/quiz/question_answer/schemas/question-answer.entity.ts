@@ -13,7 +13,7 @@ export class QuestionAnswerEntity {
   name: string = '';
 
   @ApiProperty({ example: 'This test...', description: 'Описание ответа' })
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   description: string;
 
   @ManyToOne(() => QuestionEntity, (question) => question.answers)

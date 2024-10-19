@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IQuestion } from '@shared/interfaces';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/base-entity';
-import { IQuestion } from '../../interfaces/i-question';
 import { QuestionAnswerEntity } from '../../question_answer/schemas/question-answer.entity';
 import { QuestionTypeEntity } from '../../question_type/schemas/question-type.entity';
 import { TestEntity } from '../../test/schemas/test.entity';

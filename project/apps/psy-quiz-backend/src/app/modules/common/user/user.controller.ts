@@ -1,3 +1,5 @@
+import { BanUserDto, UserRequestDto, UserResponseDto, UserRolesDto } from '@common/dto';
+import { IUserGetParamsData } from '@common/interfaces';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -18,11 +20,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
-import { BanUserDto, IUserGetParamsData, UserRequestDto, UserResponseDto, UserRolesDto } from '../../../shared';
-import { TestResponseDto } from '../../quiz/dto/test.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Roles } from '../auth/roles-auth.decorator';
-import { RolesGuard } from '../auth/roles.guard';
 import { UserEntity } from './schemas/user.entity';
 import { UserService } from './user.service';
 

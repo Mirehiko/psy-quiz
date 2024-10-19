@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { IUser } from '../../common/user/schemas/user.entity';
+import { IUser } from '../../common';
 import { ITestRun, ITestRunRequestDto, ITestRunResponseDto } from '../interfaces/i-test-run';
 
 export class TestRunRequestDto implements ITestRunRequestDto {

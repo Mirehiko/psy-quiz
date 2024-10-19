@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QuestionRequestDto } from '@shared/dto';
 import { Repository } from 'typeorm';
 import { IUserGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
-import { QuestionRequestDto } from '../dto/question.dto';
 import { QuestionAnswerEntity } from './schemas/question-answer.entity';
 
 @Injectable()

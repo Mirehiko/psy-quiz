@@ -11,7 +11,6 @@ import {
   WebSocketServer,
   WsResponse
 } from '@nestjs/websockets';
-import { Observable, of } from 'rxjs';
 import { Server, Socket } from 'socket.io';
 import { UserService } from '../user/user.service';
 import { ConnectedUserService } from './connected-user.service';

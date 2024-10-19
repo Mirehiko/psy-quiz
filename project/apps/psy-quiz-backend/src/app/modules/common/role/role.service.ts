@@ -1,7 +1,8 @@
+import { RoleRequestDto } from '@common/dto';
+import { IGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Inject, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IGetParamsData, RoleRequestDto } from '../../../shared';
 import { BaseService } from '../base-service';
 import { PermissionService } from '../permission/permission.service';
 import { RoleEntity } from './schemas/role.entity';

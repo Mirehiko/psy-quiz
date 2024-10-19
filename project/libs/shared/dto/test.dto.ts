@@ -1,9 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
-import { IUser } from '../../common/user/schemas/user.entity';
-import { IQuestion } from '../interfaces/i-question';
-import { IScale } from '../interfaces/i-scale';
-import { ITest } from '../interfaces/i-test';
-import { ITestRun } from '../interfaces/i-test-run';
+import { IUser } from '../../common';
+import { IQuestion, IScale, ITest, ITestRun } from '../interfaces';
 
 export class TestRequestDto implements ITest {
   @IsString()

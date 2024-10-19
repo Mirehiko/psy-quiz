@@ -22,11 +22,11 @@ import {
   WebSocketGateway,
   WebSocketServer
 } from '@nestjs/websockets';
+import { TestRunRequestDto, TestRunResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
 import { Server, Socket } from 'socket.io';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-import { TestRunRequestDto, TestRunResponseDto } from '../dto/test-run.dto';
 import { TestRunService } from './test-run.service';
 
 @ApiTags('Прохождение теста')

@@ -1,4 +1,4 @@
-import { UserResponseDto } from '../../../shared';
+import { UserResponseDto } from '@common/dto';
 import { UserEntity } from './schemas/user.entity';
 
 export class UserHelper {

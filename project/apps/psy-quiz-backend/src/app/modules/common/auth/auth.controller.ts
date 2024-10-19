@@ -1,4 +1,12 @@
 import {
+  AuthResponseDto,
+  AuthUserDto,
+  ChangePasswordDto,
+  ForgotPasswordDto,
+  UserRequestDto,
+  UserResponseDto
+} from '@common/dto';
+import {
   Body,
   ClassSerializerInterceptor,
   Controller,
@@ -12,14 +20,6 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
-import {
-  AuthResponseDto,
-  AuthUserDto,
-  ChangePasswordDto,
-  ForgotPasswordDto,
-  UserRequestDto,
-  UserResponseDto
-} from '../../../shared';
 import { UserEntity } from '../user/schemas/user.entity';
 import { AuthService } from './auth.service';
 

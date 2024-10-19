@@ -1,10 +1,11 @@
+import { IQuestionGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QuestionAnswerRequestDto, QuestionRequestDto } from '@shared/dto';
 import { Repository } from 'typeorm';
-import { IQuestionGetParamsData } from '../../../shared';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
-import { QuestionRequestDto } from '../dto/question.dto';
+import { QuestionAnswerEntity } from '../question_answer/schemas/question-answer.entity';
 import { QuestionEntity } from './schemas/question.entity';
 
 @Injectable()
@@ -14,7 +15,9 @@ export class QuestionService extends BaseService<QuestionEntity, IQuestionGetPar
 
   constructor(
     @InjectRepository(QuestionEntity)
-    protected repository: Repository<QuestionEntity>
+    protected repository: Repository<QuestionEntity>,
+    @InjectRepository(QuestionAnswerEntity)
+    protected answerRepository: Repository<QuestionAnswerEntity>
   ) {
     super();
   }
@@ -47,5 +50,29 @@ export class QuestionService extends BaseService<QuestionEntity, IQuestionGetPar
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  async addAnswer(
+    questionId: string,
+    requestDto: QuestionAnswerRequestDto,
+    user: UserEntity
+  ): Promise<QuestionAnswerEntity> {
+    const question = await this.repository.findOne({ where: { id: questionId }, relations: ['answers'] });
+    const answer = await this.answerRepository.create({ ...requestDto, question: question, createdById: user.id });
+    await this.answerRepository.save(answer);
+    if (question.answers?.length) {
+      question.answers.push(answer);
+    } else {
+      question.answers = [answer];
+    }
+    await this.repository.save(question);
+
+    return answer;
+  }
+
+  async removeAnswer(questionId: string, answerId: string): Promise<any> {
+    const question = await this.repository.findOne({ where: { id: questionId }, relations: ['answers'] });
+    question.answers = question.answers.filter((answer) => answer.id === answerId);
+    await this.repository.save(question);
   }
 }

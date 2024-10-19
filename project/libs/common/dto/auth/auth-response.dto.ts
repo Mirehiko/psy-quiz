@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { UserResponseDto } from '../user/user-response.dto';
+import { UserResponseDto } from '../user';
 
 export class AuthResponseDto {
   @IsNotEmpty()

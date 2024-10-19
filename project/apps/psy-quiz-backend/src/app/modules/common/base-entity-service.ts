@@ -1,6 +1,6 @@
+import { IGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Param } from '@nestjs/common';
 import { FindOneOptions, FindOperator, In, IsNull, Not, Repository } from 'typeorm';
-import { IGetParamsData } from '../../shared';
 import { BaseEntity } from './base-entity';
 import { BaseService } from './base-service';
 

@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { CriterionRequestDto, CriterionResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
-import { CriterionRequestDto, CriterionResponseDto } from '../dto/criterion.dto';
 import { CriterionService } from './criterion.service';
 
 @ApiTags('Критерии оценки')

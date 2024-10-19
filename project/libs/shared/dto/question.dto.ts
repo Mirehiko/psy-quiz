@@ -1,7 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
-import { IQuestion } from '../interfaces/i-question';
-import { IQuestionType } from '../interfaces/i-question-type';
+import { IQuestion, IQuestionType } from '../interfaces';
 
 export class QuestionRequestDto implements IQuestion {
   @IsOptional()

@@ -1,6 +1,6 @@
 import { IsArray, IsEmail, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 import { RequestObjectWithId } from '../objectWithId';
-import { RoleRequestDto } from '../role/role-request-dto';
+import { RoleRequestDto } from '../role';
 
 export class UserRequestDto implements RequestObjectWithId {
   @IsOptional()
