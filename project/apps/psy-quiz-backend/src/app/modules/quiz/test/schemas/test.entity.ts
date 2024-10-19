@@ -20,16 +20,16 @@ export class TestEntity extends BaseEntity {
   picture: string;
 
   @ApiProperty({ example: '', description: 'Вопросы' })
-  @OneToMany(() => QuestionEntity, (question) => question.test)
+  @OneToMany(() => QuestionEntity, (question) => question.test, { onDelete: 'CASCADE' })
   @JoinColumn()
   questions: QuestionEntity[];
 
   @ApiProperty({ example: '', description: 'Шкалы оценивания' })
-  @OneToMany(() => ScaleEntity, (scale) => scale.test)
+  @OneToMany(() => ScaleEntity, (scale) => scale.test, { onDelete: 'CASCADE' })
   scales: ScaleEntity[];
 
   @ApiProperty({ example: '', description: 'Ответы' })
-  @OneToMany(() => TestRunEntity, (run) => run.test)
+  @OneToMany(() => TestRunEntity, (run) => run.test, { onDelete: 'CASCADE' })
   runs: TestRunEntity[];
 
   @ApiProperty({ example: '', description: '' })

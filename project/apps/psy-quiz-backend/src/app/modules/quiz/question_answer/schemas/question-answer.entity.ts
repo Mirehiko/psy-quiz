@@ -16,7 +16,7 @@ export class QuestionAnswerEntity {
   @Column({ length: 500, nullable: true })
   description: string;
 
-  @ManyToOne(() => QuestionEntity, (question) => question.answers)
+  @ManyToOne(() => QuestionEntity, (question) => question.answers, { onDelete: 'CASCADE' })
   @JoinColumn()
   question: QuestionEntity;
 

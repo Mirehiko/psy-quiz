@@ -16,18 +16,18 @@ export class QuestionEntity extends BaseEntity implements IQuestion {
   @Column({ length: 500, nullable: true })
   description: string;
 
-  @ManyToOne(() => QuestionTypeEntity, (test) => test.questions)
+  @ManyToOne(() => QuestionTypeEntity, (test) => test.questions, { onDelete: 'SET NULL' })
   answerType: QuestionTypeEntity;
 
   @ApiProperty({ example: '', description: 'Варианты ответов' })
-  @OneToMany(() => QuestionAnswerEntity, (answer) => answer.question)
+  @OneToMany(() => QuestionAnswerEntity, (answer) => answer.question, { onDelete: 'CASCADE' })
   answers: QuestionAnswerEntity[];
 
   @ApiProperty({ example: '', description: 'Поле для произвольного ответа' })
   @Column('text', { nullable: true })
   free_answer: string;
 
-  @ManyToOne(() => TestEntity, (test) => test.questions)
+  @ManyToOne(() => TestEntity, (test) => test.questions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'test' })
   test: string;
 
