@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnDestroy, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '@auth';
 import { UserResponseDto } from '@common/dto';
 import { SocketIoService, UserService } from '@services';
+import { UserStore } from '@store';
 import { Observable, switchMap, tap } from 'rxjs';
-import { AuthService } from '../../../auth';
 
 @Component({
   selector: 'admin-user-list',
@@ -13,6 +14,7 @@ import { AuthService } from '../../../auth';
 export class UserListComponent {
   public users: UserResponseDto[] = [];
   private userService = inject(UserService);
+  private userStore = inject(UserStore);
   private socketIoService = inject(SocketIoService);
   private destroyRef = inject(DestroyRef);
   private authService = inject(AuthService);
@@ -22,7 +24,7 @@ export class UserListComponent {
     this.wrapInDestroyRef(
       this.userService.getAll().pipe(
         tap(() => this.subscribeOnOnlineStatuses()),
-        switchMap(() => this.userService.entities$)
+        switchMap(() => this.userStore.entities$)
       )
     ).subscribe((users) => {
       this.users = users;
@@ -36,7 +38,7 @@ export class UserListComponent {
 
   private subscribeOnOnlineStatuses(): void {
     this.wrapInDestroyRef(this.socketIoService.getOnlineStatus()).subscribe((status) => {
-      let updatedUsers = this.userService.entities$.value.map((user) => {
+      let updatedUsers = this.userStore.entities$.value.map((user) => {
         if (user.id === status.userId) {
           user.onlineStatus = status.status;
         }
@@ -51,7 +53,7 @@ export class UserListComponent {
           return user;
         });
       });
-      this.userService.entities$.next(updatedUsers);
+      // this.userService.entities$.next(updatedUsers);
       this.cdr.markForCheck();
     });
     this.socketIoService.setUpOnlineStatus(this.authService.user$.value?.id);

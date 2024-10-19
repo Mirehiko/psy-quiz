@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NavigationModule } from '@components';
+import { QuestionRestService, RunRestService, TestRestService, UserRestService } from '@rest';
 import { QuestionService, RunService, TestService, UserService } from '@services';
-import { QuestionRestService, RunRestService, TestRestService, UserRestService } from '../../rest';
+import { QuestionStore, RunStore, TestStore, UserStore } from '@store';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 
@@ -12,12 +13,16 @@ import { AdminComponent } from './admin.component';
   providers: [
     TestService,
     TestRestService,
+    TestStore,
     UserService,
     UserRestService,
+    UserStore,
     RunRestService,
     RunService,
+    RunStore,
     QuestionRestService,
-    QuestionService
+    QuestionService,
+    QuestionStore
   ]
 })
 export class AdminModule {}

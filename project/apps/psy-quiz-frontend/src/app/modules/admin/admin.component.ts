@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { AuthService } from '@auth';
 import { switchMap } from 'rxjs';
-import { AuthService } from '../auth';
 
 @Component({
   selector: 'admin',

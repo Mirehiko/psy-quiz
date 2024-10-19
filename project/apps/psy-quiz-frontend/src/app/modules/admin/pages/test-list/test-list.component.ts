@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inje
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TestService } from '@services';
 import { TestResponseDto } from '@shared/dto';
+import { TestStore } from '@store';
 
 @Component({
   selector: 'admin-test-list',
@@ -12,11 +13,12 @@ import { TestResponseDto } from '@shared/dto';
 export class TestListComponent {
   public tests: TestResponseDto[] = [];
   private testService = inject(TestService);
+  private testStore = inject(TestStore);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
 
   constructor() {
-    this.testService.entities$.subscribe((tests) => {
+    this.testStore.entities$.subscribe((tests) => {
       this.tests = tests;
       this.cdr.markForCheck();
     });

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@auth';
 import { RunService, TestService } from '@services';
+import { TestStore } from '@store';
 import { filter, map, switchMap, tap } from 'rxjs';
-import { AuthService } from '../../modules';
 
 @Component({
   selector: 'app-test-details',
@@ -14,6 +15,7 @@ import { AuthService } from '../../modules';
 export class TestDetailsComponent {
   public test: any;
   private testService = inject(TestService);
+  private testStore = inject(TestStore);
   private runService = inject(RunService);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
@@ -33,7 +35,7 @@ export class TestDetailsComponent {
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {});
-    this.testService.entity$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entity) => {
+    this.testStore.entity$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entity) => {
       this.test = entity;
       this.cdr.markForCheck();
     });

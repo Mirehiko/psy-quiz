@@ -3,12 +3,14 @@ import { QuestionAnswerResponseDto, QuestionResponseDto } from '@shared/dto';
 import { IResponse } from '@shared/interfaces';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { QuestionRestService } from '../rest';
+import { QuestionStore } from '../store';
 import { BaseService } from './base.service';
 
 @Injectable()
 export class QuestionService extends BaseService<QuestionResponseDto> {
-  protected api = inject(QuestionRestService);
   public answers$ = new BehaviorSubject<QuestionAnswerResponseDto[]>([]);
+  protected api = inject(QuestionRestService);
+  protected store = inject(QuestionStore);
 
   public addAnswer(questionId: string, requestDto: any): Observable<IResponse<QuestionAnswerResponseDto>> {
     return this.api.addAnswer(questionId, requestDto).pipe(

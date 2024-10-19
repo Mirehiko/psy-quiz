@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RunService, TestService, UserService } from '@services';
+import { RunStore, TestStore, UserStore } from '@store';
 import { filter, switchMap } from 'rxjs';
 
 @Component({
@@ -16,8 +17,11 @@ export class RunEditComponent {
   public isEdit = false;
   public run: any | undefined = undefined;
   private runService = inject(RunService);
+  private runStore = inject(RunStore);
   private testService = inject(TestService);
+  private testStore = inject(TestStore);
   private userService = inject(UserService);
+  private userStore = inject(UserStore);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -43,7 +47,7 @@ export class RunEditComponent {
           .pipe(
             takeUntilDestroyed(this.destroyRef),
             filter((test) => test !== null),
-            switchMap(() => this.runService.entity$.pipe(filter((run) => run !== null)))
+            switchMap(() => this.runStore.entity$.pipe(filter((run) => run !== undefined)))
           )
           .subscribe((run) => {
             this.run = run;
@@ -58,12 +62,12 @@ export class RunEditComponent {
       }
     });
 
-    this.testService.entities$.subscribe((tests) => {
+    this.testStore.entities$.subscribe((tests) => {
       this.tests = tests;
       this.cdr.markForCheck();
     });
 
-    this.userService.entities$.subscribe((users) => {
+    this.userStore.entities$.subscribe((users) => {
       this.users = users;
       this.cdr.markForCheck();
     });

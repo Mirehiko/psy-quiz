@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inje
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService, RunService, TestService } from '@services';
+import { TestStore } from '@store';
 import { filter, map, switchMap } from 'rxjs';
 
 @Component({
@@ -12,6 +13,7 @@ import { filter, map, switchMap } from 'rxjs';
 })
 export class RunComponent {
   private testService = inject(TestService);
+  private testStore = inject(TestStore);
   private runService = inject(RunService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
@@ -34,7 +36,7 @@ export class RunComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {});
 
-    this.testService.entity$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entity) => {
+    this.testStore.entity$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((entity) => {
       this.test = entity;
       console.warn(entity);
       this.cdr.markForCheck();

@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService, TestService } from '@services';
+import { TestStore } from '@store';
 import { filter, switchMap, tap } from 'rxjs';
 
 interface IAnswerForm {
@@ -43,6 +44,7 @@ export class TestEditComponent {
     }
   ];
   private testService = inject(TestService);
+  private testStore = inject(TestStore);
   private questionService = inject(QuestionService);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
@@ -71,14 +73,13 @@ export class TestEditComponent {
           .getOne(params['id'])
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            switchMap(() => this.testService.entity$.pipe(filter((test) => test !== null)))
+            switchMap(() => this.testStore.entity$.pipe(filter((test) => test !== undefined)))
           )
           .subscribe((test) => {
             this.test = test;
             this.formGroup?.controls.name.setValue(test.name);
             this.formGroup?.controls.description.setValue(test.description || '');
             this.cdr.markForCheck();
-            console.warn('asd');
             this.testService.getQuestions(test.id).subscribe();
           });
         this.testService.testQuestions$.subscribe((questions) => {

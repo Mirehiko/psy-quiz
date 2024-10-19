@@ -4,11 +4,6 @@ import { Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { API_SOCKET_TOKEN } from '../api-token';
 
-enum OnlineStatus {
-  Online = 'Online',
-  Offline = 'Offline'
-}
-
 @Injectable()
 export class SocketIoService {
   public socket: Socket | undefined;
