@@ -15,11 +15,11 @@ export abstract class BaseService<T extends { id?: string }> {
     return this.api.getOne(id).pipe(tap((entity) => this.store.select(entity.data)));
   }
 
-  public update(id: string, requestDto: any): Observable<IResponse<T>> {
+  public update<requestDto>(id: string, requestDto: requestDto): Observable<IResponse<T>> {
     return this.api.update(id, requestDto).pipe(tap((entity) => this.store.update(id, entity.data)));
   }
 
-  public create(requestDto: any): Observable<IResponse<T>> {
+  public create<requestDto>(requestDto: requestDto): Observable<IResponse<T>> {
     return this.api.create(requestDto).pipe(tap((entity) => this.store.add([entity.data])));
   }
 

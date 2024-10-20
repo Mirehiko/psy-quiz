@@ -40,4 +40,8 @@ export class QuestionCardComponent {
       );
     });
   }
+
+  sendAnswer($event: Event) {
+    console.warn($event);
+  }
 }

@@ -25,7 +25,6 @@ export class QuestionService extends BaseService<QuestionEntity, IQuestionGetPar
   async create(requestDto: QuestionRequestDto, user: UserEntity): Promise<QuestionEntity> {
     try {
       const newQuestion = await this.repository.create({ ...requestDto, createdById: user.id });
-      console.warn(requestDto);
       await this.repository.save(newQuestion);
       return newQuestion; // 201
     } catch (e) {
@@ -41,7 +40,7 @@ export class QuestionService extends BaseService<QuestionEntity, IQuestionGetPar
 
     question.name = requestDto.name ? requestDto.name : question.name;
     question.description = requestDto.description ? requestDto.description : question.description;
-    // question.answerType = requestDto.answerType ? requestDto.answerType : question.answerType;
+    question.answerType = requestDto.answerType ? requestDto.answerType : question.answerType;
     question.free_answer = requestDto.free_answer ? requestDto.free_answer : question.free_answer;
 
     try {

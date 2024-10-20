@@ -3,7 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService, TestService } from '@services';
-import { QuestionAnswerResponseDto, QuestionResponseDto } from '@shared/dto';
+import { QuestionAnswerResponseDto, QuestionRequestDto, QuestionResponseDto } from '@shared/dto';
+import { QuestionType } from '@shared/enums';
 import { QuestionStore, TestStore } from '@store';
 import { filter, switchMap, tap } from 'rxjs';
 
@@ -17,7 +18,7 @@ interface IQuestionForm {
   id: FormControl<string | undefined | null>;
   questionName: FormControl<string | null>;
   description: FormControl<string | null>;
-  answerType: FormControl<number | null>;
+  answerType: FormControl<QuestionType | null>;
   freeAnswer: FormControl<string | null>;
   answers: FormArray<FormGroup<IAnswerForm>>;
 }
@@ -27,6 +28,21 @@ interface ITestForm {
   description: FormControl<string | null>;
   questions: FormArray<FormGroup<IQuestionForm>>;
 }
+
+const QUESTION_TYPE_STRING = [
+  {
+    type: QuestionType.Radio,
+    name: 'Один из списка'
+  },
+  {
+    type: QuestionType.Textarea,
+    name: 'Ввод текста'
+  },
+  {
+    type: QuestionType.Checkbox,
+    name: 'Несколько из списка'
+  }
+];
 
 @Component({
   selector: 'admin-test-edit',
@@ -38,12 +54,8 @@ export class TestEditComponent {
   public formGroup: FormGroup<ITestForm>;
   public isEdit = false;
   public test: any | undefined = undefined;
-  public questionTypes = [
-    {
-      id: 0,
-      name: 'asd'
-    }
-  ];
+  public questionTypeString = QUESTION_TYPE_STRING;
+  public questionType = QuestionType;
   private testService = inject(TestService);
   private testStore = inject(TestStore);
   private questionStore = inject(QuestionStore);
@@ -195,7 +207,7 @@ export class TestEditComponent {
   private createQuestionForm(question?: QuestionResponseDto): FormGroup<IQuestionForm> {
     const name: string = question?.name!;
     const description: string = question?.description!;
-    const answerType: number = question?.answerType as unknown as number;
+    const answerType: QuestionType = question?.answerType!;
     const free_answer: string = question?.free_answer!;
     let answers = this.formBuilder.array<FormGroup<IAnswerForm>>([]);
     question?.answers?.forEach((answer) => {
@@ -205,7 +217,7 @@ export class TestEditComponent {
       id: this.formBuilder.control<string | undefined>(question?.id),
       questionName: this.formBuilder.control<string>(name || ''),
       description: this.formBuilder.control<string>(description || ''),
-      answerType: this.formBuilder.control<number>(answerType || 0),
+      answerType: this.formBuilder.control<QuestionType>(answerType || 0),
       freeAnswer: this.formBuilder.control<string>(free_answer || ''),
       answers: answers
     });
@@ -227,11 +239,11 @@ export class TestEditComponent {
 
   public questionChanged(questionForm: FormGroup<IQuestionForm>): void {
     this.questionService
-      .update(questionForm.controls.id.value!, {
+      .update<QuestionRequestDto>(questionForm.controls.id.value!, {
         name: questionForm.controls.questionName.value!,
         description: questionForm.controls.description.value!,
         answerType: questionForm.controls.answerType.value!,
-        freeAnswer: questionForm.controls.freeAnswer.value!
+        free_answer: questionForm.controls.freeAnswer.value!
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {

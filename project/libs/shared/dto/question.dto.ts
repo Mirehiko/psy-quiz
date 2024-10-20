@@ -19,10 +19,6 @@ export class QuestionRequestDto implements IQuestion {
   @IsOptional()
   @IsString()
   free_answer: string;
-
-  @IsOptional()
-  @IsString()
-  testId: string;
 }
 
 @Exclude()

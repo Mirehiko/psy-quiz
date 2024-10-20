@@ -77,6 +77,7 @@ export class QuestionController {
     @Body() requestDto: QuestionAnswerRequestDto,
     @Req() request
   ): Promise<QuestionAnswerResponseDto> {
+    console.warn(requestDto);
     const entity = await this.service.addAnswer(id, requestDto, request.user);
     return plainToInstance(QuestionAnswerResponseDto, entity, { enableCircularCheck: true });
   }

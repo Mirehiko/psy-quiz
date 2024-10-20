@@ -28,7 +28,6 @@ export class RunComponent {
     this.route.params
       .pipe(
         filter((params) => {
-          console.warn(params);
           return params['testId'];
         }),
         map((params) => params['testId']),

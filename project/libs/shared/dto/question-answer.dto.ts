@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { IQuestion, IQuestionAnswer } from '../interfaces';
+import { IQuestionAnswer } from '../interfaces';
 import { QuestionResponseDto } from './question.dto';
 
 export class QuestionAnswerRequestDto implements IQuestionAnswer {
@@ -21,6 +21,4 @@ export class QuestionAnswerResponseDto implements IQuestionAnswer {
   @IsOptional()
   @IsString()
   description?: string;
-
-  question: QuestionResponseDto;
 }

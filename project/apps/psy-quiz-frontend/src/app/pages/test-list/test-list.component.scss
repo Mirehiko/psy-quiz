@@ -9,8 +9,9 @@ main {
 .cards {
   display: grid;
   gap: 8px;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 33.333333% 33.333333% 33.333333%;
   card {
-    width: auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 }

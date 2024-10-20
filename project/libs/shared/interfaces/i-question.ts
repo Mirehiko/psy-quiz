@@ -4,7 +4,6 @@ export interface IQuestion {
   id?: string;
   name?: string;
   description?: string;
-  answerType?: QuestionType;
-  answers?: IQuestion[];
+  answerType: QuestionType;
   free_answer?: string;
 }

@@ -22,11 +22,11 @@ export abstract class BaseRestService<T> {
     return from(this.http.get<IResponse<T>>(`${this.baseUrl}/${this.apiUrl}/${id}`));
   }
 
-  public create(requestDto: any): Observable<IResponse<T>> {
+  public create<requestDto>(requestDto: requestDto): Observable<IResponse<T>> {
     return from(this.http.post<IResponse<T>>(`${this.baseUrl}/${this.apiUrl}`, requestDto));
   }
 
-  public update(id: string, requestDto: any): Observable<IResponse<T>> {
+  public update<requestDto>(id: string, requestDto: requestDto): Observable<IResponse<T>> {
     return from(this.http.patch<IResponse<T>>(`${this.baseUrl}/${this.apiUrl}/${id}`, requestDto));
   }
 
