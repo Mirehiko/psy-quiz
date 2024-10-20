@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
 import { QuestionEntity } from '../question/schemas/question.entity';
+import { TestRunEntity } from '../test_run/schemas/test-run.entity';
 import { TestEntity } from './schemas/test.entity';
 
 @Injectable()
@@ -17,7 +18,9 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
     @InjectRepository(TestEntity)
     protected repository: Repository<TestEntity>,
     @InjectRepository(QuestionEntity)
-    protected questionRepo: Repository<QuestionEntity>
+    protected questionRepo: Repository<QuestionEntity>,
+    @InjectRepository(TestRunEntity)
+    protected runRepo: Repository<TestRunEntity>
   ) {
     super();
   }
@@ -60,5 +63,10 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
     await this.repository.save(test);
 
     return question;
+  }
+
+  async getActiveRun(testId: string, user: UserEntity): Promise<TestRunEntity | undefined> {
+    const test = await this.repository.findOne({ where: { id: testId }, relations: ['runs'] });
+    return test.runs.find((run) => run.userId === user.id.toString() && run.isFinished === false);
   }
 }

@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { QuestionCardModule } from '@components';
-import { RunComponent } from '@pages/run/run.component';
+import { RunComponent } from '../run';
+import { RunResultsComponent } from '../run-results';
 import { TestDetailsComponent } from './test-details.component';
 
 @NgModule({
-  declarations: [TestDetailsComponent, RunComponent],
+  declarations: [TestDetailsComponent, RunComponent, RunResultsComponent],
   imports: [
     CommonModule,
     QuestionCardModule,
@@ -20,6 +20,10 @@ import { TestDetailsComponent } from './test-details.component';
       {
         path: 'run/:runId',
         component: RunComponent
+      },
+      {
+        path: 'run/:runId/results',
+        component: RunResultsComponent
       },
       {
         path: '**',

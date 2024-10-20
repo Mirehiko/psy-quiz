@@ -31,4 +31,7 @@ export class TestRunEntity extends BaseEntity implements ITestRun {
   @CreateDateColumn({ type: 'timestamptz' })
   // @CreateDateColumn({ type: 'datetime' })
   endDate: Date;
+
+  @Column('boolean', { nullable: false, default: false })
+  isFinished: boolean;
 }

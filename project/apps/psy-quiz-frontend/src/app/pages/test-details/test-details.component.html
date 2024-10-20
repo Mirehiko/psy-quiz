@@ -5,8 +5,8 @@
     <div>{{test.description}}</div>
 
     <div>
-      <button (click)="startTest()">Начать</button>
-      <button (click)="continueTest()">Продолжить</button>
+      <button *ngIf="!run" (click)="startTest()">Начать</button>
+      <button *ngIf="run" (click)="continueTest()">Продолжить</button>
     </div>
   </ng-container>
 </main>

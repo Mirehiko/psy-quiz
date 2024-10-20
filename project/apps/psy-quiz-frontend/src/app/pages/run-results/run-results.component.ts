@@ -1,32 +1,28 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { RunService, TestService } from '@services';
-import { QuestionResponseDto, TestResponseDto, TestRunResponseDto } from '@shared/dto';
-import { QuestionStore, RunStore, TestStore } from '@store';
+import { TestResponseDto, TestRunResponseDto } from '@shared/dto';
+import { RunStore, TestStore } from '@store';
 import { filter, map, switchMap, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-run',
-  templateUrl: './run.component.html',
-  styleUrls: ['./run.component.scss'],
+  selector: 'run-results',
+  templateUrl: './run-results.component.html',
+  styleUrls: ['./run-results.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RunComponent {
+export class RunResultsComponent {
   public test: TestResponseDto;
-  public questions: QuestionResponseDto[] = [];
   public run: TestRunResponseDto;
-  public isAllAnswered: boolean = false;
-  private runId: string;
   private testService = inject(TestService);
   private testStore = inject(TestStore);
-  private questionStore = inject(QuestionStore);
   private runService = inject(RunService);
   private runStore = inject(RunStore);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private runId: string;
 
   constructor() {
     this.route.params
@@ -56,7 +52,6 @@ export class RunComponent {
           )
           .subscribe((run) => {
             this.run = run;
-            this.isAllAnswered = this.run.answers?.length === this.questions.length;
             this.cdr.markForCheck();
           });
       });
@@ -69,20 +64,6 @@ export class RunComponent {
       .subscribe((test) => {
         this.test = test;
         this.cdr.markForCheck();
-      });
-
-    this.questionStore.entities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((questions) => {
-      this.questions = questions;
-      this.cdr.markForCheck();
-    });
-  }
-
-  public finish(): void {
-    this.runService
-      .finish(this.runId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.router.navigate(['results'], { relativeTo: this.route });
       });
   }
 }

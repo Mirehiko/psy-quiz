@@ -12,7 +12,14 @@ export abstract class BaseService<T extends { id?: string }> {
   }
 
   public getOne(id: string): Observable<IResponse<T>> {
-    return this.api.getOne(id).pipe(tap((entity) => this.store.select(entity.data)));
+    return this.api.getOne(id).pipe(
+      tap((entity) => {
+        if (this.store.entities$.value.filter((e) => e.id !== entity.data.id)) {
+          this.store.add([entity.data]);
+        }
+        this.store.select(entity.data);
+      })
+    );
   }
 
   public update<requestDto>(id: string, requestDto: requestDto): Observable<IResponse<T>> {

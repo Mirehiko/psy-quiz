@@ -1,8 +1,10 @@
 <aside></aside>
 <main>
   <h1 *ngIf="test">{{ test.name }}</h1>
-  <div class="question-list">
-    <question-card *ngFor="let question of questions" [question]="question"></question-card>
+  <div *ngIf="run" class="question-list">
+    <question-card *ngFor="let question of questions" [question]="question" [run]="run"></question-card>
   </div>
+  <div><button *ngIf="isAllAnswered && !run?.isFinished" (click)="finish()">Закончить</button></div>
+  <div><button *ngIf="run?.isFinished" routerLink="results">Результаты</button></div>
 </main>
 <aside></aside>

@@ -22,7 +22,7 @@ import {
   WebSocketGateway,
   WebSocketServer
 } from '@nestjs/websockets';
-import { TestRunRequestDto, TestRunResponseDto } from '@shared/dto';
+import { RunAnswerRequestDto, RunAnswerResponseDto, TestRunRequestDto, TestRunResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
 import { Server, Socket } from 'socket.io';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
@@ -47,7 +47,7 @@ export class TestRunController implements OnGatewayInit, OnGatewayConnection, On
   // @UseGuards(JwtAuthGuard)
   @Get('test-run/list')
   async getAll(): Promise<TestRunResponseDto[]> {
-    const entities = await this.service.getAll();
+    const entities = await this.service.getAll(['answers']);
     return plainToInstance(TestRunResponseDto, entities, { enableCircularCheck: true });
   }
 
@@ -62,14 +62,14 @@ export class TestRunController implements OnGatewayInit, OnGatewayConnection, On
   @UseGuards(JwtAuthGuard)
   @Get('test-run/:id')
   async getById(@Param('id') id: string): Promise<TestRunResponseDto> {
-    const entity = await this.service.getByID(id);
+    const entity = await this.service.getByID(id, ['answers']);
     return plainToInstance(TestRunResponseDto, entity, { enableCircularCheck: true });
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('test-run/:id')
   async update(@Body() requestDto: TestRunRequestDto, @Param() id: string): Promise<TestRunResponseDto> {
-    const entity = await this.service.getByID(id);
+    const entity = await this.service.getByID(id, ['answers']);
     return plainToInstance(TestRunResponseDto, entity, { enableCircularCheck: true });
   }
 
@@ -93,6 +93,19 @@ export class TestRunController implements OnGatewayInit, OnGatewayConnection, On
   @Delete('test-run/:id')
   async delete(@Param('id') id: string): Promise<any> {
     return await this.service.delete([id]);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('test-run/:id/answer')
+  async addAnswer(
+    @Param('id') id: string,
+    @Body() requestDto: RunAnswerRequestDto,
+    @Req() request
+  ): Promise<RunAnswerResponseDto> {
+    const entity = await this.service.addAnswer(id, requestDto, request.user);
+    console.warn(entity);
+    return plainToInstance(RunAnswerResponseDto, entity, { enableCircularCheck: true });
   }
 
   afterInit(server: Server) {

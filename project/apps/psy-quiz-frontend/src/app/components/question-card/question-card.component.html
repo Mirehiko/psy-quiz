@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="form">
   <div class="question-header">
     <div>{{question.name}}</div>
     <div>{{question.description}}</div>
@@ -7,13 +7,19 @@
     <div *ngFor="let answer of question.answers" class="answer">
       <div class="answer-body">
         <ng-container *ngIf="question.answerType === questionType.Textarea">
-          <textarea></textarea>
+          <textarea [disabled]="_run.isFinished" [formControl]="form.controls.value" (change)="sendAnswer(answer)"></textarea>
         </ng-container>
         <ng-container *ngIf="question.answerType !== questionType.Textarea">
-          <input type="{{question.answerType}}" name="{{question.id}}" (change)="sendAnswer($event)">
+          <input id="{{question.id}}{{answer.id}}"
+                 type="{{question.answerType}}"
+                 name="{{question.id}}{{answer.id}}"
+                 [disabled]="_run.isFinished"
+                 [value]="answer.id"
+                 [checked]="answer.id == form.controls.value.value"
+                 [formControl]="form.controls.value" (change)="sendAnswer(answer)">
         </ng-container>
       </div>
-      <div class="answer-header">{{answer.name}}</div>
+      <label for="{{question.id}}{{answer.id}}" class="answer-header">{{answer.name}}</label>
     </div>
   </div>
 </form>

@@ -19,6 +19,7 @@ import { TransformInterceptor } from '../../../interceptors/transform.intercepto
 import { ValidationPipe } from '../../../pipes/validation.pipe';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
 import { QuestionService } from '../question/question.service';
+import { TestRunEntity } from '../test_run/schemas/test-run.entity';
 import { TestService } from './test.service';
 
 @ApiTags('Test')
@@ -48,6 +49,14 @@ export class TestController {
   async getById(@Param('id') id: string): Promise<TestResponseDto> {
     const entity = await this.service.getByID(id);
     return plainToInstance(TestResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('test/:id/active-run')
+  async getActiveRun(@Param('id') id: string, @Req() request): Promise<TestRunEntity> {
+    const run = await this.service.getActiveRun(id, request.user);
+    return plainToInstance(TestRunEntity, run, { enableCircularCheck: true });
   }
 
   // @ApiOperation({ summary: 'Модифицирует тест по его идентификатору' })

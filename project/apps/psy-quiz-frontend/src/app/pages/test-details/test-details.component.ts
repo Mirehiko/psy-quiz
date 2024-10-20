@@ -3,8 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth';
 import { RunService, TestService } from '@services';
-import { TestResponseDto } from '@shared/dto';
-import { TestStore } from '@store';
+import { TestResponseDto, TestRunResponseDto } from '@shared/dto';
+import { RunStore, TestStore } from '@store';
 import { filter, map, switchMap, tap } from 'rxjs';
 
 @Component({
@@ -15,8 +15,10 @@ import { filter, map, switchMap, tap } from 'rxjs';
 })
 export class TestDetailsComponent {
   public test: TestResponseDto;
+  public run: TestRunResponseDto | undefined = undefined;
   private testService = inject(TestService);
   private testStore = inject(TestStore);
+  private runStore = inject(RunStore);
   private runService = inject(RunService);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
@@ -28,21 +30,30 @@ export class TestDetailsComponent {
     this.route.params
       .pipe(
         filter((params) => {
-          console.warn(params);
           return params['testId'];
         }),
         map((params) => params['testId']),
-        switchMap((testId) => this.testService.getOne(testId))
+        takeUntilDestroyed(this.destroyRef),
+        switchMap((testId) =>
+          this.testService.getOne(testId).pipe(
+            switchMap(() => this.testStore.entity$),
+            takeUntilDestroyed(this.destroyRef)
+          )
+        )
+      )
+      .pipe(
+        filter((test) => test !== undefined),
+        tap((test) => {
+          this.test = test;
+          console.warn(test.id);
+          this.cdr.markForCheck();
+        }),
+        takeUntilDestroyed(this.destroyRef),
+        switchMap((test) => this.testService.getActiveRun(test.id).pipe(switchMap(() => this.runStore.entity$)))
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {});
-    this.testStore.entity$
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        filter((test) => test !== undefined)
-      )
-      .subscribe((test) => {
-        this.test = test;
+      .subscribe((run) => {
+        this.run = run;
         this.cdr.markForCheck();
       });
   }
@@ -61,11 +72,11 @@ export class TestDetailsComponent {
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.router.navigate(['run', runId]);
+        this.router.navigate(['run', runId], { relativeTo: this.route });
       });
   }
 
   public continueTest(): void {
-    this.router.navigate(['run', 2], { relativeTo: this.route });
+    this.router.navigate(['run', this.run?.id], { relativeTo: this.route });
   }
 }

@@ -1,6 +1,8 @@
-import { Component, Input, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { QuestionResponseDto } from '@shared/dto';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { RunService } from '@services';
+import { QuestionAnswerResponseDto, QuestionResponseDto, TestRunResponseDto } from '@shared/dto';
 import { QuestionType } from '@shared/enums';
 
 interface IAnswerForm {
@@ -11,37 +13,52 @@ interface IAnswerForm {
 @Component({
   selector: 'question-card',
   templateUrl: './question-card.component.html',
-  styleUrls: ['./question-card.component.scss']
+  styleUrls: ['./question-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionCardComponent {
+  @Input() public set run(run: TestRunResponseDto) {
+    this._run = run;
+    const currentAnswerId = run.answers?.find((a) => a.questionId === this._question.id.toString());
+
+    if (currentAnswerId) {
+      this.form.controls.value.setValue(currentAnswerId.answer);
+    }
+    if (run.isFinished) {
+      this.form.disable();
+    }
+    this.cdr.markForCheck();
+  }
   @Input() public set question(question: QuestionResponseDto) {
     this._question = question;
     this.initForm(question);
+    debugger;
   }
+
   public get question(): QuestionResponseDto {
     return this._question;
   }
 
   public questionType = QuestionType;
-  public formArray: FormArray<FormGroup<IAnswerForm>>;
+  public form: FormGroup<IAnswerForm>;
+  public _run: TestRunResponseDto;
   private _question: QuestionResponseDto;
   private formBuilder = inject(FormBuilder);
+  private runService = inject(RunService);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
 
-  public setAnswer(formGroup: FormGroup<IAnswerForm>) {}
-
-  private initForm(question: QuestionResponseDto) {
-    this.formArray = this.formBuilder.array<FormGroup<IAnswerForm>>([]);
-    question.answers?.forEach((answer) => {
-      this.formArray.push(
-        this.formBuilder.group<IAnswerForm>({
-          id: this.formBuilder.control<string | undefined>(answer?.id),
-          value: this.formBuilder.control<string | null>(null)
-        })
-      );
-    });
+  public sendAnswer(answer: QuestionAnswerResponseDto): void {
+    this.runService
+      .sendAnswer(this._run.id, { questionId: this._question.id.toString()!, answer: answer.id.toString()! })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 
-  sendAnswer($event: Event) {
-    console.warn($event);
+  private initForm(question: QuestionResponseDto) {
+    this.form = this.formBuilder.group<IAnswerForm>({
+      id: this.formBuilder.control<string>(question.id.toString()),
+      value: this.formBuilder.control<string | null>(null)
+    });
   }
 }

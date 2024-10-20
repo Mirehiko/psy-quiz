@@ -1,10 +1,12 @@
 import { IUserGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TestRunRequestDto } from '@shared/dto';
+import { RunAnswerRequestDto, TestRunRequestDto } from '@shared/dto';
 import { Repository } from 'typeorm';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
+import { RunAnswerEntity } from '../run_answer/schemas/run-answer.entity';
+import { TestEntity } from '../test/schemas/test.entity';
 import { TestRunEntity } from './schemas/test-run.entity';
 
 @Injectable()
@@ -14,14 +16,19 @@ export class TestRunService extends BaseService<TestRunEntity, IUserGetParamsDat
 
   constructor(
     @InjectRepository(TestRunEntity)
-    protected repository: Repository<TestRunEntity>
+    protected repository: Repository<TestRunEntity>,
+    @InjectRepository(TestEntity)
+    protected testEntityRepository: Repository<TestEntity>,
+    @InjectRepository(RunAnswerEntity)
+    protected runAnswerRepository: Repository<RunAnswerEntity>
   ) {
     super();
   }
 
   async create(requestDto: TestRunRequestDto, user: UserEntity): Promise<TestRunEntity> {
     try {
-      const newEntity = await this.repository.create({ ...requestDto, createdById: user.id });
+      const test = await this.testEntityRepository.findOne({ where: { id: requestDto.testId }, relations: ['runs'] });
+      const newEntity = await this.repository.create({ ...requestDto, test, createdById: user.id });
       await this.repository.save(newEntity);
       return newEntity; // 201
     } catch (e) {
@@ -43,6 +50,33 @@ export class TestRunService extends BaseService<TestRunEntity, IUserGetParamsDat
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  async addAnswer(runId: string, requestDto: RunAnswerRequestDto, user: UserEntity): Promise<RunAnswerEntity> {
+    const run = await this.repository.findOne({ where: { id: runId }, relations: ['answers'] });
+    if (!run) {
+    }
+    let answer = run.answers.find((answer) => answer.questionId === requestDto.questionId);
+    let isCreated = false;
+    if (answer) {
+      answer.answer = requestDto.answer;
+    } else {
+      answer = await this.runAnswerRepository.create({ ...requestDto, run: run, userId: user.id });
+      isCreated = true;
+    }
+    await this.runAnswerRepository.save(answer);
+
+    if (isCreated) {
+      if (run.answers?.length) {
+        run.answers.push(answer);
+      } else {
+        run.answers = [answer];
+      }
+    }
+
+    await this.repository.save(run);
+
+    return answer;
   }
 
   async startRun(id: string, user: UserEntity): Promise<TestRunEntity> {
@@ -75,15 +109,16 @@ export class TestRunService extends BaseService<TestRunEntity, IUserGetParamsDat
       throw new HttpException(this.entityNotFoundMessage, HttpStatus.NOT_FOUND);
     }
 
-    if (entity.endDate !== undefined) {
-      return entity; // todo: return error?
-    }
-
-    if (entity.userId !== user.id) {
+    // if (entity.endDate !== undefined) {
+    //   return entity; // todo: return error?
+    // }
+    console.warn(entity);
+    if (entity.userId !== user.id.toString()) {
       return entity;
     }
 
     entity.endDate = new Date();
+    entity.isFinished = true;
 
     try {
       await this.repository.save(entity);

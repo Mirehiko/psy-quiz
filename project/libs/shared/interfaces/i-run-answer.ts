@@ -1,4 +1,5 @@
 export interface IRunAnswer {
-  id: string;
+  id?: string;
   questionId: string;
+  answer: string;
 }

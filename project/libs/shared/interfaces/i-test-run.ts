@@ -6,6 +6,7 @@ export interface ITestRun {
   userId?: string;
   startDate?: Date;
   endDate?: Date;
+  isFinished?: boolean;
 }
 
 export interface ITestRunRequestDto extends ITestRun {
