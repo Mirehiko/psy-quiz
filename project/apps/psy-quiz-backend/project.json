@@ -21,6 +21,22 @@
           "buildTarget": "psy-quiz-backend:build:production"
         }
       }
+    },
+    "serve-functions": {
+      "command": "npx netlify dev"
+    },
+    "deploy-functions": {
+      "dependsOn": [],
+      "command": "npx netlify deploy",
+      "options": {
+        "cwd": "apps/psy-quiz-backend"
+      },
+      "configurations": {
+        "production": {
+          "command": "npx netlify deploy --prod",
+          "cwd": "apps/psy-quiz-backend"
+        }
+      }
     }
   }
 }
