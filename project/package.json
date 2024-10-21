@@ -5,7 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "psy-quiz-backend": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx serve psy-quiz-backend --configuration development",
-    "psy-quiz-backend-build-prod": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx build psy-quiz-backend",
+    "psy-quiz-backend-build-prod": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && npx nx build psy-quiz-backend",
     "psy-quiz-backend-build": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx build psy-quiz-backend --configuration development",
     "psy-quiz-frontend": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx serve psy-quiz-frontend",
     "psy-quiz-frontend-build-prod": "NX_NO_CLOUD=true && NX_SKIP_NX_CACHE=true && nx build psy-quiz-frontend --configuration production",
