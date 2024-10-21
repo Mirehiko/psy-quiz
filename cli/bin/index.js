@@ -14,6 +14,7 @@ DB_USER=postgres
 DB_PASSWORD=postgres
 DB_PORT=5432
 DB_HOST=postgres
+DB_URL="place url here"
 DB_VOLUMES="./db/pgdata:/var/lib/postgresql/data"
 PROXY_PORTS=5432:5432
 
