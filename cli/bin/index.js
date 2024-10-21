@@ -21,10 +21,10 @@ PROXY_PORTS=5432:5432
 SERVER_PORT=5002
 SERVER_PORTS=5002:5002
 SERVER_VOLUMES="./project:/usr/src/app"
-# SERVER_COMMAND="npm run psy-quiz-backend" // for development
+# SERVER_COMMAND="npm run psy-quiz-backend" # for development
 JWT_SECRET="someSecret"
 
-BUILD_TARGET="development" // development | production
+BUILD_TARGET="development" # development | production
 
 #Frontend
 FRONTEND_PORTS=8080:8080

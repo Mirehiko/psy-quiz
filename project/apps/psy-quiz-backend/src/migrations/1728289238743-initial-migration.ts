@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class InitialMigration1728289238743 implements MigrationInterface {
   name = 'InitialMigration1728289238743';
+
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE "run_answer_entity" ("id" SERIAL NOT NULL, "questionId" character varying(150) NOT NULL, "answer" character varying(500) NOT NULL, "userId" text NOT NULL, "runId" integer, CONSTRAINT "PK_4e2981fc403d9a43494d24a61e8" PRIMARY KEY ("id"))`
@@ -25,7 +26,7 @@ export class InitialMigration1728289238743 implements MigrationInterface {
       `CREATE TABLE "test_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150) NOT NULL, "description" character varying(500) DEFAULT '', "picture" text, "createdById" text NOT NULL, CONSTRAINT "PK_cc0413536e3afc0e586996bea40" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "test_run_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "userId" text NOT NULL, "createdById" text NOT NULL, "startDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "endDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "testId" integer, CONSTRAINT "PK_7da84d6eacf84a8b9f2cbe89f7e" PRIMARY KEY ("id"))`
+      `CREATE TABLE "test_run_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "userId" text NOT NULL, "createdById" text NOT NULL, "startDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "endDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "isFinished" boolean NOT NULL DEFAULT false, "testId" integer, CONSTRAINT "PK_7da84d6eacf84a8b9f2cbe89f7e" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "connected_user_entity" ("id" SERIAL NOT NULL, "socketId" character varying NOT NULL, "userId" integer, CONSTRAINT "PK_a903379d19b275c008fa625f0fa" PRIMARY KEY ("id"))`
