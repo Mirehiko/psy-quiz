@@ -5,6 +5,7 @@ import { ScaleRequestDto } from '@shared/dto';
 import { Repository } from 'typeorm';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
+import { TestEntity } from '../test/schemas/test.entity';
 import { ScaleEntity } from './schemas/scale.entity';
 
 @Injectable()
@@ -14,14 +15,17 @@ export class ScaleService extends BaseService<ScaleEntity, IUserGetParamsData> {
 
   constructor(
     @InjectRepository(ScaleEntity)
-    protected repository: Repository<ScaleEntity>
+    protected repository: Repository<ScaleEntity>,
+    @InjectRepository(TestEntity)
+    protected testRepository: Repository<TestEntity>
   ) {
     super();
   }
 
   async create(requestDto: ScaleRequestDto, user: UserEntity): Promise<ScaleEntity> {
     try {
-      const newEntity = await this.repository.create({ ...requestDto, createdById: user.id });
+      const test = await this.testRepository.findOne({ where: { id: requestDto.testId } });
+      const newEntity = await this.repository.create({ ...requestDto, test, createdById: user.id });
       await this.repository.save(newEntity);
       return newEntity; // 201
     } catch (e) {

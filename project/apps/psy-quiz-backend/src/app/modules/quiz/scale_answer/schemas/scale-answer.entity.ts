@@ -16,6 +16,9 @@ export class ScaleAnswerEntity {
   @Column({ type: 'text', nullable: false })
   answer: string;
 
+  // @Column({ type: 'number', default: 0 })
+  // value: number;
+
   @ManyToOne(() => ScaleEntity, (test) => test.answers)
   scale: ScaleEntity;
 

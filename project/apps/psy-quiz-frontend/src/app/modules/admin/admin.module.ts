@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NavigationModule } from '@components';
-import { QuestionRestService, RunRestService, TestRestService, UserRestService } from '@rest';
+import { QuestionRestService, RunRestService, ScaleRestService, TestRestService, UserRestService } from '@rest';
 import { QuestionService, RunService, TestService, UserService } from '@services';
-import { AnswerStore, QuestionStore, RunStore, TestStore, UserStore } from '@store';
+import { ScaleService } from '@services/scale.service';
+import { AnswerStore, QuestionStore, RunStore, ScaleStore, TestStore, UserStore } from '@store';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 
@@ -23,7 +24,10 @@ import { AdminComponent } from './admin.component';
     QuestionRestService,
     QuestionService,
     QuestionStore,
-    AnswerStore
+    AnswerStore,
+    ScaleStore,
+    ScaleRestService,
+    ScaleService
   ]
 })
 export class AdminModule {}

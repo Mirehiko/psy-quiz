@@ -1,0 +1,12 @@
+<app-title title="Шкалы оценивания">
+  <button (click)="addScale()">+</button>
+</app-title>
+
+<div class="row-list">
+  <div *ngFor="let scale of scales" class="row-item">
+    <div class="row-item-content" routerLink="{{scale.id}}">
+      <span>{{ scale.name }}</span>
+    </div>
+    <button (click)="remove(scale.id)">remove</button>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { RunAnswerRequestDto, RunAnswerResponseDto, TestRunResponseDto } from '@shared/dto';
+import { Result } from '@shared/dto/results.dto';
 import { IResponse } from '@shared/interfaces';
 import { Observable, tap } from 'rxjs';
 import { RunRestService } from '../rest';
@@ -23,6 +24,10 @@ export class RunService extends BaseService<TestRunResponseDto> {
         this.store.update(runId, { answers });
       })
     );
+  }
+
+  public getResults(runId: string): Observable<IResponse<Result>> {
+    return this.api.getResults(runId);
   }
 
   public start(id: string): Observable<IResponse<Boolean>> {

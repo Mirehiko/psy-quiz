@@ -55,6 +55,9 @@ export class RunResultsComponent {
             this.cdr.markForCheck();
           });
       });
+    this.runService.getResults(this.runId).subscribe((results) => {
+      console.warn(results);
+    });
 
     this.testStore.entity$
       .pipe(

@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { QuestionResponseDto, TestResponseDto } from '@shared/dto';
+import { QuestionResponseDto, ScaleResponseDto, TestResponseDto } from '@shared/dto';
 import { IResponse } from '@shared/interfaces';
 import { Observable, tap } from 'rxjs';
 import { TestRestService } from '../rest';
-import { QuestionStore, RunStore, TestStore } from '../store';
+import { QuestionStore, RunStore, ScaleStore, TestStore } from '../store';
 import { BaseService } from './base.service';
 
 @Injectable()
@@ -12,6 +12,7 @@ export class TestService extends BaseService<TestResponseDto> {
   protected store = inject(TestStore);
   protected runStore = inject(RunStore);
   protected questionStore = inject(QuestionStore);
+  protected scaleStore = inject(ScaleStore);
 
   public getActiveRun(testId: string) {
     return this.api.getActiveRun(testId).pipe(
@@ -22,6 +23,10 @@ export class TestService extends BaseService<TestResponseDto> {
         }
       })
     );
+  }
+
+  public getScales(id: string): Observable<IResponse<ScaleResponseDto[]>> {
+    return this.api.getScales(id).pipe(tap((scales) => this.scaleStore.add(scales.data)));
   }
 
   public getQuestions(id: string): Observable<IResponse<QuestionResponseDto[]>> {

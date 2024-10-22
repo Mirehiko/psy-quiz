@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RunAnswerRequestDto, RunAnswerResponseDto, TestRunResponseDto } from '@shared/dto';
+import { Result } from '@shared/dto/results.dto';
 import { IResponse } from '@shared/interfaces';
 import { Observable, from } from 'rxjs';
 import { BaseRestService } from './base-rest.service';
@@ -12,6 +13,10 @@ export class RunRestService extends BaseRestService<TestRunResponseDto> {
     return from(
       this.http.post<IResponse<RunAnswerResponseDto>>(`${this.baseUrl}/${this.apiUrl}/${runId}/answer`, requestDto)
     );
+  }
+
+  public getResults(runId: string): Observable<IResponse<Result>> {
+    return from(this.http.get<IResponse<Result>>(`${this.baseUrl}/${this.apiUrl}/${runId}/results`));
   }
 
   public start(id: string): Observable<any> {

@@ -2,6 +2,7 @@ import { IUserGetParamsData } from '@common/interfaces';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RunAnswerRequestDto, TestRunRequestDto } from '@shared/dto';
+import { IResult } from '@shared/interfaces';
 import { Repository } from 'typeorm';
 import { BaseService } from '../../common/base-service';
 import { UserEntity } from '../../common/user/schemas/user.entity';
@@ -126,5 +127,42 @@ export class TestRunService extends BaseService<TestRunEntity, IUserGetParamsDat
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  public async getResults(runId: string, user: UserEntity): Promise<IResult[]> {
+    const run = await this.repository.findOne({ where: { id: runId }, relations: ['answers', 'test'] });
+    let answerMap = new Map<string, string>();
+    run.answers.forEach((answer: RunAnswerEntity) => {
+      answerMap.set(answer.questionId, answer.answer);
+    });
+
+    const test = await this.testEntityRepository.findOne({
+      where: { id: run.test.id },
+      relations: ['scales', 'scales.answers', 'scales.criteria']
+    });
+
+    const results: IResult[] = [];
+
+    test.scales.forEach((scale) => {
+      const result: IResult = {
+        scaleName: scale.name,
+        scaleDescription: scale.description,
+        score: 0
+      };
+      scale.answers.forEach((answer) => {
+        if (answerMap.get(answer.questionId) === answer.answer) {
+          result.score++;
+        }
+      });
+
+      scale.criteria.forEach((criterion) => {
+        if (result.score >= criterion.minScore && result.score <= criterion.maxScore) {
+          result.criterion = criterion;
+        }
+      });
+      results.push(result);
+    });
+
+    return results;
   }
 }

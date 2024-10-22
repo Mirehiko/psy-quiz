@@ -9,3 +9,4 @@ export * from './i-test';
 export * from './i-test-run';
 export * from './i-response';
 export * from './i-user-online-status';
+export * from './i-result';

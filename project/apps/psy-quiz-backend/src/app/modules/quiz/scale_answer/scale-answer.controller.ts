@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ScaleAnswerRequestDto, ScaleAnswerResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
@@ -27,9 +39,17 @@ export class ScaleAnswerController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('scale-answer')
+  async create(@Body() requestDto: ScaleAnswerRequestDto, @Req() request): Promise<ScaleAnswerResponseDto> {
+    const entity = await this.service.create(requestDto, request.user);
+    return plainToInstance(ScaleAnswerResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Patch('scale-answer/:id')
   async update(@Body() requestDto: ScaleAnswerRequestDto, @Param() id: string): Promise<ScaleAnswerResponseDto> {
-    const entity = await this.service.getByID(id);
+    const entity = await this.service.update(id, requestDto);
     return plainToInstance(ScaleAnswerResponseDto, entity, { enableCircularCheck: true });
   }
 

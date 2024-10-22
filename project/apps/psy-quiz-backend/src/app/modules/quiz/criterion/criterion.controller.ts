@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CriterionRequestDto, CriterionResponseDto } from '@shared/dto';
 import { plainToInstance } from 'class-transformer';
@@ -27,10 +39,18 @@ export class CriterionController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('criterion')
+  async create(@Body() requestDto: CriterionRequestDto, @Req() request): Promise<CriterionResponseDto> {
+    const entity = await this.service.create(requestDto, request.user);
+    return plainToInstance(CriterionResponseDto, entity, { enableCircularCheck: true });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Patch('criterion/:id')
   async update(@Body() requestDto: CriterionRequestDto, @Param() id: string): Promise<CriterionResponseDto> {
-    const criterion = await this.service.getByID(id);
-    return plainToInstance(CriterionResponseDto, criterion, { enableCircularCheck: true });
+    const entity = await this.service.update(id, requestDto);
+    return plainToInstance(CriterionResponseDto, entity, { enableCircularCheck: true });
   }
 
   @UseGuards(JwtAuthGuard)

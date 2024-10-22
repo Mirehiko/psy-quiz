@@ -1,0 +1,25 @@
+<app-title title="{{'Update'}} {{form.get('name')?.value}}"></app-title>
+
+<form [formGroup]="form">
+  <div>
+    <label for="name"></label>
+    <input id="name" type="text" placeholder="Название шкалы" formControlName="name" (change)="saveScale()" />
+  </div>
+  <div>
+    <label for="description"></label>
+    <textarea id="description" placeholder="Описание шкалы" formControlName="description" (change)="saveScale()"></textarea>
+  </div>
+</form>
+
+<br>
+
+<nav>
+  <a routerLink="scale-item" routerLinkActive="active">Сопоставление ответов</a>
+  <a routerLink="criteria" routerLinkActive="active">Критерии оценки</a>
+</nav>
+
+<div class="tab-content">
+  <router-outlet></router-outlet>
+</div>
+
+

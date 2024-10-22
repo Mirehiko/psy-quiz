@@ -15,15 +15,15 @@ import { TestEditComponent } from './test-edit.component';
       {
         path: '',
         component: TestEditComponent
+      },
+      {
+        path: 'scales',
+        loadChildren: () => import('../scale-list').then((m) => m.ScaleListModule)
+      },
+      {
+        path: '**',
+        redirectTo: ''
       }
-      // {
-      //   path: 'add',
-      //   loadChildren: () => import('./pages').then((m) => m.UserListModule)
-      // },
-      // {
-      //   path: '**',
-      //   redirectTo: ''
-      // }
     ])
   ],
   providers: []

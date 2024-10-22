@@ -1,0 +1,44 @@
+form {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+
+  & > div {
+    display: flex;
+    width: 100%;
+  }
+
+  input {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #b3b1b1;
+    font-size: 20px;
+    width: 100%;
+  }
+
+  textarea {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: Roboto;
+    font-size: 14px;
+    border: 1px solid #b3b1b1;
+    width: 100%;
+    resize: none;
+    height: 150px;
+  }
+}
+
+nav {
+  a {
+    text-decoration: none;
+    padding: 4px 8px;
+
+    &.active {
+      background-color: #ccc;
+    }
+  }
+}
+
+.tab-content {
+  padding: 30px 15px;
+}

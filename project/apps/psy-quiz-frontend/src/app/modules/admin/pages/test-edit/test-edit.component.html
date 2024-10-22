@@ -10,40 +10,50 @@
       <textarea id="description" placeholder="Описание теста" formControlName="description"></textarea>
     </div>
     <br />
-    <div>
-      <button (click)="clickHandler()">{{isEdit ? 'Update' : 'Create'}}</button>
-      <button routerLink="../">Cancel</button>
+    <div class="test-actions">
+      <div>
+        <button (click)="clickHandler()">{{ isEdit ? 'Update' : 'Create' }}</button>
+        <button routerLink="../">Cancel</button>
+      </div>
+      <div>
+        <button *ngIf="isEdit" routerLink="scales">Шкалы оценивания</button>
+      </div>
     </div>
   </div>
   <div *ngIf="isEdit" class="test-body">
     <h2>Вопросы</h2>
     <div class="test-questions" formArrayName="questions">
-      <div class="test-question" *ngFor="let questionForm of questions.controls; index as questionIndex" formGroupName="{{ questionIndex }}">
+      <div class="test-question" *ngFor="let questionForm of questions.controls; index as questionIndex"
+           formGroupName="{{ questionIndex }}">
         <div class="question-info">
           <div class="question-name">
             <label for="name{{ questionIndex }}"></label>
-            <input id="name{{ questionIndex }}" placeholder="Вопрос" type="text" (change)="questionChanged(questionForm)" formControlName="questionName" />
+            <input id="name{{ questionIndex }}" placeholder="Вопрос" type="text"
+                   (change)="questionChanged(questionForm)" formControlName="questionName" />
           </div>
           <div>
             <label for="answerType"></label>
-            <select name="answerType" id="answerType" (change)="questionChanged(questionForm)" formControlName="answerType">
+            <select name="answerType" id="answerType" (change)="questionChanged(questionForm)"
+                    formControlName="answerType">
               <option *ngFor="let type of questionTypeString" value="{{type.type}}">{{ type.name }}</option>
             </select>
           </div>
         </div>
 
-<!--        <div>-->
-<!--          <label for="description{{ questionIndex }}"></label>-->
-<!--          <input id="description{{ questionIndex }}" type="text" placeholder="Описание вопроса" (change)="questionChanged(questionForm)" formControlName="description" />-->
-<!--        </div>-->
+        <!--        <div>-->
+        <!--          <label for="description{{ questionIndex }}"></label>-->
+        <!--          <input id="description{{ questionIndex }}" type="text" placeholder="Описание вопроса" (change)="questionChanged(questionForm)" formControlName="description" />-->
+        <!--        </div>-->
         <hr>
         <div *ngIf="questionForm.controls.answerType.value !== questionType.Textarea" class="question-answers">
           <div class="answer-list" formArrayName="answers">
 
-            <div class="answer-item" *ngFor="let answerForm of getAnswers(questionForm).controls; index as answerIndex" formGroupName="{{ answerIndex }}">
+            <div class="answer-item" *ngFor="let answerForm of getAnswers(questionForm).controls; index as answerIndex"
+                 formGroupName="{{ answerIndex }}">
               <div class="answer-body">
                 <div class="answer-text">
-                  <label class="answer-type answer-type-{{questionForm.controls.answerType.value}}" for="name{{ answerIndex }}"></label>
+                  <label class="answer-type answer-type-{{questionForm.controls.answerType.value}}"
+                         for="name{{ answerIndex }}"></label>
                   <input id="name{{ answerIndex }}"
                          type="text"
                          formControlName="name"
@@ -53,24 +63,27 @@
                   />
                 </div>
                 <button class="remove"
-                        (click)="removeAnswer(answerForm, answerIndex, questionForm)">x</button>
+                        (click)="removeAnswer(answerForm, answerIndex, questionForm)">x
+                </button>
               </div>
 
-<!--              <div>-->
-<!--                <label for="description{{ answerIndex }}">description:</label>-->
-<!--                <input id="description{{ answerIndex }}"-->
-<!--                       type="text"-->
-<!--                       formControlName="description"-->
-<!--                       (keydown.enter)="saveAnswer(questionForm.controls.id.value!, answerForm, $event)" />-->
-<!--              </div>-->
+              <!--              <div>-->
+              <!--                <label for="description{{ answerIndex }}">description:</label>-->
+              <!--                <input id="description{{ answerIndex }}"-->
+              <!--                       type="text"-->
+              <!--                       formControlName="description"-->
+              <!--                       (keydown.enter)="saveAnswer(questionForm.controls.id.value!, answerForm, $event)" />-->
+              <!--              </div>-->
             </div>
           </div>
-          <div><button (click)="addAnswer(questionForm)">Добавить</button></div>
+          <div>
+            <button (click)="addAnswer(questionForm)">Добавить</button>
+          </div>
         </div>
-<!--        <div>-->
-<!--          <label for="freeAnswer{{ questionIndex }}">freeAnswer:</label>-->
-<!--          <input id="freeAnswer{{ questionIndex }}" type="text" formControlName="freeAnswer" />-->
-<!--        </div>-->
+        <!--        <div>-->
+        <!--          <label for="freeAnswer{{ questionIndex }}">freeAnswer:</label>-->
+        <!--          <input id="freeAnswer{{ questionIndex }}" type="text" formControlName="freeAnswer" />-->
+        <!--        </div>-->
         <hr>
         <button (click)="removeQuestion(questionIndex, questionForm)">Удалить вопрос</button>
       </div>

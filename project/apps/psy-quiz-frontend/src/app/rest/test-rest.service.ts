@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { QuestionResponseDto, TestResponseDto, TestRunResponseDto } from '@shared/dto';
+import { QuestionResponseDto, ScaleResponseDto, TestResponseDto, TestRunResponseDto } from '@shared/dto';
 import { IResponse } from '@shared/interfaces';
 import { Observable, from } from 'rxjs';
 import { BaseRestService } from './base-rest.service';
@@ -10,6 +10,10 @@ export class TestRestService extends BaseRestService<TestResponseDto> {
 
   public getActiveRun(testId: string): Observable<IResponse<TestRunResponseDto>> {
     return from(this.http.get<IResponse<TestRunResponseDto>>(`${this.baseUrl}/${this.apiUrl}/${testId}/active-run`));
+  }
+
+  public getScales(id: string): Observable<IResponse<ScaleResponseDto[]>> {
+    return from(this.http.get<IResponse<ScaleResponseDto[]>>(`${this.baseUrl}/${this.apiUrl}/${id}/scales`));
   }
 
   public getQuestions(id: string): Observable<IResponse<QuestionResponseDto[]>> {

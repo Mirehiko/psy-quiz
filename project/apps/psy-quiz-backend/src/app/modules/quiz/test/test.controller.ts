@@ -13,7 +13,14 @@ import {
   UsePipes
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { QuestionRequestDto, QuestionResponseDto, TestRequestDto, TestResponseDto } from '@shared/dto';
+import {
+  QuestionRequestDto,
+  QuestionResponseDto,
+  ScaleResponseDto,
+  TestRequestDto,
+  TestResponseDto
+} from '@shared/dto';
+import { IResult } from '@shared/interfaces';
 import { plainToInstance } from 'class-transformer';
 import { TransformInterceptor } from '../../../interceptors/transform.interceptor';
 import { ValidationPipe } from '../../../pipes/validation.pipe';
@@ -120,5 +127,11 @@ export class TestController {
   async getQuestions(@Param('id') id: string): Promise<QuestionResponseDto[]> {
     const test = await this.service.getBy({ params: { id }, withRelations: true }, ['questions', 'questions.answers']);
     return plainToInstance(QuestionResponseDto, test.questions, { enableCircularCheck: true });
+  }
+
+  @Get('test/:id/scales')
+  async getScales(@Param('id') id: string, @Req() request): Promise<ScaleResponseDto[]> {
+    const scales = await this.service.getScales(id, request.user);
+    return plainToInstance(ScaleResponseDto, scales, { enableCircularCheck: true });
   }
 }
