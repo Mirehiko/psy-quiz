@@ -5,7 +5,7 @@ import { QuestionEntity } from '../../question/schemas/question.entity';
 @Entity()
 export class QuestionAnswerEntity {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({ example: 'Psy Test', description: 'Наименование ответа' })

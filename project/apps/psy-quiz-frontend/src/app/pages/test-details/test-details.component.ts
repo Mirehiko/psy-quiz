@@ -63,8 +63,8 @@ export class TestDetailsComponent {
     this.runService
       .create({
         name: '',
-        userId: this.authService.user$.value.id.toString(),
-        testId: this.test.id.toString()
+        userId: this.authService.user$.value.id,
+        testId: this.test.id
       })
       .pipe(
         tap((resp) => (runId = resp.data.id)),

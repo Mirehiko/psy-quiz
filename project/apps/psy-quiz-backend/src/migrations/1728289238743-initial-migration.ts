@@ -5,49 +5,49 @@ export class InitialMigration1728289238743 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "run_answer_entity" ("id" SERIAL NOT NULL, "questionId" character varying(150) NOT NULL, "answer" character varying(500) NOT NULL, "userId" text NOT NULL, "runId" integer, CONSTRAINT "PK_4e2981fc403d9a43494d24a61e8" PRIMARY KEY ("id"))`
+      `CREATE TABLE "run_answer_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "questionId" character varying(150) NOT NULL, "answer" character varying(500) NOT NULL, "userId" text NOT NULL, "runId" uuid, CONSTRAINT "PK_4e2981fc403d9a43494d24a61e8" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "question_answer_entity" ("id" SERIAL NOT NULL, "name" character varying(150) NOT NULL, "description" character varying(500), "createdById" text NOT NULL, "questionId" integer, CONSTRAINT "PK_2f213a195cc88605a4e1ee253b7" PRIMARY KEY ("id"))`
+      `CREATE TABLE "question_answer_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(150) NOT NULL, "description" character varying(500), "createdById" text NOT NULL, "questionId" uuid, CONSTRAINT "PK_2f213a195cc88605a4e1ee253b7" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "question_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150), "description" character varying(500), "answerType" "public"."question_entity_answertype_enum" NOT NULL DEFAULT 'checkbox', "free_answer" text, "createdById" text NOT NULL, "test" integer, CONSTRAINT "PK_14a0a509f33d8cd3a96a448dcd7" PRIMARY KEY ("id"))`
+      `CREATE TABLE "question_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150), "description" character varying(500), "answerType" "public"."question_entity_answertype_enum" NOT NULL DEFAULT 'checkbox', "free_answer" text, "createdById" text NOT NULL, "test" uuid, CONSTRAINT "PK_14a0a509f33d8cd3a96a448dcd7" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "criterion_entity" ("id" SERIAL NOT NULL, "minScore" integer NOT NULL, "maxScore" integer NOT NULL, "name" text NOT NULL, "description" text, "createdById" text NOT NULL, "scaleId" integer, CONSTRAINT "PK_aeafbfbdcdb8d59a057a8334c9b" PRIMARY KEY ("id"))`
+      `CREATE TABLE "criterion_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "minScore" integer NOT NULL, "maxScore" integer NOT NULL, "name" text NOT NULL, "description" text, "createdById" text NOT NULL, "scaleId" uuid, CONSTRAINT "PK_aeafbfbdcdb8d59a057a8334c9b" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "scale_answer_entity" ("id" SERIAL NOT NULL, "questionId" character varying(150) NOT NULL, "answer" text NOT NULL, "createdById" text NOT NULL, "scaleId" integer, CONSTRAINT "PK_5c92695fc2a00985eb37ea470be" PRIMARY KEY ("id"))`
+      `CREATE TABLE "scale_answer_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "questionId" character varying(150) NOT NULL, "answer" text NOT NULL, "createdById" text NOT NULL, "scaleId" uuid, CONSTRAINT "PK_5c92695fc2a00985eb37ea470be" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "scale_entity" ("id" SERIAL NOT NULL, "name" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, "createdById" text NOT NULL, "testId" integer, CONSTRAINT "PK_f0a13531f7232b68e38b2db430c" PRIMARY KEY ("id"))`
+      `CREATE TABLE "scale_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, "createdById" text NOT NULL, "testId" uuid, CONSTRAINT "PK_f0a13531f7232b68e38b2db430c" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "test_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150) NOT NULL, "description" character varying(500) DEFAULT '', "picture" text, "createdById" text NOT NULL, CONSTRAINT "PK_cc0413536e3afc0e586996bea40" PRIMARY KEY ("id"))`
+      `CREATE TABLE "test_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150) NOT NULL, "description" character varying(500) DEFAULT '', "picture" text, "createdById" text NOT NULL, CONSTRAINT "PK_cc0413536e3afc0e586996bea40" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "test_run_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "userId" text NOT NULL, "createdById" text NOT NULL, "startDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "endDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "isFinished" boolean NOT NULL DEFAULT false, "testId" integer, CONSTRAINT "PK_7da84d6eacf84a8b9f2cbe89f7e" PRIMARY KEY ("id"))`
+      `CREATE TABLE "test_run_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "userId" text NOT NULL, "createdById" text NOT NULL, "startDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "endDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "isFinished" boolean NOT NULL DEFAULT false, "testId" uuid, CONSTRAINT "PK_7da84d6eacf84a8b9f2cbe89f7e" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "connected_user_entity" ("id" SERIAL NOT NULL, "socketId" character varying NOT NULL, "userId" integer, CONSTRAINT "PK_a903379d19b275c008fa625f0fa" PRIMARY KEY ("id"))`
+      `CREATE TABLE "connected_user_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "socketId" character varying NOT NULL, "userId" uuid, CONSTRAINT "PK_a903379d19b275c008fa625f0fa" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "permission_entity" ("id" SERIAL NOT NULL, "name" character varying(50) NOT NULL, "displayName" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, CONSTRAINT "PK_57a5504c7abcb1d2a9c82ae6f48" PRIMARY KEY ("id"))`
+      `CREATE TABLE "permission_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50) NOT NULL, "displayName" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, CONSTRAINT "PK_57a5504c7abcb1d2a9c82ae6f48" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "role_entity" ("id" SERIAL NOT NULL, "name" character varying(50) NOT NULL, "displayName" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, CONSTRAINT "PK_7bc1bd2364b6e9bf7c84b1e52e2" PRIMARY KEY ("id"))`
+      `CREATE TABLE "role_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(50) NOT NULL, "displayName" character varying(150) NOT NULL, "description" character varying(500) NOT NULL, CONSTRAINT "PK_7bc1bd2364b6e9bf7c84b1e52e2" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "user_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150) NOT NULL, "email" character varying(150) NOT NULL, "password" character varying(150) NOT NULL, "avatar" text, "suspendedAt" TIMESTAMP, "status" "public"."user_entity_status_enum" NOT NULL DEFAULT 'pending', "suspendReason" text, CONSTRAINT "PK_b54f8ea623b17094db7667d8206" PRIMARY KEY ("id"))`
+      `CREATE TABLE "user_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(150) NOT NULL, "email" character varying(150) NOT NULL, "password" character varying(150) NOT NULL, "avatar" text, "suspendedAt" TIMESTAMP, "status" "public"."user_entity_status_enum" NOT NULL DEFAULT 'pending', "suspendReason" text, CONSTRAINT "PK_b54f8ea623b17094db7667d8206" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "user_token" ("id" SERIAL NOT NULL, "token" character varying NOT NULL, "expireAt" TIMESTAMP NOT NULL, "userIdId" integer, CONSTRAINT "UQ_9b8c6eac80e52d95241b573877f" UNIQUE ("token"), CONSTRAINT "REL_a400db51f01ce7d38ef24c09ba" UNIQUE ("userIdId"), CONSTRAINT "PK_48cb6b5c20faa63157b3c1baf7f" PRIMARY KEY ("id"))`
+      `CREATE TABLE "user_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "token" character varying NOT NULL, "expireAt" TIMESTAMP NOT NULL, "userIdId" uuid, CONSTRAINT "UQ_9b8c6eac80e52d95241b573877f" UNIQUE ("token"), CONSTRAINT "REL_a400db51f01ce7d38ef24c09ba" UNIQUE ("userIdId"), CONSTRAINT "PK_48cb6b5c20faa63157b3c1baf7f" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "profile_entity" ("id" SERIAL NOT NULL, "gender" character varying(500) NOT NULL, "age" text, CONSTRAINT "PK_330d3560db0dac16f06a04609bb" PRIMARY KEY ("id"))`
+      `CREATE TABLE "profile_entity" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "gender" character varying(500) NOT NULL, "age" text, CONSTRAINT "PK_330d3560db0dac16f06a04609bb" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "role_entity_permissions_permission_entity" ("roleEntityId" integer NOT NULL, "permissionEntityId" integer NOT NULL, CONSTRAINT "PK_cbdf5cb47edf1711ba34864d255" PRIMARY KEY ("roleEntityId", "permissionEntityId"))`
+      `CREATE TABLE "role_entity_permissions_permission_entity" ("roleEntityId" uuid NOT NULL, "permissionEntityId" uuid NOT NULL, CONSTRAINT "PK_cbdf5cb47edf1711ba34864d255" PRIMARY KEY ("roleEntityId", "permissionEntityId"))`
     );
     await queryRunner.query(
       `CREATE INDEX "IDX_c58c915f7dfc3b9d6746d4a318" ON "role_entity_permissions_permission_entity" ("roleEntityId") `
@@ -56,7 +56,7 @@ export class InitialMigration1728289238743 implements MigrationInterface {
       `CREATE INDEX "IDX_c18b1176211a6a9ce8c5818931" ON "role_entity_permissions_permission_entity" ("permissionEntityId") `
     );
     await queryRunner.query(
-      `CREATE TABLE "user_entity_roles_role_entity" ("userEntityId" integer NOT NULL, "roleEntityId" integer NOT NULL, CONSTRAINT "PK_9426d726a48f9c5d9c83c6eb91f" PRIMARY KEY ("userEntityId", "roleEntityId"))`
+      `CREATE TABLE "user_entity_roles_role_entity" ("userEntityId" uuid NOT NULL, "roleEntityId" uuid NOT NULL, CONSTRAINT "PK_9426d726a48f9c5d9c83c6eb91f" PRIMARY KEY ("userEntityId", "roleEntityId"))`
     );
     await queryRunner.query(
       `CREATE INDEX "IDX_3277e83a0656736e30b901d9a3" ON "user_entity_roles_role_entity" ("userEntityId") `

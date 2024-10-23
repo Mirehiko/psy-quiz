@@ -72,7 +72,7 @@ export class TestService extends BaseService<TestEntity, IUserGetParamsData> {
 
   async getActiveRun(testId: string, user: UserEntity): Promise<TestRunEntity | undefined> {
     const test = await this.repository.findOne({ where: { id: testId }, relations: ['runs'] });
-    return test.runs.find((run) => run.userId === user.id.toString() && run.isFinished === false);
+    return test.runs.find((run) => run.userId === user.id && run.isFinished === false);
   }
 
   public async getScales(testId: string, user: UserEntity): Promise<ScaleEntity[]> {

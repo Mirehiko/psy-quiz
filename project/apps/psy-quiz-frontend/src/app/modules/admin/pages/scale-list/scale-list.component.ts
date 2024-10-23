@@ -24,15 +24,12 @@ export class ScaleListComponent {
   private route = inject(ActivatedRoute);
 
   constructor() {
-    this.route.params
-      .pipe(
-        filter((params) => params['id']),
-        switchMap((params) =>
-          this.testService.getOne(params['id']).pipe(switchMap((data) => this.testService.getScales(data.data.id)))
-        )
+    this.wrapQuery(
+      this.testStore.entity$.pipe(
+        filter((test) => test !== undefined),
+        switchMap((test) => this.testService.getScales(test.id).pipe(switchMap(() => this.scaleStore.entities$)))
       )
-      .subscribe((params) => {});
-    this.wrapQuery(this.scaleStore.entities$).subscribe((scales) => {
+    ).subscribe((scales) => {
       this.scales = scales;
       this.cdr.markForCheck();
     });
@@ -42,9 +39,9 @@ export class ScaleListComponent {
     console.warn(this.testStore.entity$.value);
     this.wrapQuery(
       this.scaleService.create<ScaleRequestDto>({
-        name: 'scale',
-        description: 'asdasd',
-        testId: this.testStore.entity$.value?.id!.toString()!
+        name: `scale ${this.scaleStore.entities$.value.length + 1}`,
+        description: '',
+        testId: this.testStore.entity$.value?.id!
       })
     ).subscribe();
   }

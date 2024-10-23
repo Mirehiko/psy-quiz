@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@services';
 import { UserStore } from '@store';
-import { filter, switchMap } from 'rxjs';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'admin-user-edit',
@@ -44,23 +44,17 @@ export class UserEditComponent {
     this.route.params.subscribe((params) => {
       this.isEdit = !!params['id'];
       if (this.isEdit) {
-        this.userService
-          .getOne(params['id'])
-          .pipe(
-            takeUntilDestroyed(this.destroyRef),
-            switchMap(() => this.userStore.entity$.pipe(filter((user) => user !== undefined)))
-          )
-          .subscribe((user) => {
-            this.user = user;
-            this.formGroup = new FormGroup({
-              email: new FormControl(user.email!, [Validators.required, Validators.email]),
-              name: new FormControl(user.name),
-              password: new FormControl(''),
-              status: new FormControl(user.status)
-              // form array
-            });
-            this.cdr.markForCheck();
+        this.userStore.entity$.pipe(filter((user) => user !== undefined)).subscribe((user) => {
+          this.user = user;
+          this.formGroup = new FormGroup({
+            email: new FormControl(user.email!, [Validators.required, Validators.email]),
+            name: new FormControl(user.name),
+            password: new FormControl(''),
+            status: new FormControl(user.status)
+            // form array
           });
+          this.cdr.markForCheck();
+        });
         return;
       }
     });

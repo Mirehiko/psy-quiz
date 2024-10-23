@@ -4,7 +4,7 @@
 
 <div class="row-list">
   <div *ngFor="let scale of scales" class="row-item">
-    <div class="row-item-content" routerLink="{{scale.id}}">
+    <div class="row-item-content" routerLink="{{scale.id}}/scale-item">
       <span>{{ scale.name }}</span>
     </div>
     <button (click)="remove(scale.id)">remove</button>

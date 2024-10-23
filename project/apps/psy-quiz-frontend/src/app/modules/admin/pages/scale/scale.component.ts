@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { TestService } from '@services';
 import { ScaleService } from '@services/scale.service';
-import { QuestionResponseDto, ScaleRequestDto, ScaleResponseDto, TestResponseDto } from '@shared/dto';
+import { QuestionResponseDto, ScaleRequestDto, ScaleResponseDto } from '@shared/dto';
 import { QuestionStore, ScaleStore, TestStore } from '@store';
-import { Observable, filter, switchMap, tap } from 'rxjs';
+import { Observable, filter, switchMap, take, tap } from 'rxjs';
 
 interface IScaleForm {
   name: FormControl<string | null>;
@@ -29,11 +28,9 @@ export class ScaleComponent {
   private questionStore = inject(QuestionStore);
   private testService = inject(TestService);
   private scaleService = inject(ScaleService);
-  private route = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
 
   // private scaleService = inject(ScaleService);
-  private testID: string;
   public questions: QuestionResponseDto[];
 
   constructor() {
@@ -42,24 +39,20 @@ export class ScaleComponent {
       description: new FormControl(null)
     });
 
-    this.route.params
-      .pipe(
-        filter((params) => params['id'] && params['scaleId']),
-        tap((params) => {
-          this.testID = params['id'];
-          console.warn(params);
-        }),
-        switchMap((params) => this.scaleService.getOne(params['scaleId']))
+    this.wrapQuery(
+      this.testStore.entity$.pipe(
+        filter((test) => test !== undefined),
+        switchMap((test) => this.testService.getQuestions(test.id))
       )
-      .subscribe((params) => {
-        this.wrapQuery(this.testService.getQuestions(this.testID)).subscribe();
-      });
+    ).subscribe();
+
     this.wrapQuery(this.questionStore.entities$)
       .pipe(filter((scale) => scale !== undefined))
       .subscribe((test) => {
         this.questions = test;
         this.cdr.markForCheck();
       });
+
     this.wrapQuery(this.scaleStore.entity$)
       .pipe(filter((scale) => scale !== undefined))
       .subscribe((scale) => {

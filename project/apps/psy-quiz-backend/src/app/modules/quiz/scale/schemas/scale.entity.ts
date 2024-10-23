@@ -8,7 +8,7 @@ import { TestEntity } from '../../test/schemas/test.entity';
 @Entity()
 export class ScaleEntity implements IScale {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({ example: 'Scale', description: 'Название шкалы' })

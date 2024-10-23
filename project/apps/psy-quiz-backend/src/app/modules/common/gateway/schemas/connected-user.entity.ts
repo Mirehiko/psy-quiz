@@ -3,7 +3,7 @@ import { UserEntity } from '../../user/schemas/user.entity';
 
 @Entity()
 export class ConnectedUserEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

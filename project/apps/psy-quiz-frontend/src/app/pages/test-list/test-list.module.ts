@@ -11,17 +11,17 @@ import { TestListComponent } from './test-list.component';
     RouterModule.forChild([
       {
         path: '',
-        // pathMatch: 'full',
         component: TestListComponent
       },
       {
         path: ':testId',
+
         loadChildren: () => import('../test-details').then((m) => m.TestDetailsModule)
+      },
+      {
+        path: '**',
+        redirectTo: ''
       }
-      // {
-      //   path: '**',
-      //   redirectTo: ''
-      // }
     ]),
     CardModule
   ],

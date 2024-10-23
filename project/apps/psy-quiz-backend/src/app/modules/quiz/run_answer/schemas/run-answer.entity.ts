@@ -6,7 +6,7 @@ import { TestRunEntity } from '../../test_run/schemas/test-run.entity';
 @Entity()
 export class RunAnswerEntity implements IRunAnswer {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({ example: 'Psy Test', description: 'Название теста' })

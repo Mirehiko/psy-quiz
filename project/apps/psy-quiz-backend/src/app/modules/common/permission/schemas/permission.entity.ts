@@ -5,7 +5,7 @@ import { RoleEntity } from '../../role/schemas/role.entity';
 @Entity()
 export class PermissionEntity {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({ example: 'permissionName', description: 'Уникальное имя разрешения' })

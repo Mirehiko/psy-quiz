@@ -6,7 +6,7 @@ import { ScaleEntity } from '../../scale/schemas/scale.entity';
 @Entity()
 export class CriterionEntity implements ICriterion {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({ example: '0', description: 'Минимальное значение параметра' })

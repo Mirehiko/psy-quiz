@@ -17,6 +17,7 @@ export abstract class BaseService<T extends { id?: string }> {
         if (this.store.entities$.value.filter((e) => e.id !== entity.data.id)) {
           this.store.add([entity.data]);
         }
+        console.warn(this.store.entities$.value);
         this.store.select(entity.data);
       })
     );

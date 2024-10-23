@@ -82,21 +82,15 @@ export class TestEditComponent {
     });
 
     this.route.params.subscribe((params) => {
-      this.isEdit = !!params['id'];
+      this.isEdit = !!params['testId'];
       if (this.isEdit) {
-        this.testService
-          .getOne(params['id'])
-          .pipe(
-            takeUntilDestroyed(this.destroyRef),
-            switchMap(() => this.testStore.entity$.pipe(filter((test) => test !== undefined)))
-          )
-          .subscribe((test) => {
-            this.test = test;
-            this.formGroup?.controls.name.setValue(test.name);
-            this.formGroup?.controls.description.setValue(test.description || '');
-            this.cdr.markForCheck();
-            this.testService.getQuestions(test.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
-          });
+        this.testStore.entity$.pipe(filter((test) => test !== undefined)).subscribe((test) => {
+          this.test = test;
+          this.formGroup?.controls.name.setValue(test.name);
+          this.formGroup?.controls.description.setValue(test.description || '');
+          this.cdr.markForCheck();
+          this.testService.getQuestions(test.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+        });
         this.questionStore.entities$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((questions) => {
           this.formGroup.controls.questions = this.createQuestionForms(questions);
           this.cdr.markForCheck();

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TestService } from '@services';
 import { TestResponseDto } from '@shared/dto';
-import { TestService } from '../../services/test.service';
 
 @Component({
   selector: 'app-test-list',

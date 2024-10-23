@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TitleModule } from '../../components';
+import { isUserGuardFn } from '../../guards';
 import { UserListComponent } from './user-list.component';
 
 @NgModule({
@@ -15,7 +16,8 @@ import { UserListComponent } from './user-list.component';
         loadChildren: () => import('../user-edit').then((m) => m.UserEditModule)
       },
       {
-        path: ':id/edit',
+        path: ':userId/edit',
+        canActivateChild: [isUserGuardFn],
         loadChildren: () => import('../user-edit').then((m) => m.UserEditModule)
       },
       {

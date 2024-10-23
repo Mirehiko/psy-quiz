@@ -6,7 +6,7 @@ import { UserStatusEnum } from '../../user/user-status.enum';
 @Entity()
 export class UserToken {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({ example: 'afs2342dffgsdfg234dsfg', description: 'Токен' })

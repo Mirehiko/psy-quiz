@@ -19,7 +19,7 @@ interface IAnswerForm {
 export class QuestionCardComponent {
   @Input() public set run(run: TestRunResponseDto) {
     this._run = run;
-    const currentAnswerId = run.answers?.find((a) => a.questionId === this._question.id.toString());
+    const currentAnswerId = run.answers?.find((a) => a.questionId === this._question.id);
 
     if (currentAnswerId) {
       this.form.controls.value.setValue(currentAnswerId.answer);
@@ -50,14 +50,14 @@ export class QuestionCardComponent {
 
   public sendAnswer(answer: QuestionAnswerResponseDto): void {
     this.runService
-      .sendAnswer(this._run.id, { questionId: this._question.id.toString()!, answer: answer.id.toString()! })
+      .sendAnswer(this._run.id, { questionId: this._question.id!, answer: answer.id! })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
 
   private initForm(question: QuestionResponseDto) {
     this.form = this.formBuilder.group<IAnswerForm>({
-      id: this.formBuilder.control<string>(question.id.toString()),
+      id: this.formBuilder.control<string>(question.id),
       value: this.formBuilder.control<string | null>(null)
     });
   }

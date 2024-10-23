@@ -114,7 +114,7 @@ export class TestRunService extends BaseService<TestRunEntity, IUserGetParamsDat
     //   return entity; // todo: return error?
     // }
     console.warn(entity);
-    if (entity.userId !== user.id.toString()) {
+    if (entity.userId !== user.id) {
       return entity;
     }
 
